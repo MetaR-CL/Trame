@@ -1,0 +1,3247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Trame — Cuisine</title>
+<meta name="description" content="Apprendre la cuisine sans recette : leviers, ratios, gestes, trames et dépannage, avec révision espacée et pratique guidée.">
+<meta name="theme-color" content="#f7f1e3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trame">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b5502f'/%3E%3Cpath d='M20 44V20l12 12 12-12v24' fill='none' stroke='%23fdf6ea' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b5502f'/%3E%3Cpath d='M20 44V20l12 12 12-12v24' fill='none' stroke='%23fdf6ea' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Trame%22%2C%22short_name%22%3A%22Trame%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f7f1e3%22%2C%22theme_color%22%3A%22%23f7f1e3%22%7D">
+<style>
+/* =====================================================================
+   MOTEUR — styles. Ne dépend d'aucun contenu, uniquement de la structure
+   des vues (accueil, consulter, réviser, pratiquer, suivi, notion).
+   ===================================================================== */
+:root{
+  --bg:#f7f1e3;
+  --bg-card:#fffdf7;
+  --bg-raised:#ffffff;
+  --ink:#2a2116;
+  --ink-soft:#6f6152;
+  --ink-faint:#a89985;
+  --line:#e6dabf;
+  --line-soft:#efe4cd;
+  --accent:#b5502f;
+  --accent-ink:#fffaf3;
+  --accent-soft:#f2ded1;
+  --sauge:#5c6b46;
+  --sauge-soft:#e3e8d5;
+  --ocre:#a97a22;
+  --ocre-soft:#f2e4c4;
+  --rouge:#a1402f;
+  --rouge-soft:#f3ddd4;
+  --radius-s:8px;
+  --radius-m:14px;
+  --radius-l:24px;
+  --shadow:0 1px 2px rgba(40,28,15,.06), 0 10px 24px -14px rgba(40,28,15,.35);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Noto Serif",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1a1610;
+    --bg-card:#231e16;
+    --bg-raised:#2a241a;
+    --ink:#f3e9d6;
+    --ink-soft:#c4b59c;
+    --ink-faint:#8a7c67;
+    --line:#3a3223;
+    --line-soft:#2d2819;
+    --accent:#e28457;
+    --accent-ink:#1a1610;
+    --accent-soft:#3c2a20;
+    --sauge:#a3b98a;
+    --sauge-soft:#2b3323;
+    --ocre:#d9ac5c;
+    --ocre-soft:#3a2f1b;
+    --rouge:#e08e7d;
+    --rouge-soft:#3a2620;
+  }
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0 0 .4em;color:var(--ink);}
+p{margin:0 0 .8em;}
+p:last-child{margin-bottom:0;}
+ul{margin:0 0 .8em;padding-left:1.2em;}
+ul:last-child{margin-bottom:0;}
+li{margin-bottom:.3em;}
+a{color:inherit;}
+button{font:inherit;color:inherit;}
+input,textarea{font:inherit;color:inherit;}
+
+#app{
+  max-width:560px;
+  margin:0 auto;
+  min-height:100vh;
+  padding-bottom:calc(78px + env(safe-area-inset-bottom));
+  position:relative;
+}
+
+.topbar{
+  position:sticky;top:0;z-index:5;
+  background:var(--bg);
+  padding:calc(14px + env(safe-area-inset-top)) 18px 10px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  border-bottom:1px solid transparent;
+}
+.topbar.raised{border-bottom-color:var(--line);}
+.topbar .brand{font-family:var(--serif);font-weight:700;font-size:1.05rem;letter-spacing:.01em;}
+.topbar .brand small{display:block;font-family:var(--sans);font-weight:400;font-size:.72rem;color:var(--ink-faint);letter-spacing:.04em;text-transform:uppercase;margin-top:1px;}
+.back-btn{
+  background:none;border:none;padding:6px 8px 6px 2px;margin-left:-6px;
+  font-size:.95rem;color:var(--ink-soft);display:flex;align-items:center;gap:2px;cursor:pointer;
+}
+
+main{padding:6px 18px 28px;}
+
+/* --- Home --- */
+.hero{padding:6px 0 18px;}
+.hero h1{font-size:1.6rem;margin-bottom:.15em;}
+.hero .sub{color:var(--ink-soft);font-size:.95rem;}
+
+.stat-row{display:flex;gap:10px;margin:16px 0 22px;}
+.stat{
+  flex:1;background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
+  padding:12px 14px;text-align:left;
+}
+.stat .n{font-family:var(--serif);font-size:1.5rem;font-weight:700;line-height:1;display:block;}
+.stat .l{font-size:.72rem;color:var(--ink-soft);margin-top:4px;display:block;}
+
+.section-title{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);
+  margin:22px 0 10px;
+}
+
+.depannage-panel{
+  background:var(--rouge-soft);border-radius:var(--radius-l);padding:16px;margin-bottom:6px;
+}
+.depannage-panel h2{font-size:1rem;color:var(--rouge);margin-bottom:2px;}
+.depannage-panel .hint{font-size:.82rem;color:var(--ink-soft);margin-bottom:12px;}
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  display:inline-flex;align-items:center;
+  background:var(--bg-raised);border:1px solid var(--line);color:var(--ink);
+  border-radius:100px;padding:8px 14px;font-size:.85rem;cursor:pointer;text-decoration:none;
+  transition:transform .1s ease;
+}
+.chip:active{transform:scale(.96);}
+.chip.on-rouge{border-color:transparent;}
+
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cat-card{
+  background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
+  padding:14px;text-align:left;cursor:pointer;text-decoration:none;display:block;color:var(--ink);
+}
+.cat-card h3{font-size:.98rem;margin-bottom:3px;}
+.cat-card p{font-size:.76rem;color:var(--ink-soft);margin-bottom:6px;}
+.cat-card .count{font-size:.72rem;color:var(--ink-faint);}
+
+.nav-cards{display:flex;flex-direction:column;gap:10px;}
+.nav-card{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--bg-raised);border:1px solid var(--line);border-radius:var(--radius-m);
+  padding:15px 16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);
+}
+.nav-card .t{font-family:var(--serif);font-weight:700;font-size:1.02rem;}
+.nav-card .d{font-size:.78rem;color:var(--ink-soft);margin-top:2px;}
+.nav-card .badge{
+  background:var(--accent);color:var(--accent-ink);border-radius:100px;min-width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;padding:0 7px;flex:none;
+}
+.nav-card .arrow{color:var(--ink-faint);font-size:1.1rem;flex:none;}
+
+/* --- Search / filters --- */
+.search-wrap{position:sticky;top:56px;z-index:4;background:var(--bg);padding-bottom:10px;}
+.search-input{
+  width:100%;border:1px solid var(--line);background:var(--bg-raised);border-radius:100px;
+  padding:11px 16px;font-size:.95rem;outline:none;
+}
+.search-input:focus{border-color:var(--accent);}
+.filter-row{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;-webkit-overflow-scrolling:touch;}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter-chip{
+  flex:none;background:var(--bg-raised);border:1px solid var(--line);border-radius:100px;
+  padding:7px 13px;font-size:.82rem;color:var(--ink-soft);cursor:pointer;white-space:nowrap;
+}
+.filter-chip.active{background:var(--ink);border-color:var(--ink);color:var(--bg);}
+
+.notion-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.notion-item{
+  display:block;text-decoration:none;color:var(--ink);
+  background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
+  padding:13px 15px;
+}
+.notion-item .tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:600;}
+.notion-item h3{font-size:1rem;margin:.15em 0 .2em;}
+.notion-item p{font-size:.82rem;color:var(--ink-soft);}
+.empty-state{padding:40px 10px;text-align:center;color:var(--ink-faint);font-size:.9rem;}
+
+/* --- Notion detail --- */
+.notion-head{padding:8px 0 4px;}
+.notion-head .tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;}
+.notion-head h1{font-size:1.5rem;margin:.2em 0 .25em;}
+.notion-head .resume{color:var(--ink-soft);font-size:.95rem;}
+
+.block{margin-top:20px;}
+.block h2{font-size:.98rem;}
+.prose h4{font-size:.92rem;margin-top:1.1em;color:var(--accent);}
+.prose{font-size:.94rem;}
+.prose strong{color:var(--ink);}
+
+.vigilance-box{
+  background:var(--ocre-soft);border-radius:var(--radius-m);padding:14px 16px;
+}
+.vigilance-box h2{color:var(--ocre);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+.vigilance-box ul{margin:0;padding-left:1.1em;font-size:.88rem;}
+
+details.fold{border:1px solid var(--line-soft);border-radius:var(--radius-m);overflow:hidden;}
+details.fold + details.fold{margin-top:8px;}
+details.fold summary{
+  padding:12px 15px;cursor:pointer;font-size:.88rem;font-weight:600;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;
+}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::after{content:"+";color:var(--ink-faint);font-size:1.1rem;}
+details.fold[open] summary::after{content:"–";}
+details.fold .fold-body{padding:0 15px 14px;font-size:.88rem;color:var(--ink-soft);}
+details.fold ul{padding-left:1.1em;}
+
+.lien-chips{display:flex;flex-wrap:wrap;gap:8px;}
+
+/* --- Buttons --- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border-radius:100px;padding:13px 20px;font-size:.92rem;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg-raised);color:var(--ink);width:100%;
+  text-decoration:none;
+}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+.btn-ghost{background:none;border-color:var(--line);}
+.btn-row{display:flex;gap:10px;margin-top:16px;}
+.btn-row .btn{width:auto;flex:1;}
+
+/* --- Réviser --- */
+.session-card{
+  background:var(--bg-raised);border-radius:var(--radius-l);box-shadow:var(--shadow);
+  padding:24px 20px;margin-top:12px;min-height:280px;display:flex;flex-direction:column;
+}
+.session-progress{font-size:.72rem;color:var(--ink-faint);margin-bottom:14px;}
+.session-card .tag{font-size:.7rem;text-transform:uppercase;color:var(--accent);font-weight:700;letter-spacing:.05em;}
+.session-card h2{font-size:1.2rem;margin:.3em 0 .5em;}
+.session-question{font-size:1.02rem;color:var(--ink-soft);flex:1;}
+.session-answer{margin-top:14px;border-top:1px solid var(--line-soft);padding-top:14px;}
+.eval-row{display:flex;gap:8px;margin-top:18px;}
+.eval-btn{
+  flex:1;border-radius:var(--radius-m);padding:14px 6px;text-align:center;border:1px solid var(--line);
+  background:var(--bg-card);cursor:pointer;font-size:.85rem;font-weight:600;
+}
+.eval-btn small{display:block;font-weight:400;font-size:.68rem;color:var(--ink-faint);margin-top:2px;}
+.eval-1{border-color:var(--rouge);color:var(--rouge);}
+.eval-2{border-color:var(--ocre);color:var(--ocre);}
+.eval-3{border-color:var(--sauge);color:var(--sauge);}
+
+/* --- Pratiquer --- */
+.practice-card{
+  background:linear-gradient(180deg,var(--accent-soft),var(--bg-card));
+  border-radius:var(--radius-l);padding:22px 20px;margin-top:12px;
+}
+.practice-card .tag{font-size:.7rem;text-transform:uppercase;color:var(--accent);font-weight:700;letter-spacing:.05em;}
+.practice-card h2{font-size:1.25rem;margin:.25em 0 .5em;}
+.variation-box{
+  background:var(--bg-raised);border-radius:var(--radius-m);padding:14px 16px;margin-top:10px;
+}
+.variation-box .label{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:4px;}
+.variation-box .txt{font-size:.98rem;}
+.variation-last{font-size:.8rem;color:var(--ink-faint);margin-top:10px;}
+
+.journal-q{margin-top:16px;}
+.journal-q label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;}
+.journal-q textarea{
+  width:100%;border:1px solid var(--line);border-radius:var(--radius-s);padding:11px 13px;
+  min-height:70px;resize:vertical;background:var(--bg-raised);
+}
+
+/* --- Suivi --- */
+.seg{display:flex;background:var(--line-soft);border-radius:100px;padding:3px;margin:10px 0 18px;}
+.seg-btn{flex:1;text-align:center;padding:9px 4px;border-radius:100px;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--ink-soft);}
+.seg-btn.active{background:var(--bg-raised);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+.progress-group{margin-bottom:14px;}
+.progress-group summary{
+  display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none;
+  padding:13px 15px;background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
+  font-weight:700;font-size:.92rem;
+}
+.progress-group summary::-webkit-details-marker{display:none;}
+.progress-group summary .count{font-weight:700;color:var(--ink-faint);font-size:.85rem;}
+.progress-group[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.progress-group .glist{border:1px solid var(--line-soft);border-top:none;border-bottom-left-radius:var(--radius-m);border-bottom-right-radius:var(--radius-m);padding:6px 8px;}
+.grow-link{display:block;padding:9px 8px;text-decoration:none;color:var(--ink);font-size:.88rem;border-bottom:1px solid var(--line-soft);}
+.grow-link:last-child{border-bottom:none;}
+.dot-acquis{color:var(--sauge);}
+.dot-traine{color:var(--rouge);}
+.dot-jamais{color:var(--ink-faint);}
+
+.journal-entry{
+  background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
+  padding:14px 16px;margin-bottom:10px;
+}
+.journal-entry .meta{font-size:.72rem;color:var(--ink-faint);margin-bottom:6px;}
+.journal-entry .meta a{color:var(--accent);text-decoration:none;font-weight:600;}
+.journal-entry .qa{font-size:.86rem;margin-top:6px;}
+.journal-entry .qa .q{color:var(--ink-soft);font-size:.78rem;margin-bottom:1px;}
+
+.export-box{
+  margin-top:24px;padding-top:18px;border-top:1px solid var(--line);
+}
+.export-box p{font-size:.8rem;color:var(--ink-faint);margin-bottom:10px;}
+
+/* --- Bottom nav --- */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:10;
+  background:var(--bg-raised);border-top:1px solid var(--line);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;
+}
+.tabbar-inner{display:flex;width:100%;max-width:560px;}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  text-decoration:none;color:var(--ink-faint);font-size:.68rem;padding:6px 2px;position:relative;
+}
+.tab.active{color:var(--accent);font-weight:700;}
+.tab .mark{width:20px;height:3px;border-radius:3px;background:transparent;}
+.tab.active .mark{background:var(--accent);}
+.tab .tbadge{
+  position:absolute;top:0;right:18%;background:var(--rouge);color:#fff;font-size:.62rem;font-weight:700;
+  border-radius:100px;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;padding:0 3px;
+}
+
+@media (min-width:600px){
+  body{background:linear-gradient(var(--bg),var(--bg));}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   CONTENU — CUISINE
+   Bloc de données pour la plateforme d'apprentissage.
+   Le moteur ne connaît rien de ce fichier : remplace-le par un autre
+   sujet (géopolitique, musique, allemand) et l'application fonctionne
+   à l'identique.
+
+   SCHÉMA D'UNE NOTION
+   {
+     id:        string unique
+     cat:       'levier' | 'ratio' | 'geste' | 'depannage' | 'trame'
+     titre:     string
+     resume:    une phrase — ce qui s'affiche en liste
+     contenu:   le cours, en texte long
+     vigilance: [] points d'attention / erreurs fréquentes
+     questions: [] auto-évaluation pour le mode Révision
+     variations:[] axes de variation pour le mode Pratique
+     lien:      [] ids de notions connexes
+   }
+   ===================================================================== */
+
+const CONTENU = {
+  sujet: "Cuisine",
+  sousTitre: "Cuisiner sans recette, en semaine, avec le temps qu'on a",
+  categories: [
+    { id: 'levier',    nom: 'Leviers',    desc: "Les cinq curseurs qui décident si un plat est bon" },
+    { id: 'ratio',     nom: 'Ratios',     desc: "Les proportions à connaître par cœur" },
+    { id: 'geste',     nom: 'Gestes',     desc: "Les techniques fondamentales, une par fiche" },
+    { id: 'trame',     nom: 'Trames',     desc: "Des canevas de repas, pas des recettes" },
+    { id: 'depannage', nom: 'Dépannage',  desc: "Le plat est en cours et quelque chose cloche" }
+  ],
+
+  notions: [
+/* =====================================================================
+   1. LES LEVIERS
+   ===================================================================== */
+
+{
+  id: 'lev-sel',
+  cat: 'levier',
+  titre: "Le sel",
+  resume: "Il ne sale pas, il révèle. Et le moment où tu le mets compte autant que la quantité.",
+  contenu: `Le sel est le seul ingrédient qui rend un aliment plus semblable à lui-même. Une carotte salée a un goût de carotte plus intense, pas un goût de sel. C'est pour ça qu'il est le premier levier : la plupart des plats jugés « fades » ne manquent pas d'épices, ils manquent de sel bien placé.
+
+**Ce qu'il fait réellement**
+
+Trois effets, très différents les uns des autres.
+
+D'abord il amplifie la perception des arômes : nos récepteurs détectent mieux les molécules aromatiques en présence d'ions sodium. Ensuite il supprime l'amertume — c'est pour ça qu'une pincée de sel sur un pamplemousse le rend plus sucré, et pourquoi on sale l'eau des légumes amers. Enfin il agit physiquement sur les aliments : il tire l'eau par osmose, puis, si on lui laisse le temps, il la fait revenir en emportant le sel avec elle. C'est tout le principe de la saumure.
+
+**La question du moment**
+
+C'est ici que se joue la différence entre un cuisinier qui suit une recette et un cuisinier qui sait ce qu'il fait.
+
+Le sel a besoin de temps pour pénétrer. Sur une pièce de viande épaisse, il met des heures à traverser. Sur un légume coupé, quelques minutes. Dans une soupe, il diffuse immédiatement. Donc : plus l'aliment est dense et épais, plus tu sales tôt.
+
+Concrètement, à la maison, en semaine :
+- Viande épaisse (poulet entier, rôti, côte) : sale la veille ou le matin, à sec, et laisse au frigo à découvert. C'est la technique la plus rentable de toute la cuisine — trente secondes de travail pour un résultat qu'aucun assaisonnement de dernière minute ne rattrapera.
+- Viande fine, escalope, steak : sale juste avant de saisir, ou trois heures avant. Entre les deux, tu es dans la mauvaise fenêtre — le sel a tiré l'eau en surface mais n'est pas encore reparti dedans, et tu obtiens une surface humide qui ne dore pas.
+- Légumes : sale en début de cuisson, ils libèrent leur eau et concentrent leur goût.
+- Soupe, sauce, braisé : sale par couches, un peu à chaque étape, et corrige à la fin. Jamais tout d'un coup au départ, car ça réduit et ça se concentre.
+
+**Saler par couches**
+
+C'est l'idée la plus importante et la moins appliquée. Chaque composant d'un plat doit être assaisonné pour lui-même. Si tu fais des pâtes à la sauce tomate : l'eau des pâtes est salée, l'oignon est salé quand il sue, la sauce est salée pendant qu'elle réduit. Le résultat n'est pas trois fois trop salé — il est assaisonné en profondeur. À l'inverse, un plat salé uniquement à la fin a un goût de sel posé par-dessus, pas un goût intégré.
+
+**Quel sel pour quoi**
+
+Le gros sel pour tout ce qui est immergé : eau de cuisson, saumure. Il se dissout de toute façon, autant prendre le moins cher.
+
+Le sel fin pour l'assaisonnement en cours de cuisson. Attention : à volume égal, le sel fin est bien plus salé que le gros sel, parce qu'il est plus dense. Une cuillère de gros sel et une cuillère de sel fin n'ont rien à voir. Si tu changes de sel, tu dois réapprendre ta main.
+
+La fleur de sel uniquement à la fin, sur un aliment déjà cuit et déjà assaisonné, pour le croquant et pour les points de salinité qui éclatent en bouche. La mettre en cuisson, c'est jeter de l'argent.
+
+**Comment savoir si c'est assez salé**
+
+Goûte, ajoute une petite pincée, goûte à nouveau. Pose-toi la question : est-ce que le plat a un goût plus intense de ce qu'il est, ou est-ce qu'il commence à avoir un goût de sel ? Tant que c'est la première réponse, tu peux continuer. Dès que c'est la seconde, tu es allé un cran trop loin.
+
+Un plat correctement salé ne donne pas l'impression d'être salé. Il donne l'impression d'être bon.`,
+  vigilance: [
+    "Ne saler qu'à la fin : le plat est salé en surface et fade en profondeur.",
+    "Saler une viande fine 20 minutes avant de la saisir : c'est la pire fenêtre, la surface est humide et ne dore pas.",
+    "Changer de type de sel sans réajuster : le sel fin est beaucoup plus salé au volume que le gros sel.",
+    "Saler à fond un plat qui va réduire : la concentration double sans prévenir.",
+    "Oublier de saler l'eau des pâtes et des légumes — c'est une couche d'assaisonnement perdue définitivement."
+  ],
+  questions: [
+    "Pourquoi saler un poulet la veille change plus de choses que saler à table ?",
+    "Tu fais une sauce qui va réduire de moitié. Quand sales-tu, et pourquoi ?",
+    "Quelle est la différence perceptible entre un plat sous-salé et un plat qui manque d'acide ?"
+  ],
+  variations: [
+    "Sale le même légume en début puis en fin de cuisson sur deux poêlées, et compare.",
+    "Salé à sec la veille sur une cuisse de poulet, contre salé juste avant. Note la différence de peau.",
+    "Ajoute une pincée de sel sur un fruit acide ou amer et observe ce que ça fait à la perception du sucre."
+  ],
+  lien: ['lev-acide', 'ratio-saumure', 'dep-fade', 'dep-trop-sale']
+},
+
+{
+  id: 'lev-acide',
+  cat: 'levier',
+  titre: "L'acide",
+  resume: "Le levier le plus sous-utilisé à la maison. Quand un plat est bon mais 'plat', c'est presque toujours lui.",
+  contenu: `L'acide est ce qui empêche un plat d'être lourd, monotone et fermé. C'est le contrepoids du gras et du sucre, et c'est le levier que les cuisiniers amateurs oublient systématiquement — parce qu'aucune recette familiale ne dit « ajoutez un trait de vinaigre à la fin », alors que c'est souvent tout ce qui manque.
+
+**Le test qui change tout**
+
+Quand un plat te semble bon mais pas mémorable, sans que tu saches quoi corriger : prélève deux cuillères dans un bol, mets une goutte de jus de citron ou de vinaigre, goûte. Si ça s'illumine, tu tiens le manque. Ce test coûte dix secondes et il t'apprendra plus que n'importe quelle recette.
+
+**Ce que l'acide fait**
+
+Il tranche le gras : c'est physiologique, l'acidité relance la salivation et nettoie le palais entre deux bouchées riches. Sans lui, un plat gras devient écœurant à la troisième fourchette. C'est pourquoi il y a des cornichons avec la raclette, du citron sur le poisson frit, de la moutarde dans la vinaigrette.
+
+Il donne du relief : un plat sans acide est perçu comme monotone même s'il est bien salé. L'acide crée un contraste qui rend les autres saveurs lisibles.
+
+Il agit aussi sur la texture : il dénature les protéines (c'est le ceviche), il attendrit les marinades, il empêche les légumes verts de garder leur couleur en cuisson longue — d'où le fait qu'on ajoute l'acide à la fin sur les verts.
+
+**Les sources, et leur caractère**
+
+Toutes les acidités ne sont pas interchangeables, c'est là que se construit ton vocabulaire.
+
+Le jus de citron est vif, frais, volatil — il disparaît à la cuisson, donc il se met hors du feu. Le zeste apporte l'arôme sans l'acidité.
+
+Le vinaigre de vin est plus rond et plus persistant, il tient la cuisson. Le vinaigre de cidre est plus doux et fruité. Le vinaigre balsamique apporte de l'acide et du sucre en même temps — attention, il déséquilibre facilement. Le vinaigre de riz est le plus doux de tous, idéal quand tu veux de l'acidité sans agressivité.
+
+Le vin ajouté en cuisson apporte de l'acide et des arômes, mais il doit réduire pour perdre son mordant alcoolique.
+
+Les produits lactofermentés — yaourt, crème fraîche, cornichons, choucroute, kimchi — apportent une acidité complexe avec de la profondeur en plus. Vu ton intérêt pour la fermentation, c'est là que tu as le plus à exploiter : un fond de saumure de pickles dans une sauce fait un travail qu'aucun vinaigre industriel ne fait.
+
+La tomate, le tamarin, les agrumes en général, la moutarde : autant de sources qui apportent chacune autre chose que de l'acide pur.
+
+**Le moment**
+
+En règle générale, à la fin, hors du feu ou juste avant de servir. La chaleur prolongée fait s'évaporer les acides volatils et adoucit les autres. Un citron ajouté vingt minutes avant la fin n'a plus d'effet.
+
+Les exceptions sont les cuissons longues où l'acide joue un rôle structurel : le vin d'un braisé, la tomate d'une sauce, le vinaigre d'une marinade. Là il est là dès le départ, et il a le temps de s'intégrer.
+
+**Le réflexe à installer**
+
+Avant de servir n'importe quel plat riche — braisé, gratin, plat en sauce, soupe crémeuse, poêlée grasse — pose-toi la question : est-ce qu'il y a une source d'acide dedans ? Si la réponse est non, ajoute-en. C'est le geste unique qui améliore le plus de plats.`,
+  vigilance: [
+    "Ajouter le citron trop tôt : il s'évapore et il ne reste rien.",
+    "Croire qu'un plat fade manque de sel alors qu'il manque d'acide — teste toujours les deux dans un bol à part.",
+    "Utiliser du balsamique par défaut : il apporte du sucre en plus, ce qui n'est pas toujours voulu.",
+    "Mettre l'acide dans un plat contenant du lait ou de la crème sans précaution : ça peut trancher.",
+    "Oublier que les légumes verts virent au kaki en présence d'acide et de chaleur."
+  ],
+  questions: [
+    "Un plat est bien salé mais reste plat. Quelle est ta première hypothèse et comment la testes-tu ?",
+    "Pourquoi mettre le jus de citron hors du feu et pas pendant la cuisson ?",
+    "Quelle différence de résultat entre du vinaigre de vin et du vinaigre de riz sur une même poêlée ?"
+  ],
+  variations: [
+    "Refais le même plat qu'une fois précédente en changeant uniquement la source d'acide.",
+    "Sur une soupe de légumes : sers-la moitié nature, moitié avec un trait de vinaigre de cidre.",
+    "Utilise la saumure d'un bocal de pickles maison à la place du vinaigre dans une vinaigrette."
+  ],
+  lien: ['lev-sel', 'lev-gras', 'ratio-vinaigrette', 'dep-lourd', 'geste-fermentation']
+},
+
+{
+  id: 'lev-gras',
+  cat: 'levier',
+  titre: "Le gras",
+  resume: "Il porte les arômes, il conduit la chaleur, il fait la texture. Trois métiers différents.",
+  contenu: `Le gras n'est pas un ingrédient qu'on ajoute, c'est un milieu dans lequel les choses se passent. Il fait trois métiers distincts, et savoir lequel tu es en train de lui demander détermine lequel tu choisis.
+
+**Métier 1 : conduire la chaleur**
+
+Quand tu saisis dans une poêle, le gras assure le contact thermique entre le métal et l'aliment. Sans lui, seuls les points de contact chauffent, le reste non. Ici ce qui compte est le point de fumée — la température à laquelle le gras se dégrade, noircit et devient âcre.
+
+Pour saisir fort : huile d'arachide, de tournesol, de colza raffinée, ou beurre clarifié. Points de fumée hauts, goût neutre.
+
+Pour cuire doux : huile d'olive, beurre. Le beurre entier brûle vers 150 °C à cause de ses protéines de lait — c'est d'ailleurs elles qui donnent le beurre noisette, donc ce n'est pas toujours un défaut.
+
+L'huile d'olive vierge extra en cuisson forte est un gaspillage : ses arômes sont détruits. Garde-la pour finir un plat.
+
+**Métier 2 : porter les arômes**
+
+Beaucoup de molécules aromatiques ne sont pas solubles dans l'eau mais dans le gras. C'est pour ça qu'on fait revenir l'ail, les épices ou le concentré de tomate dans l'huile avant d'ajouter le liquide : sans cette étape, la moitié de l'arôme reste enfermée.
+
+Ce geste porte un nom en cuisine indienne — le tempérage — et c'est une des choses les plus rentables à intégrer. Épices en poudre jetées dans une huile chaude quinze secondes avant d'ajouter le reste : le plat change de dimension.
+
+Corollaire : un plat totalement dégraissé a moins de goût, pas seulement moins de calories. Il n'a plus de véhicule.
+
+**Métier 3 : faire la texture**
+
+Le gras donne l'onctuosité, le fondant, le croustillant. Une sauce montée au beurre est brillante et nappe la cuillère. Une pâte brisée est friable parce que le gras a enrobé la farine et bloqué le gluten.
+
+C'est aussi lui qui crée la sensation de « ça tient au corps ». Un plat sans gras est perçu comme maigre et insatisfaisant même s'il est bien assaisonné.
+
+**Choisir sans se compliquer**
+
+À la maison, quatre gras suffisent à couvrir 95 % des situations : une huile neutre pour saisir, de l'huile d'olive pour cuire doux et finir, du beurre pour le goût et les sauces, et un gras animal récupéré (canard, lard, jus de rôti) pour ce qui gagne à être profond.
+
+**Le gras de finition**
+
+Le geste le plus sous-estimé. Un filet d'huile d'olive crue, une noisette de beurre hors du feu, une cuillère de crème, un peu de yaourt : ajouté à la toute fin, le gras cru garde ses arômes intacts et lie le plat. Une soupe de légumes correcte devient bonne avec un trait d'huile d'olive au moment de servir.`,
+  vigilance: [
+    "Utiliser l'huile d'olive vierge extra pour saisir fort : arômes détruits, goût âcre.",
+    "Ajouter les épices en poudre dans le liquide au lieu de les passer dans le gras chaud d'abord.",
+    "Trop dégraisser par réflexe santé : le plat perd son véhicule aromatique et sa satiété.",
+    "Mettre le beurre trop tôt dans une poêle très chaude : il brûle avant que l'aliment ne cuise.",
+    "Oublier le gras de finition — c'est trente secondes de travail pour un gain immédiat."
+  ],
+  questions: [
+    "Pourquoi fait-on revenir le concentré de tomate dans l'huile avant d'ajouter le liquide ?",
+    "Quel gras choisis-tu pour saisir une entrecôte, et pourquoi pas un autre ?",
+    "Qu'est-ce qui change concrètement quand on ajoute une noisette de beurre hors du feu en fin de sauce ?"
+  ],
+  variations: [
+    "Fais la même poêlée de légumes une fois à l'huile neutre, une fois au beurre, une fois au gras de canard.",
+    "Sur un plat aux épices : compare épices ajoutées au liquide contre épices passées dans l'huile chaude.",
+    "Sers une soupe sans rien, puis avec un filet d'huile d'olive crue. Note l'écart."
+  ],
+  lien: ['lev-acide', 'lev-chaleur', 'geste-monter-beurre', 'dep-lourd']
+},
+
+{
+  id: 'lev-chaleur',
+  cat: 'levier',
+  titre: "La chaleur",
+  resume: "Le levier qui transforme la matière. Choisir sa température, c'est choisir son résultat.",
+  contenu: `La chaleur n'est pas un réglage, c'est une décision. Elle détermine si tu obtiens une croûte ou de la vapeur, une viande fondante ou sèche, un légume translucide ou grillé. La plupart des ratés de cuisson maison viennent d'un feu trop faible au mauvais moment ou trop fort au mauvais moment.
+
+**Les deux grandes familles**
+
+Chaleur forte et sèche : elle crée. Au-dessus d'environ 140 °C, les sucres et les acides aminés réagissent — c'est la réaction de Maillard — et fabriquent des centaines de composés aromatiques qui n'existaient pas dans l'aliment cru. C'est la croûte du pain, le doré d'un oignon, la surface d'un steak. Sans elle, un plat reste bouilli et pâle.
+
+Chaleur douce et longue : elle transforme. Entre 60 et 90 °C, le collagène des viandes dures se convertit en gélatine, les fibres se relâchent, les saveurs se mélangent. C'est le braisé, le confit, le bouillon.
+
+Ces deux familles ne s'opposent pas : la plupart des grands plats utilisent les deux à la suite. On saisit fort pour créer, puis on mijote doux pour transformer.
+
+**L'ennemi principal : l'eau**
+
+Tant qu'il y a de l'eau libre en surface, la température ne dépasse pas 100 °C, et Maillard ne démarre pas. Ta viande grise et triste dans la poêle n'a pas manqué de feu : elle a manqué de sécheresse.
+
+Trois conséquences pratiques, à appliquer tout le temps :
+- Sèche la surface au papier absorbant avant de saisir. Toujours.
+- Ne surcharge pas la poêle. Trop d'aliments d'un coup font chuter la température et libèrent leur eau plus vite qu'elle ne s'évapore. Tu obtiens des légumes à l'étouffée en croyant faire une poêlée. Cuis en deux fois plutôt qu'en une.
+- Attends que la poêle soit vraiment chaude. Une goutte d'eau doit y danser, pas grésiller mollement.
+
+**Le repos, qui est encore de la chaleur**
+
+Quand tu sors une viande du feu, la chaleur continue de migrer de la surface vers le centre. La température à cœur monte encore de quelques degrés — c'est la cuisson résiduelle. Sortir une pièce à la température exacte visée, c'est la sur-cuire.
+
+Le repos permet aussi aux fibres, contractées par la chaleur, de se détendre et de réabsorber le jus. Une viande tranchée immédiatement perd son jus sur la planche ; la même viande reposée dix minutes le garde. C'est gratuit et personne ne le fait.
+
+Règle simple : environ la moitié du temps de cuisson pour une pièce épaisse, cinq minutes pour un steak, vingt minutes pour un rôti.
+
+**En pratique, en semaine**
+
+Le réflexe le plus rentable : commencer plus chaud que ce que tu crois pour tout ce qui doit dorer, et plus doux que ce que tu crois pour tout ce qui doit fondre. La plupart des cuisines maison font l'inverse.`,
+  vigilance: [
+    "Poêle pas assez chaude au départ : l'aliment relâche son eau et bout au lieu de dorer.",
+    "Poêle surchargée : la température chute, tout devient de l'étuvée.",
+    "Ne pas sécher la surface avant de saisir.",
+    "Trancher une viande sans la laisser reposer : le jus finit sur la planche.",
+    "Faire mijoter à gros bouillons : ça durcit les fibres au lieu de les fondre. Un braisé doit frémir, pas bouillir."
+  ],
+  questions: [
+    "Pourquoi une viande sortie du frigo et jetée telle quelle dans la poêle grise-t-elle au lieu de dorer ?",
+    "À quoi sert le repos d'une viande, et combien de temps pour un rôti ?",
+    "Quelle différence entre frémir et bouillir pour un braisé, et pourquoi ça compte ?"
+  ],
+  variations: [
+    "Cuis la même quantité de champignons en une fournée puis en deux, et compare la couleur.",
+    "Steak tranché immédiatement contre steak reposé cinq minutes — regarde la planche.",
+    "Fais rôtir des légumes à 180 °C puis à 220 °C, même durée, et note l'écart."
+  ],
+  lien: ['geste-saisir', 'geste-braiser', 'geste-rotir', 'dep-sec', 'dep-legumes-detrempes']
+},
+
+{
+  id: 'lev-umami',
+  cat: 'levier',
+  titre: "L'umami (le cinquième levier)",
+  resume: "Ce qui donne l'impression qu'un plat a mijoté longtemps alors qu'il a pris vingt minutes.",
+  contenu: `Les quatre leviers classiques suffisent à équilibrer un plat. L'umami, lui, sert à lui donner de la profondeur — cette sensation de plat qui a du fond, du corps, de la longueur en bouche. C'est le levier le plus utile quand on cuisine vite, parce qu'il permet de simuler en cinq minutes ce que la cuisson longue produirait en trois heures.
+
+**De quoi il s'agit**
+
+L'umami vient du glutamate et de deux nucléotides, l'inosinate et le guanylate. Le point intéressant est qu'ils se multiplient entre eux : associer une source de glutamate et une source de nucléotide donne un effet bien supérieur à la somme des deux. C'est la raison pour laquelle tomate et champignon fonctionnent si bien ensemble, ou parmesan et bouillon de viande.
+
+**Ton arsenal, à avoir en permanence**
+
+Concentré de tomate. Le plus polyvalent. Passé une minute dans l'huile chaude jusqu'à ce qu'il brunisse légèrement, il change complètement de registre — il perd son acidité crue et devient profond.
+
+Sauce soja. Une cuillère dans un plat qui n'a rien d'asiatique passe inaperçue en tant que telle mais ajoute du fond. Dans une sauce de viande, une soupe de légumes, un braisé.
+
+Champignons, surtout séchés. Les shiitakés séchés réhydratés, plus leur eau de trempage, sont une bombe d'umami. Les champignons de Paris bien dorés le sont aussi.
+
+Parmesan et fromages affinés, y compris la croûte — garde tes croûtes de parmesan au congélateur et jette-en une dans une soupe ou une sauce tomate.
+
+Anchois. Fondus dans l'huile chaude au début d'un plat, ils disparaissent totalement et ne laissent que de la profondeur. Personne ne détectera l'anchois. C'est le secret de beaucoup de sauces italiennes.
+
+Miso, en pâte. Se dissout dans n'importe quel bouillon ou sauce. À ajouter hors du feu pour ne pas tuer les ferments.
+
+Produits fermentés en général : c'est là que ton intérêt pour la fermentation rejoint directement la cuisine du quotidien.
+
+Viandes séchées, os grillés, oignons longuement caramélisés, algues kombu.
+
+**Le geste concret**
+
+Quand un plat est correctement salé, correctement acidulé, mais qu'il te semble encore « jeune » ou superficiel — c'est l'umami qui manque. Une cuillère de concentré de tomate bien roussi, un anchois fondu, un trait de soja : le plat gagne d'un coup l'épaisseur qu'on associe à une longue cuisson.`,
+  vigilance: [
+    "Ajouter le concentré de tomate directement dans le liquide au lieu de le faire roussir dans l'huile d'abord.",
+    "Empiler les sources d'umami sans surveiller le sel : sauce soja, miso, parmesan et anchois sont tous très salés.",
+    "Mettre le miso à ébullition : on perd les ferments et une partie du goût.",
+    "Jeter l'eau de trempage des champignons séchés — c'est la partie la plus intéressante."
+  ],
+  questions: [
+    "Quel est l'effet du concentré de tomate roussi par rapport au concentré ajouté cru ?",
+    "Pourquoi tomate + champignon fonctionne mieux que deux fois plus de tomate ?",
+    "Tu as une soupe de légumes correcte mais superficielle. Cite trois ajouts possibles et leur effet."
+  ],
+  variations: [
+    "Fais deux fois la même sauce tomate, une avec deux anchois fondus au départ, une sans.",
+    "Ajoute une croûte de parmesan dans une soupe pendant la cuisson, retire-la avant de servir.",
+    "Compare une poêlée de champignons frais et la même avec un shiitaké séché réhydraté plus son eau."
+  ],
+  lien: ['lev-sel', 'geste-fermentation', 'dep-plat-superficiel']
+},
+
+/* =====================================================================
+   2. LES RATIOS
+   ===================================================================== */
+
+{
+  id: 'ratio-vinaigrette',
+  cat: 'ratio',
+  titre: "Vinaigrette — 3 : 1",
+  resume: "Trois parts de gras pour une part d'acide. Tout le reste est du réglage.",
+  contenu: `Trois volumes d'huile pour un volume de vinaigre. C'est la base, et elle est valable pour toutes les vinaigrettes du monde.
+
+**Le montage**
+
+L'ordre compte. Dans un bol : l'acide, le sel, la moutarde éventuelle. Tu mélanges jusqu'à dissoudre le sel — il ne se dissout pas dans l'huile, donc si tu le mets en dernier, tu auras des grains. Puis l'huile en filet en fouettant.
+
+La moutarde n'est pas là pour le goût seulement : c'est un émulsifiant, elle stabilise le mélange et l'empêche de se séparer immédiatement.
+
+**Le réglage**
+
+Le 3:1 est un point de départ, pas une loi. Avec un vinaigre très doux (riz, cidre) tu peux descendre à 2:1. Avec un citron très acide ou une salade délicate, tu peux monter à 4:1. Goûte sur une feuille, pas à la cuillère : la vinaigrette pure paraît toujours trop acide.
+
+**Les axes de variation**
+
+Une fois le ratio acquis, tu as un nombre infini de vinaigrettes en changeant un seul paramètre :
+- l'acide : vin rouge, vin blanc, cidre, riz, balsamique, citron, citron vert, verjus, saumure de pickles
+- le gras : olive, colza, noix, noisette, sésame grillé, un peu de gras de rôti fondu
+- l'émulsifiant : moutarde, miel, yaourt, tahini, jaune d'œuf, purée d'ail confit
+- l'aromate : échalote ciselée macérée dans l'acide dix minutes avant, herbes, zeste, anchois écrasé, poivre concassé
+
+**Ce qui vaut le coup en semaine**
+
+Fais-en un bocal pour la semaine. Le ratio se garde, elle se sépare et tu secoues. L'échalote macérée dans le vinaigre avant l'huile est le seul geste supplémentaire qui vaille le détour : dix minutes de contact avec l'acide adoucissent son mordant et parfument toute la vinaigrette.`,
+  vigilance: [
+    "Mettre le sel après l'huile : il ne se dissout plus.",
+    "Goûter la vinaigrette pure et la trouver trop acide — elle doit l'être, elle sera diluée par la salade.",
+    "Fouetter l'huile trop vite : l'émulsion ne prend pas.",
+    "Assaisonner la salade trop en avance : les feuilles se flétrissent en quelques minutes sous l'effet du sel."
+  ],
+  questions: [
+    "Pourquoi la moutarde est-elle dans presque toutes les vinaigrettes classiques ?",
+    "Tu utilises du vinaigre de riz. Gardes-tu le 3:1 ? Pourquoi ?",
+    "Dans quel ordre montes-tu une vinaigrette et pourquoi cet ordre-là ?"
+  ],
+  variations: [
+    "Même salade, trois vinaigrettes : vinaigre de vin, citron, saumure de pickles.",
+    "Change uniquement le gras : olive puis noix puis sésame grillé.",
+    "Teste avec et sans échalote macérée dix minutes."
+  ],
+  lien: ['lev-acide', 'geste-emulsionner']
+},
+
+{
+  id: 'ratio-roux',
+  cat: 'ratio',
+  titre: "Roux et béchamel — 1 : 1 : 10",
+  resume: "Poids égal beurre et farine, dix fois ce poids en lait pour une sauce nappante.",
+  contenu: `Le roux est la base d'une famille entière de sauces. Le principe : la farine cuite dans le gras s'enrobe et peut ensuite se disperser dans un liquide sans faire de grumeaux.
+
+**Le ratio**
+
+Pour 500 ml de lait : 50 g de beurre, 50 g de farine. Soit 1:1:10 en poids. Ça donne une sauce nappante, celle qui tient sur le dos d'une cuillère.
+
+Pour moduler :
+- sauce légère (velouté, soupe liée) : 1:1:15
+- sauce nappante (gratin, lasagne) : 1:1:10
+- appareil épais (croquettes, soufflé) : 1:1:6
+
+**La méthode**
+
+Fais fondre le beurre, ajoute la farine d'un coup, mélange et laisse cuire deux à trois minutes à feu moyen. Cette cuisson est obligatoire : elle élimine le goût de farine crue. Tant que ça mousse et que ça sent la noisette, tu es bien.
+
+Puis le liquide. Deux écoles fonctionnent : liquide froid sur roux chaud, ou liquide chaud sur roux froid. Ce qui ne marche pas, c'est chaud sur chaud — grumeaux garantis. Verse en plusieurs fois en fouettant, en laissant chaque ajout s'incorporer.
+
+Enfin, laisse cuire au moins cinq minutes à petit feu après épaississement. C'est ce qui fait la différence entre une béchamel correcte et une béchamel plate.
+
+**Les couleurs**
+
+Roux blanc : deux minutes, pour les sauces claires. Roux blond : cinq minutes, léger goût de noisette. Roux brun : dix à quinze minutes, brun clair, pour les sauces de viande — attention, plus un roux est cuit, moins il épaissit.
+
+**Les dérivés**
+
+C'est ici que le principe « une base, N variations » prend tout son sens. Béchamel plus fromage râpé égale Mornay. Béchamel plus oignon piqué et muscade égale la base des gratins. Roux plus bouillon de volaille égale velouté. Roux brun plus fond de veau égale sauce espagnole. Tu apprends une technique, tu débloques une dizaine de sauces.`,
+  vigilance: [
+    "Ne pas cuire le roux : goût de farine crue impossible à rattraper.",
+    "Verser du liquide chaud sur un roux chaud : grumeaux.",
+    "Arrêter dès que ça a épaissi : la sauce a un goût inachevé, il faut cuire encore cinq minutes.",
+    "Saler avant réduction sur un velouté qui va réduire.",
+    "Croire qu'un roux brun épaissit autant qu'un roux blanc — non, il faut en mettre plus."
+  ],
+  questions: [
+    "Combien de beurre, de farine et de lait pour une béchamel nappante de 750 ml ?",
+    "Pourquoi ne peut-on pas verser un liquide chaud sur un roux chaud ?",
+    "Pourquoi un roux brun épaissit-il moins qu'un roux blanc ?"
+  ],
+  variations: [
+    "Fais la même béchamel avec du lait infusé (laurier, oignon, muscade) contre du lait nature.",
+    "Remplace le lait par du bouillon de volaille : tu obtiens un velouté, note la différence d'usage.",
+    "Pousse le roux jusqu'au blond et compare le goût final."
+  ],
+  lien: ['geste-reduire', 'dep-sauce-liquide', 'dep-grumeaux']
+},
+
+{
+  id: 'ratio-saumure',
+  cat: 'ratio',
+  titre: "Saumure — 5 % à 8 %",
+  resume: "50 à 80 g de sel par litre d'eau. Le meilleur rapport effort/résultat de toute la cuisine.",
+  contenu: `La saumure fait deux choses : elle assaisonne en profondeur, et elle permet à la viande de retenir plus d'eau pendant la cuisson. Résultat : une viande maigre qui reste juteuse même légèrement trop cuite. Pour du poulet ou du porc, c'est transformateur.
+
+**Le ratio**
+
+Saumure rapide, 5 à 8 % : 50 à 80 g de sel par litre d'eau. Pour des blancs de poulet, une heure suffit. Pour des cuisses, deux à trois heures. Pour un poulet entier, six à douze heures à 5 %.
+
+Ne dépasse pas ces durées : au-delà, la texture devient spongieuse et le goût trop salé.
+
+**La saumure sèche, plus pratique**
+
+Pour la vie de tous les jours, c'est meilleur et plus simple. Compte 1 % du poids de la viande en sel — 10 g de sel par kilo. Tu frottes, tu poses sur une grille au frigo, à découvert, et tu laisses de quelques heures à deux jours.
+
+Le sel tire d'abord l'eau, qui dissout le sel, puis cette saumure concentrée est réabsorbée. Tu obtiens le même effet qu'une saumure liquide sans encombrer ton frigo d'un seau, et avec un avantage majeur : la surface sèche, donc elle dore parfaitement. Une saumure liquide donne une surface mouillée qui résiste au brunissement.
+
+**Les ajouts**
+
+Sucre : de 25 à 50 % du poids du sel. Il équilibre et favorise le brunissement.
+Aromates : laurier, poivre, ail écrasé, thym, zeste, épices entières. À faire bouillir dans une partie de l'eau puis à refroidir totalement avant d'immerger la viande.
+
+**Les pickles rapides, même logique**
+
+Un ratio à garder en tête vu ton intérêt pour la fermentation : à parts égales vinaigre et eau, plus 1 cuillère à soupe de sucre et 2 cuillères à café de sel pour 200 ml de liquide. Tu chauffes juste pour dissoudre, tu verses sur des légumes crus tranchés fin, une heure au frigo et c'est prêt. Ça te donne une source d'acide croquante disponible en permanence.`,
+  vigilance: [
+    "Immerger la viande dans une saumure encore tiède : zone de danger bactérien.",
+    "Dépasser les durées : texture spongieuse et sur-salage.",
+    "Saumurer une viande déjà salée ou une volaille de supermarché déjà injectée en solution saline.",
+    "Ne pas sécher la surface après une saumure liquide — sinon aucune coloration à la cuisson.",
+    "Resaler à la cuisson par réflexe après une saumure."
+  ],
+  questions: [
+    "Combien de sel pour saumurer à sec un poulet de 1,5 kg ?",
+    "Pourquoi la saumure sèche donne-t-elle une meilleure coloration que la saumure liquide ?",
+    "Combien de temps pour des blancs de poulet en saumure liquide à 6 % ?"
+  ],
+  variations: [
+    "Poulet salé à sec la veille contre poulet salé juste avant. Même cuisson.",
+    "Ajoute du sucre dans la saumure sèche et compare la couleur obtenue.",
+    "Fais un bocal de pickles rapides et utilise sa saumure comme acide dans une vinaigrette."
+  ],
+  lien: ['lev-sel', 'geste-rotir', 'geste-fermentation']
+},
+
+{
+  id: 'ratio-riz',
+  cat: 'ratio',
+  titre: "Riz par absorption — 1 : 1,5",
+  resume: "Un volume de riz, un volume et demi d'eau, couvercle, feu doux, pas touche.",
+  contenu: `La cuisson par absorption donne un riz aux grains détachés sans surveillance et sans égouttage. Le principe : exactement la quantité d'eau que le riz peut absorber, rien de plus.
+
+**Le ratio**
+
+Riz long, basmati, thaï : 1 volume de riz pour 1,5 volume d'eau. Riz complet : 1 pour 2, et vingt minutes de plus. Riz rond type arborio en risotto : autre logique, ajout progressif de bouillon, environ 1 pour 4 au total.
+
+**La méthode**
+
+Rince le riz long jusqu'à ce que l'eau soit claire — tu enlèves l'amidon de surface qui colle les grains. Pour un riz plus parfumé, fais-le revenir une minute dans un peu de gras avant d'ajouter l'eau : c'est le geste du pilaf, il change tout.
+
+Eau salée, porte à ébullition, couvre, feu au minimum. Onze minutes pour du basmati, quinze pour du riz long, quarante pour du complet. Puis — c'est l'étape que tout le monde saute — dix minutes hors du feu, couvercle fermé. La vapeur résiduelle finit la cuisson et l'humidité se répartit. Ensuite seulement tu ouvres et tu aères à la fourchette.
+
+Ne soulève jamais le couvercle pendant la cuisson. Chaque coup d'œil coûte de la vapeur.
+
+**Ce qui rend ça intéressant**
+
+Une fois le ratio acquis, tu peux remplacer l'eau par du bouillon, ajouter un aromate entier dans la casserole (bâton de cannelle, cardamome, laurier, zeste de citron), faire revenir un oignon avant. Le riz cesse d'être un accompagnement neutre.
+
+**Les autres féculents utiles**
+
+Polenta : 1 volume pour 4 à 5 de liquide, à verser en pluie en fouettant.
+Quinoa : 1 pour 1,75, quinze minutes.
+Pâtes : 1 litre d'eau et 10 g de sel pour 100 g de pâtes. Et garde toujours une louche d'eau de cuisson — son amidon est ce qui lie une sauce à des pâtes.`,
+  vigilance: [
+    "Soulever le couvercle pendant la cuisson.",
+    "Sauter les dix minutes de repos hors du feu.",
+    "Ne pas rincer un riz long : il colle.",
+    "Feu trop fort : le fond brûle avant que le haut ne cuise.",
+    "Jeter l'eau de cuisson des pâtes — c'est un ingrédient, pas un déchet."
+  ],
+  questions: [
+    "Quelle quantité d'eau pour 300 ml de riz basmati ?",
+    "À quoi servent les dix minutes de repos hors du feu ?",
+    "Pourquoi garder l'eau de cuisson des pâtes ?"
+  ],
+  variations: [
+    "Riz à l'eau contre riz au bouillon, même méthode.",
+    "Ajoute un aromate entier dans la casserole (cardamome, laurier, zeste).",
+    "Fais revenir le riz une minute dans le gras avant d'ajouter le liquide."
+  ],
+  lien: ['geste-suer', 'trame-bol']
+},
+
+{
+  id: 'ratio-crepes',
+  cat: 'ratio',
+  titre: "Pâte à crêpes — 1 : 1 : 2",
+  resume: "100 g de farine, 100 g d'œuf (2 œufs), 200 à 250 ml de lait.",
+  contenu: `Une pâte à crêpes, c'est de la farine, de l'œuf et du liquide dans un rapport de poids d'environ 1:1:2, plus une pincée de sel et un peu de beurre fondu.
+
+Pour quatre personnes : 200 g de farine, 4 œufs, 500 ml de lait, 5 g de sel, 40 g de beurre fondu.
+
+**La méthode**
+
+Farine et sel dans un saladier, un puits, les œufs au centre. Tu mélanges d'abord au centre en incorporant la farine progressivement — tu obtiens une pâte épaisse et lisse. C'est à ce moment-là qu'on élimine les grumeaux, quand la pâte est encore dense. Ensuite seulement tu détends avec le lait petit à petit. Beurre fondu à la fin.
+
+Si tu verses tout le lait d'un coup au début, tu auras des grumeaux et rien ne les enlèvera à part le mixeur.
+
+**Le repos**
+
+Une heure au minimum, idéalement deux. La farine s'hydrate complètement et le gluten se détend : les crêpes sont plus souples et se déchirent moins. C'est un vrai gain, pas une superstition.
+
+**Les variations qui valent le coup**
+
+Remplace un quart du lait par de la bière ou de l'eau gazeuse : crêpes plus légères. Remplace un tiers de la farine par du sarrasin : tu passes en galette. Ajoute du sucre seulement pour les sucrées — le sucre fait brunir plus vite, donc feu plus doux.
+
+**Le principe transférable**
+
+Ce ratio farine/œuf/liquide se décline. Plus épais, tu obtiens des pancakes (avec de la levure). Encore plus épais, une pâte à beignets. Plus liquide, des crêpes très fines. C'est le même squelette, tu déplaces un curseur.
+
+**L'appareil à quiche, à retenir aussi**
+
+1 œuf pour 100 ml de crème ou de lait. Pour un moule standard : 3 œufs, 300 ml. Sel, poivre, muscade. C'est tout, et ça évite d'avoir à chercher une recette de quiche à chaque fois.`,
+  vigilance: [
+    "Verser tout le liquide d'un coup : grumeaux inévitables.",
+    "Sauter le repos : crêpes cassantes.",
+    "Pâte à crêpes sucrée sur feu trop vif : elle brunit avant d'être cuite.",
+    "Première crêpe ratée — c'est normal, elle sert à régler la poêle."
+  ],
+  questions: [
+    "Quel poids de farine, d'œuf et de liquide pour une pâte à crêpes de base ?",
+    "Pourquoi mélanger d'abord une pâte épaisse avant d'ajouter le lait ?",
+    "Combien d'œufs pour 400 ml de crème dans un appareil à quiche ?"
+  ],
+  variations: [
+    "Un quart du lait remplacé par de la bière.",
+    "Un tiers de la farine en sarrasin.",
+    "Repos d'une heure contre pas de repos, même pâte, et compare la souplesse."
+  ],
+  lien: ['ratio-pate-brisee']
+},
+
+{
+  id: 'ratio-pate-brisee',
+  cat: 'ratio',
+  titre: "Pâte brisée — 3 : 2 : 1",
+  resume: "300 g de farine, 200 g de beurre, 100 g d'eau. Une seule règle : tout doit être froid.",
+  contenu: `Trois parts de farine, deux de beurre, une d'eau, en poids. Plus 1 % de sel. C'est le ratio le plus mémorable de la pâtisserie salée.
+
+Pour une tarte standard : 200 g de farine, 130 g de beurre, 65 g d'eau, 4 g de sel.
+
+**Le principe**
+
+Le beurre enrobe la farine et l'empêche de développer du gluten au contact de l'eau. Moins de gluten égale plus de friabilité. Toute la technique consiste à mélanger le moins possible.
+
+**La méthode**
+
+Beurre très froid coupé en dés, farine, sel. Tu sables du bout des doigts ou au robot par à-coups, jusqu'à obtenir une texture de gros sable avec encore des morceaux de beurre visibles de la taille d'un pois. Ces morceaux sont importants : ils fondront en cuisson et créeront des feuillets.
+
+Puis l'eau glacée, d'un coup, et tu rassembles en pressant — sans pétrir. Dès que ça tient, tu arrêtes. La pâte doit être hétérogène, pas lisse.
+
+Aplatis en disque, film, une heure au frigo minimum. Le repos détend le gluten formé malgré tout et refroidit le beurre.
+
+**Ce qui la fait rater**
+
+Beurre trop mou : il s'incorpore complètement, tu obtiens une pâte sablée dense au lieu d'une pâte brisée friable. Trop de travail : le gluten se développe, la pâte se rétracte à la cuisson et devient dure. Trop d'eau : même problème.
+
+**La variante rapide**
+
+Si tu manques de temps : même ratio, tout au robot par impulsions courtes, cinq secondes avec l'eau, et directement étalée entre deux feuilles de papier cuisson sans repos, puis quinze minutes au congélateur avant enfournement. C'est moins bien mais c'est faisable un soir de semaine.`,
+  vigilance: [
+    "Beurre pas assez froid.",
+    "Pétrir jusqu'à obtenir une pâte lisse : c'est exactement ce qu'il ne faut pas.",
+    "Ajouter de l'eau parce que ça ne tient pas — presse davantage avant d'en rajouter.",
+    "Sauter le repos : la pâte se rétracte dans le moule."
+  ],
+  questions: [
+    "Quel est le rôle du beurre dans une pâte brisée, au-delà du goût ?",
+    "Pourquoi faut-il voir encore des morceaux de beurre avant d'ajouter l'eau ?",
+    "Quelles quantités pour une tarte à partir de 200 g de farine ?"
+  ],
+  variations: [
+    "Remplace 20 % de la farine par de la farine complète ou de sarrasin.",
+    "Ajoute du parmesan râpé ou des graines dans le sablage.",
+    "Compare une pâte reposée une heure et une pâte utilisée immédiatement."
+  ],
+  lien: ['ratio-crepes']
+},
+
+{
+  id: 'ratio-pain',
+  cat: 'ratio',
+  titre: "Pain — 100 / 65 / 2 / 1",
+  resume: "En pourcentage du poids de farine : 65 % d'eau, 2 % de sel, 1 % de levure fraîche.",
+  contenu: `Le boulanger raisonne en pourcentage de la farine, jamais en quantités absolues. Une fois cette logique intégrée, tu peux fabriquer n'importe quelle quantité sans calculatrice et adapter n'importe quelle recette.
+
+**Le ratio de base**
+
+Farine 100 %, eau 65 %, sel 2 %, levure fraîche 1 % (ou levure sèche 0,4 %).
+
+Pour 500 g de farine : 325 g d'eau, 10 g de sel, 5 g de levure fraîche.
+
+**Le curseur hydratation**
+
+C'est le paramètre qui change le plus de choses.
+60 % : pâte ferme, facile à travailler, mie serrée. Bon pour débuter et pour les pains moulés.
+65 % : le standard, équilibré.
+70-75 % : pâte collante, mie alvéolée et humide. Il faut travailler à la corne, pas à la main.
+80 % et plus : ciabatta, focaccia. Pâte quasi liquide qui se manipule en pliages.
+
+**Le curseur levure et temps**
+
+Ces deux paramètres sont inversement proportionnels. Beaucoup de levure et peu de temps donnent un pain qui lève vite et qui a peu de goût. Peu de levure et beaucoup de temps donnent un pain aromatique.
+
+Le meilleur compromis pour quelqu'un qui n'a pas de temps en semaine : 0,3 % de levure fraîche et une nuit au frigo. Tu mélanges le soir, tu oublies, tu cuis le lendemain. Le travail actif est de cinq minutes.
+
+**Le sel**
+
+Toujours 2 %. En dessous, le pain est fade et la pâte trop molle. Au-dessus, la fermentation ralentit trop. Ne mets jamais le sel en contact direct avec la levure au moment du mélange.
+
+**L'autolyse**
+
+Mélange farine et eau seules, laisse reposer trente minutes, puis ajoute sel et levure. Le gluten se forme tout seul pendant ce repos, et tu réduis énormément le pétrissage. C'est du temps d'attente contre du temps de travail — le bon échange quand on est pressé.`,
+  vigilance: [
+    "Mettre le sel directement sur la levure.",
+    "Ajouter de la farine parce que la pâte colle : tu changes le ratio et tu obtiens un pain sec.",
+    "Trop de levure pour aller plus vite : le pain n'a aucun goût.",
+    "Enfourner sans avoir bien préchauffé et sans vapeur : pas de croûte."
+  ],
+  questions: [
+    "Combien d'eau, de sel et de levure pour 800 g de farine ?",
+    "Quel est l'effet d'une hydratation à 75 % par rapport à 60 % ?",
+    "Pourquoi peu de levure et beaucoup de temps donne-t-il un meilleur pain ?"
+  ],
+  variations: [
+    "Même pâte, 60 % puis 70 % d'hydratation.",
+    "Pousse la fermentation une nuit au frigo au lieu de deux heures à température ambiante.",
+    "Teste l'autolyse de trente minutes contre un mélange direct."
+  ],
+  lien: ['geste-fermentation']
+},
+
+{
+  id: 'ratio-mayonnaise',
+  cat: 'ratio',
+  titre: "Mayonnaise et émulsions — 1 jaune pour 200 ml",
+  resume: "Un jaune d'œuf émulsionne environ 200 à 250 ml d'huile. Au-delà, ça tranche.",
+  contenu: `Une émulsion, c'est du gras dispersé en gouttelettes microscopiques dans un liquide aqueux, maintenu en place par un émulsifiant. Comprendre ça permet de rattraper à peu près n'importe quelle sauce.
+
+**Le ratio**
+
+Un jaune d'œuf stabilise 200 à 250 ml d'huile. Au-delà, il n'y a plus assez de lécithine pour couvrir la surface des gouttelettes, et la sauce se sépare.
+
+Base : 1 jaune, 1 cuillère à café de moutarde, 200 ml d'huile, sel, un trait de vinaigre ou de citron.
+
+**La méthode**
+
+Tout à température ambiante — c'est la cause numéro un des échecs. Jaune, moutarde et sel mélangés d'abord. Puis l'huile goutte à goutte au début, en fouettant, jusqu'à ce que l'émulsion prenne. Ensuite tu peux verser en filet plus généreux. L'acide à la fin, il détend la sauce si elle est trop ferme.
+
+**Rattraper une mayonnaise tranchée**
+
+Ne jette rien. Prends un jaune neuf dans un bol propre, et verse dessus la mayonnaise ratée goutte à goutte comme si c'était de l'huile. Elle reprend. Une cuillère d'eau tiède fouettée dans un bol propre fonctionne aussi souvent.
+
+**La famille des émulsions**
+
+Le même principe couvre beaucoup de terrain. La vinaigrette est une émulsion temporaire (elle se sépare, c'est normal). La mayonnaise est une émulsion froide stable. Le beurre blanc et la hollandaise sont des émulsions chaudes, plus fragiles, où la chaleur doit rester basse sinon l'œuf coagule. Une sauce montée au beurre est une émulsion aussi.
+
+Ce qui fait la différence : l'émulsifiant (jaune, moutarde, amidon, protéines de lait), la température, et la vitesse d'incorporation du gras.`,
+  vigilance: [
+    "Ingrédients sortis du frigo : l'émulsion ne prend pas.",
+    "Verser l'huile trop vite au début.",
+    "Dépasser 250 ml d'huile par jaune.",
+    "Chauffer une émulsion chaude au-delà de 65-70 °C : l'œuf coagule et la sauce granule."
+  ],
+  questions: [
+    "Combien d'huile peut stabiliser un seul jaune, et que se passe-t-il au-delà ?",
+    "Comment rattrapes-tu une mayonnaise tranchée ?",
+    "Qu'est-ce qui distingue une vinaigrette d'une mayonnaise, structurellement ?"
+  ],
+  variations: [
+    "Remplace la moutarde par du tahini ou du miso.",
+    "Change l'huile : neutre, olive, ou moitié-moitié.",
+    "Ajoute de l'ail écrasé au sel dès le départ — tu obtiens un aïoli."
+  ],
+  lien: ['geste-emulsionner', 'ratio-vinaigrette', 'dep-sauce-tranchee']
+},
+
+{
+  id: 'ratio-bouillon',
+  cat: 'ratio',
+  titre: "Bouillon — 1 kg d'os pour 2 à 3 litres",
+  resume: "Un kilo de carcasses, deux à trois litres d'eau froide, jamais d'ébullition.",
+  contenu: `Un bouillon maison n'a rien à voir avec un cube, et il ne demande presque aucun travail actif — juste du temps de présence.
+
+**Le ratio**
+
+1 kg d'os ou de carcasses pour 2 à 3 litres d'eau froide. Moins d'eau donne un bouillon plus concentré. Ajoute une garniture aromatique : environ 200 g de légumes par litre, dans la proportion classique deux parts d'oignon, une de carotte, une de céleri.
+
+**Les règles**
+
+Départ à l'eau froide. C'est essentiel : les protéines migrent progressivement dans l'eau au lieu de coaguler immédiatement en surface.
+
+Jamais d'ébullition. Un frémissement, des bulles qui remontent paresseusement. Une ébullition émulsionne les graisses et les impuretés dans le liquide, et tu obtiens un bouillon trouble et gras. C'est la seule erreur vraiment irréversible.
+
+Écume la mousse grise des vingt premières minutes.
+
+Sel : très peu, ou pas du tout. Un bouillon se réduit souvent ensuite, et il sert de base à des plats qui seront salés à leur tour.
+
+Durée : volaille 3 à 4 heures, bœuf 6 à 8, légumes 45 minutes seulement (au-delà ils donnent de l'amertume). Poisson 20 minutes maximum.
+
+**Griller ou pas**
+
+Os crus donnent un bouillon clair et délicat. Os rôtis au four à 220 °C pendant 40 minutes avant de les mettre à l'eau donnent un bouillon brun, profond, avec toute la réaction de Maillard en prime. Pour un plat de caractère, c'est ce qu'il faut faire.
+
+**En pratique, avec ton emploi du temps**
+
+Congèle tes carcasses de poulet rôti au fur et à mesure. Quand tu en as trois ou quatre, tu lances un bouillon un dimanche après-midi pendant que tu fais autre chose. Tu congèles en portions. Ensuite, chaque plat de la semaine qui utilise du liquide devient meilleur sans effort supplémentaire.`,
+  vigilance: [
+    "Faire bouillir : bouillon trouble et gras, irrécupérable.",
+    "Départ à l'eau chaude.",
+    "Saler franchement dès le départ.",
+    "Laisser les légumes plus d'une heure : amertume.",
+    "Couvrir complètement : ça monte en température et ça finit par bouillir."
+  ],
+  questions: [
+    "Pourquoi démarrer un bouillon à l'eau froide ?",
+    "Que se passe-t-il exactement si le bouillon bout ?",
+    "Quelle différence entre un bouillon d'os crus et d'os rôtis ?"
+  ],
+  variations: [
+    "Même carcasse, une fois crue, une fois rôtie au four avant.",
+    "Ajoute un morceau de kombu ou des pieds de champignons pour l'umami.",
+    "Réduis de moitié un litre de bouillon et compare l'usage."
+  ],
+  lien: ['lev-umami', 'geste-reduire', 'trame-soupe']
+},
+
+/* =====================================================================
+   3. LES GESTES
+   ===================================================================== */
+
+{
+  id: 'geste-saisir',
+  cat: 'geste',
+  titre: "Saisir",
+  resume: "Créer une croûte. Trois conditions : sec, chaud, pas serré.",
+  contenu: `Saisir, c'est provoquer la réaction de Maillard sur la surface d'un aliment. Ce n'est pas « fermer les pores » — cette idée est fausse, une viande saisie ne perd pas moins de jus. L'intérêt est uniquement aromatique, et il est énorme : la croûte contient l'essentiel du goût.
+
+**Les trois conditions**
+
+Sec. La surface doit être sèche au papier absorbant. Tant qu'il y a de l'eau, la température plafonne à 100 °C et Maillard, qui démarre vers 140 °C, ne peut pas se produire.
+
+Chaud. La poêle doit être vraiment chaude avant que l'aliment n'y entre. Test : une goutte d'eau doit danser sur la surface. Si elle grésille et disparaît lentement, ce n'est pas assez.
+
+Pas serré. Laisse de l'espace entre les morceaux. Une poêle surchargée voit sa température s'effondrer et l'humidité s'accumuler. Deux fournées valent mieux qu'une.
+
+**La méthode**
+
+Poêle chaude, un peu d'huile à point de fumée élevé, l'aliment posé et surtout pas touché. C'est le point le plus difficile psychologiquement : on a envie de remuer. Il ne faut pas. La croûte doit se former, et elle se détachera d'elle-même quand elle sera prête. Si ça colle, c'est que ce n'est pas encore fait.
+
+Une seule face à la fois, jusqu'à coloration franche. Retourner sans arrêt donne une surface grise sur les deux faces.
+
+**Le beurre à la fin**
+
+Pour une pièce de viande : saisis à l'huile, puis en fin de cuisson baisse le feu, ajoute une noix de beurre, une gousse d'ail écrasée et du thym, et arrose la viande à la cuillère pendant une minute. Le beurre noisette parfume, et l'arrosage cuit le dessus sans le retourner. C'est un geste de restaurant qui prend soixante secondes.
+
+**Et le fond de la poêle**
+
+Tous les sucs bruns collés au fond sont du goût pur. Ne lave jamais cette poêle avant d'avoir déglacé.`,
+  vigilance: [
+    "Surface humide.",
+    "Poêle pas assez chaude.",
+    "Trop d'aliments d'un coup.",
+    "Remuer ou retourner trop tôt.",
+    "Jeter les sucs du fond de la poêle."
+  ],
+  questions: [
+    "Quelles sont les trois conditions d'une bonne coloration ?",
+    "Pourquoi ne faut-il pas bouger l'aliment pendant qu'il saisit ?",
+    "À quelle température démarre la réaction de Maillard, et pourquoi l'eau l'empêche ?"
+  ],
+  variations: [
+    "Même aliment, une fois séché au papier, une fois non.",
+    "Une fournée pleine contre deux fournées espacées.",
+    "Termine avec beurre-ail-thym arrosé à la cuillère contre sans."
+  ],
+  lien: ['lev-chaleur', 'geste-deglacer', 'dep-viande-grise']
+},
+
+{
+  id: 'geste-deglacer',
+  cat: 'geste',
+  titre: "Déglacer",
+  resume: "Récupérer les sucs collés au fond. Trente secondes, et tu as une sauce.",
+  contenu: `Les particules brunes collées au fond de la poêle après une cuisson sont le concentré aromatique de tout ce que tu viens de cuire. Les laisser partir à l'eau de vaisselle est le gaspillage le plus courant de la cuisine domestique.
+
+**Le geste**
+
+Retire l'aliment cuit, laisse la poêle sur le feu, dégraisse si nécessaire en inclinant et en retirant l'excès. Verse un liquide froid — un demi-verre suffit. Le choc thermique décolle les sucs. Gratte immédiatement avec une spatule en bois pendant que ça bout.
+
+Laisse réduire jusqu'à consistance sirupeuse, puis hors du feu, ajoute une noix de beurre froid en remuant. Tu as une sauce. Temps total : deux minutes.
+
+**Le choix du liquide**
+
+Vin blanc : classique, apporte acidité et fraîcheur. Vin rouge : plus corsé, pour les viandes rouges. Bouillon : neutre et sûr. Vinaigre, très peu : très acide, à équilibrer. Cidre ou bière : intéressant sur le porc et la volaille. Jus d'agrume : sur le poisson et la volaille. Eau : ça marche aussi, ne t'en prive pas si tu n'as rien d'autre.
+
+**L'ordre d'ajout**
+
+Si tu veux des aromates, fais-les revenir avant de déglacer : échalote ciselée dans le gras restant trente secondes, puis le liquide. Après le déglaçage, ils ne feraient que bouillir.
+
+**Pourquoi c'est le geste le plus rentable**
+
+Il transforme n'importe quelle cuisson à la poêle en plat avec sauce, sans ingrédient supplémentaire et sans temps supplémentaire notable. Une escalope de poulet devient une escalope au vin blanc. C'est exactement le genre de levier qui compte quand on a vingt minutes.`,
+  vigilance: [
+    "Laver la poêle avant de déglacer.",
+    "Déglacer une poêle dont les sucs sont noirs et non bruns : ils sont brûlés, ils seront amers.",
+    "Verser trop de liquide : il faudra réduire longtemps.",
+    "Ajouter le beurre sur le feu vif : la sauce se sépare. Hors du feu, beurre froid."
+  ],
+  questions: [
+    "Que sont exactement les sucs au fond de la poêle ?",
+    "Dans quel ordre : échalote, liquide, beurre ? Pourquoi ?",
+    "Comment savoir si les sucs sont récupérables ou brûlés ?"
+  ],
+  variations: [
+    "Même cuisson, déglace au vin blanc puis au cidre puis au bouillon.",
+    "Avec échalote préalable contre sans.",
+    "Monte au beurre contre laisse tel quel, et compare la texture."
+  ],
+  lien: ['geste-saisir', 'geste-monter-beurre', 'geste-reduire']
+},
+
+{
+  id: 'geste-suer',
+  cat: 'geste',
+  titre: "Suer et construire une base aromatique",
+  resume: "Les dix premières minutes qui décident du goût du plat entier.",
+  contenu: `Presque tous les plats mijotés du monde commencent par la même chose : des légumes aromatiques cuits doucement dans un gras. Mirepoix en France, sofrito en Espagne, soffritto en Italie, holy trinity en Louisiane, base d'oignon-ail-gingembre en Asie du Sud. Ce n'est pas une coïncidence, c'est la fondation.
+
+**Suer, ce n'est pas dorer**
+
+Suer signifie cuire à feu doux pour extraire l'eau et attendrir sans coloration. Les légumes deviennent translucides et fondants. Le but est de développer la douceur.
+
+Dorer, c'est plus fort et plus long, avec de la coloration — donc de la réaction de Maillard, donc plus de profondeur et moins de fraîcheur.
+
+Les deux sont légitimes, mais il faut choisir en connaissance de cause. Une soupe de légumes délicate veut des légumes sués. Une sauce bolognaise veut des légumes dorés.
+
+**La proportion classique**
+
+Deux parts d'oignon, une part de carotte, une part de céleri. Coupe fine et régulière — plus les morceaux sont petits, plus vite l'eau sort et plus le goût se diffuse.
+
+**Le temps**
+
+C'est là que tout se joue. Cinq minutes donnent un oignon translucide. Quinze minutes donnent un oignon fondant et sucré. Quarante minutes à feu très doux donnent des oignons caramélisés, bruns, presque confits — une profondeur qu'aucun raccourci ne reproduit.
+
+En semaine, cinq à huit minutes est réaliste. Une pincée de sel dès le départ accélère la sortie de l'eau et gagne du temps.
+
+**L'ordre**
+
+Les légumes durs d'abord, l'ail en dernier. L'ail brûle en une minute et devient amer. Même chose pour les épices en poudre : trente secondes à une minute dans le gras chaud, juste avant d'ajouter le liquide.
+
+**Le raccourci utile**
+
+Prépare une grande quantité de base aromatique le week-end, congèle-la en portions dans un bac à glaçons. Un cube au fond de la casserole un soir de semaine, et tu as les dix premières minutes du plat déjà faites.`,
+  vigilance: [
+    "Feu trop fort : les légumes colorent alors qu'on voulait juste les attendrir.",
+    "Ail ajouté en même temps que l'oignon : il brûle.",
+    "Épices en poudre ajoutées après le liquide : elles ne libèrent pas leurs arômes.",
+    "Bâcler cette étape — c'est elle qui donne le fond du plat."
+  ],
+  questions: [
+    "Quelle différence entre suer et dorer, et quand choisir l'un ou l'autre ?",
+    "Pourquoi l'ail se met-il en dernier ?",
+    "Quel est l'effet d'une pincée de sel sur les oignons dès le départ ?"
+  ],
+  variations: [
+    "Même plat, base suée cinq minutes contre base dorée vingt minutes.",
+    "Change la base : mirepoix contre oignon-ail-gingembre.",
+    "Ajoute les épices dans l'huile contre dans le liquide."
+  ],
+  lien: ['lev-gras', 'geste-braiser', 'trame-soupe']
+},
+
+{
+  id: 'geste-braiser',
+  cat: 'geste',
+  titre: "Braiser",
+  resume: "Saisir, puis mijoter à couvert dans peu de liquide. La technique qui transforme les morceaux durs.",
+  contenu: `Le braisage combine les deux familles de chaleur : coloration forte d'abord, cuisson douce et humide ensuite. Il transforme les morceaux de viande les moins chers et les plus durs en quelque chose de fondant. C'est la technique la plus rentable économiquement et la plus indulgente techniquement.
+
+**Le principe physique**
+
+Les morceaux durs sont durs parce qu'ils sont riches en collagène. Entre 60 et 90 °C, maintenu plusieurs heures, le collagène se convertit en gélatine. La viande devient fondante et le liquide devient onctueux. C'est le même processus qui rend un bouillon d'os gélatineux.
+
+Cela demande du temps et une température basse et stable. Une ébullition franche, au contraire, contracte les fibres musculaires et rend la viande sèche et filandreuse — on peut parfaitement rater un braisé en le faisant bouillir.
+
+**La séquence**
+
+Sèche et sale la viande. Saisis en plusieurs fournées jusqu'à coloration franche sur toutes les faces, puis réserve. Fais suer la base aromatique dans le même récipient. Ajoute éventuellement du concentré de tomate et fais-le roussir. Déglace. Remets la viande. Ajoute le liquide à mi-hauteur seulement — c'est ce qui distingue un braisé d'un pot-au-feu. La partie émergée continue de rôtir, la partie immergée mijote.
+
+Puis : four à 140-150 °C, à couvert, deux à quatre heures selon le morceau. Le four est meilleur que la plaque parce que la chaleur enveloppe et qu'il n'y a aucun risque d'attacher.
+
+**Le meilleur usage pratique**
+
+Un braisé se fait mieux la veille. En refroidissant, la gélatine se fige, le gras remonte et se retire facilement, et les saveurs se lient. Réchauffé le lendemain, il est nettement meilleur.
+
+Pour ton organisation, c'est le plat idéal du dimanche : trente minutes de travail actif, trois heures de four pendant lesquelles tu fais autre chose, et deux ou trois repas de semaine réglés.
+
+**Les morceaux à choisir**
+
+Bœuf : joue, paleron, macreuse, jarret, queue. Porc : épaule, jarret, travers. Agneau : épaule, souris. Volaille : cuisses uniquement, jamais les blancs.`,
+  vigilance: [
+    "Faire bouillir au lieu de frémir : viande sèche et filandreuse.",
+    "Noyer la viande sous le liquide : ce n'est plus un braisé.",
+    "Utiliser un morceau maigre et noble : il devient sec, c'est du gaspillage.",
+    "Sauter la coloration initiale : le plat perd la moitié de sa profondeur.",
+    "Écourter la cuisson — un braisé passe par une phase où la viande est encore dure avant de devenir fondante. Si c'est dur, ce n'est pas cuit, il faut continuer."
+  ],
+  questions: [
+    "Pourquoi un morceau dur devient-il fondant en braisage alors qu'un morceau maigre devient sec ?",
+    "À quelle hauteur doit monter le liquide, et pourquoi pas plus ?",
+    "Ta viande est encore dure après deux heures. Que fais-tu ?"
+  ],
+  variations: [
+    "Change le liquide : vin rouge, bière, cidre, bouillon, lait.",
+    "Change la base aromatique et les épices en gardant le même morceau.",
+    "Mange-le le jour même puis le lendemain, et compare."
+  ],
+  lien: ['lev-chaleur', 'geste-saisir', 'geste-suer', 'trame-braise-dimanche']
+},
+
+{
+  id: 'geste-rotir',
+  cat: 'geste',
+  titre: "Rôtir au four",
+  resume: "Chaleur sèche et enveloppante. La technique la moins exigeante en présence.",
+  contenu: `Le four est l'allié de quelqu'un qui a peu de temps de présence : une fois enfourné, le plat cuit seul.
+
+**Le choix de la température**
+
+Chaleur forte, 220-240 °C : pour les petites pièces et les légumes coupés. Coloration rapide, intérieur qui reste juteux. C'est ce qu'il faut pour des légumes rôtis.
+
+Chaleur modérée, 180 °C : le réglage passe-partout, pour les pièces moyennes.
+
+Chaleur douce, 120-150 °C : pour les grosses pièces. Cuisson homogène du bord au centre, très peu de perte de jus.
+
+La méthode combinée est la meilleure sur un gros rôti ou un poulet : basse température jusqu'à quelques degrés du but, puis four à fond dix minutes pour la croûte. Ou l'inverse. Les deux fonctionnent.
+
+**Les légumes rôtis, à maîtriser en priorité**
+
+C'est ce qui a le meilleur rapport effort/résultat de toute la cuisine de semaine.
+
+Four à 220 °C, chaleur tournante. Légumes coupés en morceaux réguliers, séchés, mélangés avec assez d'huile pour qu'ils brillent tous, salés. Étalés sur une seule couche, sans se toucher — c'est le point critique. Une plaque surchargée donne des légumes vapeur mous et pâles.
+
+Utilise deux plaques plutôt qu'une. Préchauffe la plaque à vide : les légumes commencent à colorer dès le contact.
+
+Ne remue pas avant que la face en contact ait bruni.
+
+**Les temps de référence à 220 °C**
+
+Courgettes, poivrons, oignons : 20-25 minutes. Brocoli, chou-fleur en fleurettes : 20-25 minutes. Carottes, panais en morceaux : 30-35 minutes. Pommes de terre en quartiers : 40-45 minutes. Courge en cubes : 30-35 minutes.
+
+**La grille**
+
+Pour tout ce qui doit être croustillant sur toutes les faces, pose sur une grille au-dessus de la plaque. L'air circule dessous et le dessous ne baigne pas dans son jus.`,
+  vigilance: [
+    "Plaque surchargée : les légumes cuisent à la vapeur.",
+    "Pas assez d'huile : ils se dessèchent au lieu de rôtir.",
+    "Remuer trop souvent.",
+    "Se fier au temps plutôt qu'à la couleur.",
+    "Ne pas préchauffer réellement le four — la plupart des fours sonnent avant d'être à température."
+  ],
+  questions: [
+    "Pourquoi une plaque trop chargée donne-t-elle des légumes mous ?",
+    "Quel intérêt de préchauffer la plaque à vide ?",
+    "Quand utiliser 220 °C plutôt que 150 °C ?"
+  ],
+  variations: [
+    "Mêmes légumes sur une plaque bien étalée contre une plaque chargée.",
+    "180 °C contre 220 °C, même durée.",
+    "Ajoute les aromates en début contre en fin de cuisson."
+  ],
+  lien: ['lev-chaleur', 'ratio-saumure', 'trame-plaque-unique']
+},
+
+{
+  id: 'geste-reduire',
+  cat: 'geste',
+  titre: "Réduire",
+  resume: "Évaporer l'eau pour concentrer le goût et épaissir. Sans ajouter quoi que ce soit.",
+  contenu: `Réduire, c'est faire évaporer l'eau d'un liquide pour concentrer ce qui reste. C'est la façon la plus pure d'intensifier un goût : on n'ajoute rien, on enlève.
+
+**Le principe**
+
+Un liquide réduit de moitié a deux fois plus de goût par cuillère — et deux fois plus de sel. C'est pourquoi on ne sale jamais à fond avant de réduire.
+
+La vitesse d'évaporation dépend de la surface exposée, pas du volume. Une casserole large réduit bien plus vite qu'une casserole haute et étroite. Et sans couvercle, évidemment.
+
+**Les repères**
+
+Réduit de moitié : la sauce commence à napper.
+Réduit aux trois quarts : consistance sirupeuse, elle tient sur la cuillère et laisse une trace quand on passe le doigt dessus.
+Réduit à glace : quasi solide en refroidissant, c'est du concentré pur qu'on utilise à la cuillère à café.
+
+Le test de la cuillère : trempe une cuillère, passe le doigt sur le dos. Si la trace reste nette, c'est nappé.
+
+**Ce qu'il ne faut pas réduire**
+
+Tout ce qui contient du lait, de la crème en grande quantité ou de l'œuf ne se réduit pas fortement : ça tranche ou ça coagule. Les liquides très salés non plus, pour des raisons évidentes.
+
+Les vins réduisent bien mais il faut leur laisser le temps de perdre leur mordant alcoolique — quelques minutes à frémissement, pas dix secondes.
+
+**En pratique**
+
+C'est le geste qui sauve une sauce trop liquide sans ajouter de farine ni de fécule. Il coûte seulement du temps et de l'attention. Si tu es pressé : casserole plus large, feu plus vif, ça va deux fois plus vite.`,
+  vigilance: [
+    "Saler avant de réduire.",
+    "Réduire à couvert : la vapeur retombe, il ne se passe rien.",
+    "Réduire fortement une sauce à la crème ou contenant du lait.",
+    "Utiliser une casserole étroite : très lent."
+  ],
+  questions: [
+    "Pourquoi une casserole large réduit-elle plus vite ?",
+    "Comment testes-tu qu'une sauce est nappante ?",
+    "Que se passe-t-il si tu sales avant de réduire de moitié ?"
+  ],
+  variations: [
+    "Réduis un bouillon de moitié puis aux trois quarts et compare les usages.",
+    "Réduis un même liquide dans une casserole étroite puis dans une large, et chronomètre.",
+    "Termine une réduction montée au beurre contre non montée."
+  ],
+  lien: ['geste-deglacer', 'geste-monter-beurre', 'ratio-bouillon', 'dep-sauce-liquide']
+},
+
+{
+  id: 'geste-monter-beurre',
+  cat: 'geste',
+  titre: "Monter au beurre",
+  resume: "Beurre froid, hors du feu, en remuant. Trente secondes qui changent une sauce.",
+  contenu: `Monter au beurre consiste à incorporer du beurre froid dans une sauce chaude pour créer une émulsion. Le résultat est brillant, onctueux, avec une texture qui nappe. C'est le geste de finition classique de la cuisine française, et il est étonnamment simple.
+
+**La méthode**
+
+Ta sauce est réduite et chaude. Retire du feu, ou baisse au minimum. Ajoute le beurre très froid, coupé en petits cubes, un ou deux à la fois, en remuant ou en faisant tourner la casserole. Chaque cube doit fondre et s'incorporer avant le suivant.
+
+Compte 20 à 50 g de beurre pour 200 ml de sauce.
+
+**Pourquoi froid, pourquoi hors du feu**
+
+Le beurre est lui-même une émulsion : du gras, de l'eau et des protéines de lait. Fondu doucement dans un liquide en mouvement, il se disperse en gouttelettes stabilisées. Fondu trop vite ou trop chaud, il se sépare simplement en une flaque d'huile en surface. Le froid ralentit la fonte et laisse le temps à l'émulsion de se former.
+
+Au-delà d'environ 90 °C, ça tranche. C'est pour ça qu'on sort du feu.
+
+**Où l'utiliser**
+
+Après un déglaçage, sur un jus de cuisson, sur une réduction de vin, dans une sauce de poisson, sur des légumes glacés. Partout où tu as un liquide savoureux mais un peu maigre et sans corps.
+
+**Les variantes**
+
+Beurre d'herbes préparé à l'avance et congelé en rondelles : tu en prends un et tu montes ta sauce avec, tu gagnes une étape. Une cuillère de crème épaisse fait un travail proche, plus stable mais moins fin. Une cuillère de moutarde à la place apporte de l'émulsion et du goût.`,
+  vigilance: [
+    "Beurre à température ambiante : il fond trop vite et la sauce tranche.",
+    "Sauce trop chaude ou sur le feu vif.",
+    "Ajouter tout le beurre d'un coup.",
+    "Refaire bouillir la sauce après l'avoir montée : elle se sépare."
+  ],
+  questions: [
+    "Pourquoi le beurre doit-il être froid ?",
+    "Que se passe-t-il si la sauce est trop chaude au moment de monter ?",
+    "Combien de beurre pour 200 ml de sauce ?"
+  ],
+  variations: [
+    "Beurre nature contre beurre d'herbes congelé.",
+    "Monte au beurre contre une cuillère de crème, sur la même sauce.",
+    "Ajoute une pointe de moutarde avant le beurre."
+  ],
+  lien: ['geste-deglacer', 'geste-reduire', 'ratio-mayonnaise', 'dep-sauce-tranchee']
+},
+
+{
+  id: 'geste-emulsionner',
+  cat: 'geste',
+  titre: "Émulsionner",
+  resume: "Faire tenir ensemble deux choses qui ne se mélangent pas.",
+  contenu: `Une émulsion, c'est un gras dispersé en gouttelettes minuscules dans un liquide aqueux, ou l'inverse. Comme les deux ne veulent pas se mélanger, il faut trois choses : de l'énergie mécanique, un émulsifiant, et de la patience sur l'incorporation.
+
+**Les trois conditions**
+
+L'agitation crée les gouttelettes. Fouet, mixeur plongeant, secouage vigoureux dans un bocal.
+
+L'émulsifiant les empêche de fusionner à nouveau. Ce sont des molécules à double affinité, attirées à la fois par l'eau et par le gras : lécithine du jaune d'œuf, mucilages de la moutarde, protéines de lait, amidon, tahini, miso, purée d'ail.
+
+L'incorporation progressive du gras est la condition la plus souvent violée. Au début, il y a très peu de liquide aqueux : chaque goutte de gras doit être dispersée avant la suivante. Une fois l'émulsion établie, on peut accélérer.
+
+**Les trois catégories**
+
+Émulsions temporaires : vinaigrette simple. Elles se séparent, c'est normal, on secoue.
+
+Émulsions froides stables : mayonnaise, aïoli. Le jaune fait le travail.
+
+Émulsions chaudes : hollandaise, beurre blanc, sauce montée au beurre. Les plus fragiles, parce que la chaleur travaille contre toi — trop chaud, l'œuf coagule ou le beurre se sépare.
+
+**L'émulsion la plus utile au quotidien**
+
+L'eau de cuisson des pâtes. Son amidon est un émulsifiant. Quand tu mélanges des pâtes égouttées avec un gras et une louche d'eau de cuisson, en remuant vigoureusement, tu crées une émulsion qui enrobe les pâtes au lieu de glisser dessus. C'est toute la différence entre des pâtes à l'huile et des pâtes correctement liées, et ça ne coûte rien.
+
+**Rattraper une émulsion cassée**
+
+Le principe est toujours le même : repartir d'une petite base propre et y incorporer la sauce cassée goutte à goutte. Un jaune neuf, une cuillère d'eau tiède, ou une cuillère de la sauce encore intacte dans un bol propre.`,
+  vigilance: [
+    "Incorporer le gras trop vite au démarrage.",
+    "Ingrédients froids pour une émulsion froide.",
+    "Chauffer au-delà de 70 °C une émulsion à l'œuf.",
+    "Jeter l'eau de cuisson des pâtes."
+  ],
+  questions: [
+    "Quelles sont les trois conditions d'une émulsion réussie ?",
+    "Pourquoi l'eau de cuisson des pâtes lie-t-elle une sauce ?",
+    "Comment rattrape-t-on une émulsion cassée, dans le principe ?"
+  ],
+  variations: [
+    "Fais des pâtes avec et sans eau de cuisson dans la sauce.",
+    "Émulsionne une vinaigrette au fouet, au bocal secoué, puis au mixeur plongeant.",
+    "Change d'émulsifiant : moutarde, tahini, miso, yaourt."
+  ],
+  lien: ['ratio-mayonnaise', 'ratio-vinaigrette', 'geste-monter-beurre', 'dep-sauce-tranchee']
+},
+
+{
+  id: 'geste-blanchir',
+  cat: 'geste',
+  titre: "Blanchir et rafraîchir",
+  resume: "Cuisson courte à grande eau bouillante salée, puis arrêt net dans l'eau glacée.",
+  contenu: `Blanchir, c'est plonger un aliment dans un grand volume d'eau bouillante salée pendant un temps court, puis stopper immédiatement la cuisson dans l'eau glacée.
+
+**À quoi ça sert**
+
+Fixer la couleur des légumes verts : le choc thermique et la brièveté préservent la chlorophylle. Un haricot vert blanchi trois minutes est vert vif ; le même cuit dix minutes est kaki.
+
+Préparer à l'avance. C'est l'usage le plus intéressant pour quelqu'un de pressé : tu blanchis tes légumes le dimanche, tu les gardes au frigo, et en semaine il suffit de les réchauffer trente secondes dans une poêle avec un gras. Ça transforme complètement la faisabilité d'un repas de semaine.
+
+Retirer l'amertume ou un excès de sel de certains ingrédients. Faciliter l'épluchage des tomates et des pêches. Préparer à la congélation, en désactivant les enzymes qui dégradent les légumes.
+
+**La méthode**
+
+Beaucoup d'eau, très salée — plus salée qu'une soupe, environ 10 g par litre au minimum. Le volume compte : une petite casserole voit sa température s'effondrer quand tu ajoutes les légumes, et ils cuisent alors dans une eau tiède.
+
+Plonge, compte le temps, sors, et immerge immédiatement dans de l'eau très froide avec des glaçons. Sortir dès que c'est froid — inutile de faire tremper.
+
+**Les temps**
+
+Haricots verts : 3-4 minutes. Brocoli en fleurettes : 2-3 minutes. Petits pois : 2 minutes. Épinards : 30 secondes. Asperges vertes : 2-4 minutes selon la taille. Chou-fleur : 4-5 minutes.
+
+Le test reste le couteau : il doit entrer avec une légère résistance.
+
+**Le sel de l'eau**
+
+C'est la seule occasion d'assaisonner un légume de l'intérieur. Une eau insuffisamment salée donne un légume qu'aucun assaisonnement de surface ne rattrapera.`,
+  vigilance: [
+    "Pas assez d'eau : la température chute et le légume cuit mou.",
+    "Eau pas assez salée.",
+    "Oublier le rafraîchissement : la cuisson continue et la couleur vire.",
+    "Laisser tremper trop longtemps dans l'eau glacée : le légume se gorge d'eau.",
+    "Couvrir la casserole : les acides volatils restent piégés et ternissent le vert."
+  ],
+  questions: [
+    "Pourquoi faut-il un grand volume d'eau ?",
+    "Que se passe-t-il si on saute l'étape de l'eau glacée ?",
+    "Comment blanchir peut-il faciliter tes repas de semaine ?"
+  ],
+  variations: [
+    "Blanchi-rafraîchi puis sauté à la poêle contre cuit directement à la poêle.",
+    "Compare 2, 4 et 6 minutes sur le même brocoli.",
+    "Eau salée à 5 g/L contre 15 g/L."
+  ],
+  lien: ['lev-sel', 'trame-poelee', 'dep-legumes-detrempes']
+},
+
+{
+  id: 'geste-pocher',
+  cat: 'geste',
+  titre: "Pocher",
+  resume: "Cuire dans un liquide qui frémit à peine. La cuisson la plus douce et la plus indulgente.",
+  contenu: `Pocher, c'est cuire immergé dans un liquide maintenu entre 70 et 85 °C — soit nettement en dessous de l'ébullition. Quelques bulles isolées remontent, la surface bouge à peine.
+
+**Pourquoi c'est utile**
+
+C'est la cuisson la plus douce, donc celle qui préserve le mieux les textures fragiles : poisson, volaille maigre, œufs, fruits. Le liquide transmet la chaleur uniformément et lentement, ce qui laisse une marge d'erreur bien plus large qu'une poêle.
+
+Contrepartie : aucune réaction de Maillard, donc aucun goût de grillé. C'est pourquoi le liquide de pochage doit être savoureux — bouillon, court-bouillon, lait aromatisé, vin dilué. Pocher dans de l'eau nue donne un résultat fade.
+
+**La méthode**
+
+Porte le liquide à frémissement, baisse, immerge l'aliment. Maintiens juste en dessous de l'ébullition. Si ça bout, la surface s'effiloche et les protéines se contractent.
+
+Pour un blanc de poulet : immerge dans un bouillon frémissant, éteins le feu, couvre, et laisse quinze à vingt minutes selon l'épaisseur. La chaleur résiduelle suffit et le résultat est extrêmement moelleux. C'est une méthode presque impossible à rater et parfaite pour préparer de la protéine à l'avance pour la semaine.
+
+Pour un œuf poché : eau frémissante avec un trait de vinaigre, œuf très frais cassé dans un ramequin puis glissé dans un tourbillon créé à la cuillère, trois minutes.
+
+Pour du poisson : court-bouillon frémissant, cinq à huit minutes selon l'épaisseur, ou hors du feu à couvert.
+
+**Le bonus**
+
+Le liquide de pochage devient un bouillon parfumé, réutilisable. Ne le jette pas.`,
+  vigilance: [
+    "Laisser bouillir : texture ruinée.",
+    "Pocher dans de l'eau non assaisonnée : résultat fade.",
+    "Œuf pas assez frais : le blanc se disperse.",
+    "Jeter le liquide de pochage."
+  ],
+  questions: [
+    "Quelle est la fourchette de température du pochage, et comment la reconnaître visuellement ?",
+    "Pourquoi le liquide de pochage doit-il être savoureux ?",
+    "Décris la méthode pour un blanc de poulet moelleux."
+  ],
+  variations: [
+    "Poche un blanc de poulet dans de l'eau puis dans un bouillon aromatisé.",
+    "Ajoute des aromates entiers au liquide : gingembre, citronnelle, badiane, laurier.",
+    "Réutilise le liquide de pochage comme base de soupe."
+  ],
+  lien: ['ratio-bouillon', 'lev-chaleur']
+},
+
+{
+  id: 'geste-fermentation',
+  cat: 'geste',
+  titre: "Fermenter — lactofermentation simple",
+  resume: "Du sel, des légumes, de l'eau, du temps. Une source d'acide et d'umami en permanence.",
+  contenu: `La lactofermentation est la conservation la plus simple qui existe, et elle produit un ingrédient que rien d'autre ne remplace : un acide vivant, complexe, avec de l'umami en prime. Pour quelqu'un qui cherche à cuisiner vite et bien, avoir un bocal de fermenté au frigo est un raccourci permanent.
+
+**Le principe**
+
+Les bactéries lactiques présentes naturellement sur les légumes transforment les sucres en acide lactique. Cet acide fait chuter le pH, ce qui élimine tout ce qui pourrait faire pourrir. Le sel gère la transition : il freine les indésirables le temps que les lactiques prennent le contrôle.
+
+**Le ratio**
+
+2 % du poids total, légumes et eau confondus. Pour 1 kg de chou et 0 eau : 20 g de sel. Pour 700 g de légumes plus 300 ml d'eau : 20 g de sel.
+
+En dessous de 1,5 %, le risque augmente. Au-dessus de 3 %, la fermentation ralentit beaucoup.
+
+**Les deux méthodes**
+
+À sec, pour les légumes qui rendent de l'eau : chou pour la choucroute ou le kimchi. Tu émincés, tu sales à 2 %, tu masses jusqu'à ce que l'eau sorte, tu tasses dans un bocal en t'assurant que le liquide recouvre.
+
+En saumure, pour les légumes fermes : carotte, radis, concombre, chou-fleur, haricot. Saumure à 2-3 %, légumes immergés.
+
+**La règle absolue**
+
+Tout ce qui est sous le liquide fermente. Tout ce qui dépasse moisit. Il faut un poids ou une feuille de chou pour maintenir l'immersion.
+
+**Le déroulement**
+
+Trois à sept jours à température ambiante, à l'abri de la lumière directe, avec un bocal non hermétiquement fermé ou ouvert une fois par jour pour laisser sortir le CO2. Ça bulle, ça se trouble, ça sent aigre — c'est bon signe. Goûte à partir du troisième jour, et mets au frigo quand ça te plaît. Le froid ralentit tout, et le bocal se garde des mois.
+
+**Reconnaître un problème**
+
+Un fermenté sain sent acide et frais. Trouble et bulles sont normaux. Un voile blanc en surface est généralement une levure inoffensive à retirer. En revanche, des moisissures colorées et duveteuses, ou une odeur putride et non acide, signifient qu'on jette tout.
+
+**L'usage en cuisine**
+
+Ce n'est pas seulement un condiment. La saumure remplace le vinaigre dans une vinaigrette. Une cuillère de kimchi hachée dans une poêlée apporte acide et umami en même temps. Un fond de saumure dans un braisé lui donne une profondeur inattendue.`,
+  vigilance: [
+    "Légumes non immergés : moisissure garantie.",
+    "Bocal totalement hermétique sans dégazage.",
+    "Sel iodé ou légumes traités : la fermentation peut être inhibée.",
+    "Se fier au temps plutôt qu'au goût — goûte à partir du troisième jour.",
+    "Confondre le voile de levure inoffensif avec une vraie moisissure colorée."
+  ],
+  questions: [
+    "Quel pourcentage de sel, et calculé sur quoi exactement ?",
+    "Quelle est la règle absolue concernant le niveau de liquide ?",
+    "Comment distingues-tu une fermentation saine d'une fermentation ratée ?"
+  ],
+  variations: [
+    "Même légume à 2 % et à 3 % de sel, et compare le rythme et le goût.",
+    "Ajoute des aromates entiers : ail, aneth, graines de moutarde, piment.",
+    "Utilise la saumure obtenue comme acide dans une vinaigrette et dans un braisé."
+  ],
+  lien: ['lev-acide', 'lev-umami', 'ratio-saumure']
+},
+
+{
+  id: 'geste-couteau',
+  cat: 'geste',
+  titre: "Le couteau — régularité et vitesse",
+  resume: "Un couteau qui coupe et une coupe régulière font gagner plus de temps que n'importe quel appareil.",
+  contenu: `La découpe n'est pas de l'esthétique, c'est de la physique de cuisson. Des morceaux de tailles différentes cuisent à des vitesses différentes : quand les gros sont cuits, les petits sont défaits. La régularité est ce qui rend une cuisson prévisible.
+
+**L'affûtage**
+
+Un couteau émoussé est plus dangereux qu'un couteau affûté : il glisse au lieu de mordre. Il écrase aussi les cellules au lieu de les trancher, ce qui fait pleurer les oignons davantage et noircir les herbes.
+
+Un fusil avant chaque session redresse le fil. Une pierre ou un affûteur toutes les quelques semaines refait le tranchant. Cinq secondes de fusil avant de commencer changent l'expérience entière.
+
+**La prise**
+
+Pince la lame entre le pouce et l'index juste devant le manche, les trois autres doigts sur le manche. C'est plus stable que de tenir uniquement le manche.
+
+La main qui tient l'aliment fait une griffe : doigts repliés, ongles vers l'aliment, première phalange servant de guide à la lame. La lame reste en contact avec la deuxième phalange. Tant que tu gardes cette forme, tu ne peux pas te couper, même vite.
+
+**Le mouvement**
+
+On ne coupe pas de haut en bas, on coupe d'avant en arrière ou d'arrière en avant en laissant la longueur de la lame faire le travail. La pointe reste à peu près en contact avec la planche et sert de pivot.
+
+**Les trois coupes qui suffisent**
+
+L'émincé, tranches fines pour tout ce qui doit fondre rapidement — oignon, ail, champignon.
+
+Le dés, régulier, pour les bases aromatiques et les plats mijotés. Environ 5 mm pour une base, 1-2 cm pour un plat de légumes.
+
+Le bâtonnet, pour les légumes sautés vite ou crus.
+
+**L'oignon, à faire une fois pour toutes**
+
+Coupe en deux dans le sens de la racine, épluche, pose la face plate sur la planche. Racine vers l'arrière, elle tient tout ensemble. Tranches parallèles dans le sens des fibres pour un oignon qui tient à la cuisson, ou perpendiculaires pour un oignon qui fond. Puis coupes transversales pour obtenir des dés. Tu n'as jamais besoin de la coupe horizontale qu'on voit dans les vidéos.
+
+**Le gain réel**
+
+Une planche stable — un linge humide dessous — et un couteau qui coupe réduisent le temps de préparation d'un plat de moitié. C'est le seul investissement matériel qui compte vraiment.`,
+  vigilance: [
+    "Couteau émoussé : plus lent et plus dangereux.",
+    "Planche qui glisse : mets un linge humide dessous.",
+    "Morceaux de tailles inégales : cuisson inégale.",
+    "Hacher les herbes fragiles au lieu de les trancher : elles noircissent."
+  ],
+  questions: [
+    "Pourquoi un couteau émoussé est-il plus dangereux ?",
+    "Décris la position de la main qui tient l'aliment.",
+    "Quelle différence entre couper un oignon dans le sens des fibres ou perpendiculairement ?"
+  ],
+  variations: [
+    "Coupe un oignon dans les deux sens et compare la tenue après cuisson.",
+    "Chronomètre une même préparation avant et après un passage au fusil.",
+    "Fais une poêlée en dés réguliers puis en morceaux irréguliers, et observe la cuisson."
+  ],
+  lien: ['geste-suer', 'trame-poelee']
+},
+
+/* =====================================================================
+   4. LES TRAMES — canevas de repas, pas des recettes
+   ===================================================================== */
+
+{
+  id: 'trame-poelee',
+  cat: 'trame',
+  titre: "La poêlée complète — 20 minutes",
+  resume: "Base aromatique, protéine, légume, liaison, finition. Un canevas, des centaines de plats.",
+  contenu: `C'est la trame la plus utile en semaine. Cinq étapes, vingt minutes, une seule poêle.
+
+**La structure**
+
+1. Base aromatique. Oignon ou échalote dans un gras, feu moyen, 4-5 minutes. Ail et épices en poudre dans les 30 dernières secondes.
+
+2. Protéine. Feu vif, en une seule couche, sans remuer, jusqu'à coloration. Réserve si elle risque de trop cuire. Poulet en morceaux, lardons, crevettes, tofu ferme pressé, restes de viande, œufs à la fin.
+
+3. Légume. Le plus long d'abord, le plus court ensuite. Si le légume est dur, ajoute une louche d'eau et couvre deux minutes pour l'attendrir à la vapeur, puis découvre pour finir à sec.
+
+4. Liaison. Un liquide qui déglace et lie : eau de cuisson des pâtes, bouillon, crème, lait de coco, sauce soja, vin, ou simplement de l'eau plus le gras déjà présent.
+
+5. Finition. Les trois choses qui font la différence, systématiquement : de l'acide, un gras cru, un élément frais ou croquant. Trait de citron ou de vinaigre, filet d'huile d'olive, herbes ciselées, graines toastées, oignon nouveau, fromage râpé.
+
+**Les axes de variation**
+
+Change un seul paramètre à la fois et tu obtiens un plat différent sans jamais consulter une recette :
+- la base : oignon-ail, échalote, poireau, oignon-gingembre-ail
+- l'épice : cumin, paprika fumé, curry, herbes de Provence, piment, garam masala
+- la protéine
+- le légume
+- la liaison : crème, coco, tomate, bouillon, soja
+- l'acide de finition : citron, vinaigre, yaourt, saumure de pickles
+- le croquant : amandes, noix, graines de courge, chapelure dorée
+
+**Le principe d'apprentissage**
+
+Refais cette trame chaque semaine en changeant une seule variable. C'est la répétition avec variation qui construit l'intuition — pas la diversité. Au bout de dix fois, tu cesseras d'y penser et tu improviseras.
+
+**L'erreur qui la ruine**
+
+Tout mettre dans la poêle en même temps. Chaque famille d'ingrédients a son temps ; les empiler donne un plat où rien n'est bien cuit et où rien n'a coloré.`,
+  vigilance: [
+    "Tout ajouter en même temps.",
+    "Poêle trop chargée : ça devient de l'étuvée.",
+    "Oublier la finition acide — c'est ce qui distingue une poêlée correcte d'une bonne poêlée.",
+    "Ail ou épices ajoutés trop tôt : ils brûlent."
+  ],
+  questions: [
+    "Cite les cinq étapes dans l'ordre.",
+    "Que fais-tu si ton légume est trop dur pour cuire à la poêle en 5 minutes ?",
+    "Quels sont les trois éléments de finition à ajouter systématiquement ?"
+  ],
+  variations: [
+    "Même trame, change uniquement l'épice.",
+    "Même trame, change uniquement la liaison.",
+    "Même trame, change uniquement le croquant de finition."
+  ],
+  lien: ['geste-suer', 'geste-saisir', 'lev-acide', 'geste-blanchir']
+},
+
+{
+  id: 'trame-plaque-unique',
+  cat: 'trame',
+  titre: "Le plat unique au four",
+  resume: "Tout sur une plaque, une seule vaisselle, zéro surveillance.",
+  contenu: `Le meilleur format quand le temps de présence en cuisine est le vrai facteur limitant. Dix minutes de préparation, trente à quarante minutes pendant lesquelles tu es ailleurs.
+
+**Le principe**
+
+Une plaque, four à 200-220 °C chaleur tournante, tout étalé en une seule couche.
+
+La seule difficulté est la synchronisation : tous les éléments doivent finir en même temps. Deux solutions — couper chaque ingrédient à une taille adaptée à son temps de cuisson, ou décaler l'enfournement.
+
+**Les temps de référence à 220 °C**
+
+À enfourner en premier : pommes de terre en quartiers, carottes, panais, courge, cuisses de poulet, saucisses (35-45 min).
+À ajouter à mi-parcours : brocoli, chou-fleur, poivrons, courgettes, oignons rouges, pois chiches égouttés (20-25 min).
+À ajouter dans les dix dernières minutes : tomates cerises, ail en gousses, poisson, feta, olives.
+
+**Le montage type**
+
+Un féculent ou légume racine, un légume vert ou coloré, une protéine, du gras en quantité suffisante, du sel, une épice sèche. Mélange le tout à la main dans un saladier avant d'étaler — l'huile et les épices doivent enrober, pas être versées par-dessus.
+
+**Les trois erreurs**
+
+Plaque surchargée : les légumes rendent leur eau, ne brunissent pas, et tu obtiens un plat mou. Deux plaques valent mieux qu'une.
+
+Pas assez d'huile : tout doit briller, pas être détrempé, mais chaque morceau doit être enrobé.
+
+Sortir sans finition. Ce plat, comme les autres, a besoin d'acide et de fraîcheur en sortie de four : citron, yaourt, herbes, feta émiettée, tahini détendu, sauce yaourt-ail.
+
+**Le rendement**
+
+Fais-en une plaque et demie : le surplus devient le déjeuner du lendemain, froid ou réchauffé, transformé en bol avec un féculent et une sauce.`,
+  vigilance: [
+    "Plaque surchargée.",
+    "Tout enfourner en même temps sans tenir compte des temps de cuisson.",
+    "Huile insuffisante ou versée sans mélanger.",
+    "Servir sans élément acide ni frais."
+  ],
+  questions: [
+    "Quels ingrédients enfournes-tu en premier, et lesquels dans les dix dernières minutes ?",
+    "Pourquoi vaut-il mieux deux plaques qu'une seule bien remplie ?",
+    "Qu'ajoutes-tu systématiquement en sortie de four ?"
+  ],
+  variations: [
+    "Change la famille d'épices en gardant les mêmes légumes.",
+    "Change la sauce de finition : yaourt-ail, tahini-citron, vinaigrette moutardée.",
+    "Ajoute une légumineuse en conserve à mi-cuisson pour le croustillant."
+  ],
+  lien: ['geste-rotir', 'lev-acide', 'trame-bol']
+},
+
+{
+  id: 'trame-bol',
+  cat: 'trame',
+  titre: "Le bol composé",
+  resume: "Féculent, protéine, légume cuit, légume cru, sauce, croquant. La formule des restes.",
+  contenu: `Un bol n'est pas un plat, c'est une méthode d'assemblage. Elle permet de faire un repas complet avec ce qui existe déjà, en cinq minutes.
+
+**La formule**
+
+Une base de féculent : riz, quinoa, boulgour, pâtes froides, pommes de terre, pain.
+Une protéine : reste de viande, œuf, légumineuse, poisson en conserve, fromage frais.
+Un légume cuit : reste de plaque au four, légume blanchi, poêlée.
+Un légume cru ou fermenté : carotte râpée, chou émincé, concombre, pickles, kimchi, herbes.
+Une sauce.
+Un croquant : graines, noix, oignons frits, chapelure dorée.
+
+Les six lignes ne sont pas décoratives : chacune apporte une texture ou un contraste. Un bol qui ne fonctionne pas a presque toujours sauté la ligne « cru » ou la ligne « croquant ».
+
+**Les sauces à connaître**
+
+Elles se montent en une minute et se gardent une semaine.
+
+Tahini-citron : 3 cuillères de tahini, jus d'un citron, une gousse d'ail écrasée, de l'eau pour détendre, sel. Épaissit d'abord bizarrement puis se lisse — c'est normal, continue.
+Yaourt-herbes : yaourt, ail, citron, herbes hachées, huile d'olive.
+Soja-sésame : soja, vinaigre de riz, huile de sésame grillé, un peu de miel, gingembre râpé.
+Vinaigrette moutardée classique.
+
+**La stratégie de semaine**
+
+Le week-end : cuis un grand volume de féculent, blanchis des légumes, poche ou rôtis une protéine, monte deux sauces. En semaine, l'assemblage prend cinq minutes et ne ressemble jamais à des restes réchauffés, parce que les éléments crus et la sauce sont frais.
+
+C'est le format le plus adapté à quelqu'un dont le temps est fragmenté : le travail est concentré sur un moment, la consommation est répartie.`,
+  vigilance: [
+    "Oublier l'élément cru ou fermenté : le bol paraît tiède et mou.",
+    "Oublier le croquant.",
+    "Sauce trop épaisse : elle ne se répartit pas, détends-la.",
+    "Tout assaisonner de la même façon — chaque composant doit être assaisonné pour lui-même."
+  ],
+  questions: [
+    "Cite les six lignes de la formule.",
+    "Quel élément manque le plus souvent quand un bol paraît fade et mou ?",
+    "Que prépares-tu le week-end pour que l'assemblage prenne cinq minutes ?"
+  ],
+  variations: [
+    "Même contenu, trois sauces différentes sur trois jours.",
+    "Change uniquement le fermenté.",
+    "Change le croquant : graines de courge, amandes, chapelure dorée à l'huile."
+  ],
+  lien: ['ratio-riz', 'geste-blanchir', 'geste-fermentation', 'geste-pocher']
+},
+
+{
+  id: 'trame-soupe',
+  cat: 'trame',
+  titre: "La soupe-repas",
+  resume: "Base, légume, liquide, corps, finition. Le plat le plus tolérant qui existe.",
+  contenu: `Une soupe pardonne presque tout et absorbe n'importe quel légume qui traîne. Mais entre une soupe correcte et une bonne soupe, il y a trois gestes précis.
+
+**La structure**
+
+1. Base aromatique suée, 5 minutes. Ne saute pas cette étape : une soupe où les légumes ont été jetés directement dans l'eau n'a pas de fond.
+
+2. Légumes coupés, sués deux minutes avec la base.
+
+3. Liquide : bouillon plutôt qu'eau, à hauteur ou légèrement au-dessus. Trop de liquide dilue, c'est l'erreur la plus fréquente. Tu peux toujours en rajouter.
+
+4. Cuisson jusqu'à tendreté. Pas plus — les légumes verts perdent leur couleur et leur goût au-delà.
+
+5. Corps. C'est l'étape qui manque le plus souvent. Une soupe purement végétale est aqueuse. Ajoute une pomme de terre, une poignée de légumineuses, du riz, de la crème, du lait de coco, ou mixe une partie seulement pour épaissir avec la matière elle-même.
+
+6. Finition, obligatoire : acide, gras cru, croquant. Un trait de vinaigre ou de citron, un filet d'huile d'olive, des graines ou des croûtons.
+
+**Les trois gestes qui font la différence**
+
+Faire suer avant de mouiller. Ne pas noyer. Finir avec de l'acide.
+
+**Une variante meilleure**
+
+Rôtis les légumes au four avant de les mettre en soupe. Vingt-cinq minutes à 220 °C, puis bouillon et mixage. La caramélisation change complètement la profondeur — c'est la même soupe et ce n'est plus du tout le même plat.
+
+**Le rendement**
+
+Une soupe se fait en grande quantité, se congèle bien, et se transforme : la même base devient un plat différent selon qu'on y ajoute des pâtes, un œuf poché, des pois chiches, ou du lait de coco et du curry.`,
+  vigilance: [
+    "Jeter les légumes directement dans l'eau sans les faire suer.",
+    "Trop de liquide.",
+    "Cuisson trop longue des légumes verts.",
+    "Oublier le corps : la soupe reste aqueuse.",
+    "Servir sans acide ni gras cru."
+  ],
+  questions: [
+    "Quelles sont les six étapes ?",
+    "Qu'est-ce qui donne du corps à une soupe sans ajouter de crème ?",
+    "Que change le fait de rôtir les légumes avant ?"
+  ],
+  variations: [
+    "Même soupe, légumes sués contre légumes rôtis au four.",
+    "Change la finition : huile d'olive et citron, ou coco et coriandre, ou yaourt et cumin.",
+    "Mixe entièrement contre mixe à moitié."
+  ],
+  lien: ['geste-suer', 'ratio-bouillon', 'lev-acide', 'geste-rotir']
+},
+
+{
+  id: 'trame-braise-dimanche',
+  cat: 'trame',
+  titre: "Le braisé du dimanche",
+  resume: "Trente minutes de travail, trois heures de four, trois repas de semaine.",
+  contenu: `C'est la stratégie la plus efficace pour quelqu'un dont les soirées sont courtes : concentrer l'effort sur un moment où le temps existe, et récolter toute la semaine.
+
+**Le déroulement**
+
+Dimanche après-midi. Sèche et sale un gros morceau à braiser — deux kilos, pas moins, l'effort est identique. Saisis en plusieurs fournées. Base aromatique. Concentré de tomate roussi. Déglaçage au vin. Liquide à mi-hauteur. Couvercle, four à 140 °C, trois heures.
+
+Pendant ce temps tu fais autre chose. Le travail actif total est de trente minutes.
+
+**Le refroidissement, qui est un vrai geste**
+
+Laisse refroidir et mets au frigo sans dégraisser. Le lendemain, le gras figé se retire en une pièce, la gélatine a pris, et le goût s'est lié. Un braisé du lendemain est objectivement meilleur.
+
+**Les trois vies**
+
+Jour 1 : tel quel, avec un féculent.
+Jour 2 : la viande effilochée dans des pâtes avec un peu de son jus réduit, ou dans une galette, ou sur une purée.
+Jour 3 : le jus restant devient la base d'une soupe ou d'un risotto ; la viande restante part dans un bol composé avec un cru et une sauce fraîche.
+
+**La règle qui rend ça viable**
+
+Change l'accompagnement et la finition à chaque fois, jamais le cœur. Personne n'a l'impression de manger la même chose trois fois si l'acide, le frais et le croquant changent : gremolata au citron et persil le premier jour, yaourt-cumin le deuxième, pickles et herbes le troisième.
+
+C'est la même logique que l'entraînement — une base stable, des variables qui tournent.`,
+  vigilance: [
+    "Faire un petit braisé : même effort pour un tiers du résultat.",
+    "Dégraisser à chaud alors qu'à froid c'est immédiat.",
+    "Resservir à l'identique trois jours de suite.",
+    "Réchauffer à ébullition : la viande se défait et sèche. Réchauffage doux, à couvert."
+  ],
+  questions: [
+    "Pourquoi un braisé est-il meilleur le lendemain ?",
+    "Quel est le seul paramètre à changer d'un jour à l'autre pour que ça ne lasse pas ?",
+    "Quel est le temps de travail actif réel ?"
+  ],
+  variations: [
+    "Change la région : vin rouge et laurier, bière et moutarde, coco et curry, tomate et olives.",
+    "Change la finition de chaque jour.",
+    "Utilise le jus réduit comme sauce de pâtes le troisième jour."
+  ],
+  lien: ['geste-braiser', 'trame-bol', 'lev-umami']
+},
+
+{
+  id: 'trame-pates',
+  cat: 'trame',
+  titre: "Les pâtes en 15 minutes",
+  resume: "L'eau de cuisson est un ingrédient. C'est tout le secret.",
+  contenu: `Les pâtes sont le repas de semaine par défaut, et la différence entre correct et bon tient à deux ou trois gestes qui ne coûtent rien.
+
+**La structure**
+
+Pendant que l'eau chauffe, tu prépares la sauce dans une grande poêle : un gras, un aromatique, un élément de goût. Les pâtes cuisent pendant ce temps.
+
+**Les trois règles**
+
+L'eau doit être salée à 10 g par litre. C'est la seule occasion d'assaisonner les pâtes de l'intérieur.
+
+Sors les pâtes une à deux minutes avant le temps indiqué et finis-les dans la poêle avec la sauce et une louche d'eau de cuisson. Elles absorbent la sauce au lieu d'être posées dedans. C'est la différence la plus visible entre des pâtes de maison et des pâtes de restaurant italien.
+
+Garde toujours une tasse d'eau de cuisson. Son amidon émulsionne la sauce avec le gras et la fait adhérer. Sans elle, la sauce glisse et reste au fond de l'assiette.
+
+**Le geste de liaison**
+
+Pâtes égouttées dans la poêle, feu moyen, une louche d'eau de cuisson, et tu remues énergiquement trente secondes à une minute. Tu verras la sauce passer de liquide à crémeuse sans qu'aucune crème ne soit ajoutée. C'est une émulsion, et c'est spectaculaire la première fois.
+
+**Cinq sauces sans recette**
+
+Ail-huile-piment, avec du persil et de la chapelure dorée.
+Anchois fondus, ail, tomates cerises éclatées, olives.
+Beurre, sauge, parmesan, poivre.
+Poêlée de champignons, ail, un peu de crème ou de ricotta, citron.
+Concentré de tomate roussi, oignon, une pointe de piment, parmesan.
+
+**Ce qui ne va pas**
+
+Rincer les pâtes — jamais, on enlève l'amidon. Ajouter de l'huile dans l'eau — inutile, ça n'empêche rien de coller. Napper au lieu de mélanger dans la poêle.`,
+  vigilance: [
+    "Jeter l'eau de cuisson.",
+    "Cuire les pâtes à terme puis les napper de sauce.",
+    "Rincer les pâtes.",
+    "Eau insuffisamment salée."
+  ],
+  questions: [
+    "Pourquoi l'eau de cuisson lie-t-elle la sauce ?",
+    "À quel moment sors-tu les pâtes de l'eau, et pourquoi ?",
+    "Que se passe-t-il exactement dans la poêle pendant la dernière minute ?"
+  ],
+  variations: [
+    "Même sauce, une fois avec eau de cuisson et finition en poêle, une fois nappée.",
+    "Ajoute une chapelure dorée à l'huile en finition.",
+    "Change l'élément umami : anchois, parmesan, concentré de tomate."
+  ],
+  lien: ['geste-emulsionner', 'ratio-riz', 'lev-umami']
+},
+
+/* =====================================================================
+   5. DÉPANNAGE — accès rapide pendant la cuisson
+   ===================================================================== */
+
+{
+  id: 'dep-fade',
+  cat: 'depannage',
+  titre: "C'est fade",
+  resume: "Sel d'abord, acide ensuite, umami en troisième. Dans cet ordre.",
+  contenu: `Procède par élimination, en testant dans un petit bol à part plutôt que dans toute la casserole.
+
+**1. Le sel**
+
+Dans neuf cas sur dix, c'est ça. Ajoute une pincée, mélange, goûte. Si le plat devient plus intense sans devenir salé, continue par petites doses.
+
+**2. L'acide**
+
+Si le sel est correct mais que le plat reste sans relief, c'est l'acide. Une goutte de citron ou de vinaigre dans le bol test. Si ça s'illumine, tu tiens le manque.
+
+**3. L'umami**
+
+Si sel et acide sont bons mais que le plat reste superficiel, sans profondeur, ajoute une source d'umami : une cuillère de sauce soja, un anchois fondu, du concentré de tomate roussi, du parmesan, un peu de miso.
+
+**4. Le gras**
+
+Un plat trop maigre a moins de goût parce qu'il n'a pas de véhicule aromatique et pas de longueur en bouche. Un filet d'huile d'olive crue ou une noisette de beurre hors du feu.
+
+**5. La chaleur aromatique**
+
+Si rien ne manque mais que le plat reste plat, c'est peut-être qu'aucune coloration n'a eu lieu. Impossible à rattraper dans la casserole — mais tu peux ajouter un élément coloré : oignons dorés à part, chapelure grillée, noix toastées.
+
+**L'ordre compte**
+
+Ne fais jamais deux corrections à la fois : tu ne saurais pas laquelle a fonctionné, et tu n'apprendras rien.`,
+  vigilance: [
+    "Corriger directement dans la casserole sans test préalable.",
+    "Ajouter du sel et de l'acide en même temps.",
+    "Compenser un manque d'acide par du sel — le plat devient salé sans devenir meilleur.",
+    "Ajouter des herbes en croyant que c'est le problème : les herbes parfument, elles n'assaisonnent pas."
+  ],
+  questions: [
+    "Dans quel ordre testes-tu les leviers, et pourquoi cet ordre ?",
+    "Comment fais-tu un test sans risquer de ruiner le plat entier ?",
+    "Quel est le signe qu'il manque de l'umami plutôt que du sel ?"
+  ],
+  variations: [],
+  lien: ['lev-sel', 'lev-acide', 'lev-umami', 'dep-plat-superficiel']
+},
+
+{
+  id: 'dep-trop-sale',
+  cat: 'depannage',
+  titre: "C'est trop salé",
+  resume: "Diluer, ajouter du gras, ajouter de l'acide. La pomme de terre ne marche pas.",
+  contenu: `Par ordre d'efficacité réelle.
+
+**Augmenter le volume**
+
+C'est la seule solution qui traite vraiment le problème : ajouter des ingrédients non salés. Plus de liquide, plus de légumes, plus de féculent. Le sel se répartit dans une plus grande masse.
+
+Si c'est une sauce, ajoute du liquide non salé et rééquilibre.
+
+**Le gras**
+
+Une cuillère de crème, de yaourt, de beurre ou de lait de coco masque la perception du sel en enrobant le palais. Ça ne retire pas le sel mais ça change beaucoup la sensation.
+
+**L'acide et le sucre**
+
+Un trait de citron ou de vinaigre détourne l'attention du sel. Une pointe de sucre aussi, en très petite quantité — attention, tu risques de créer un deuxième déséquilibre.
+
+**Le féculent d'accompagnement**
+
+Sers avec du riz, des pâtes ou du pain non salés. C'est du contournement, mais ça fonctionne.
+
+**Ce qui ne marche pas**
+
+La pomme de terre crue plongée dans la casserole. C'est une croyance tenace et fausse : elle absorbe du liquide salé, dans les mêmes proportions que le reste, elle ne capte pas le sel spécifiquement. Elle dilue à peine plus qu'un ajout d'eau, et elle t'occupe pendant vingt minutes.
+
+**La prévention**
+
+La seule vraie solution est en amont : saler par petites touches, goûter à chaque étape, et ne jamais saler à fond un plat qui va réduire.`,
+  vigilance: [
+    "Compter sur la pomme de terre : ça ne fonctionne pas.",
+    "Ajouter du sucre en quantité : tu crées un deuxième problème.",
+    "Diluer avec de l'eau seule : le plat devient fade et aqueux, dilue avec du liquide savoureux non salé."
+  ],
+  questions: [
+    "Quelle est la seule méthode qui traite réellement l'excès de sel ?",
+    "Pourquoi la pomme de terre ne fonctionne-t-elle pas ?",
+    "Comment le gras agit-il sur la perception du sel ?"
+  ],
+  variations: [],
+  lien: ['lev-sel', 'geste-reduire']
+},
+
+{
+  id: 'dep-lourd',
+  cat: 'depannage',
+  titre: "C'est lourd, gras, écœurant",
+  resume: "Acide, immédiatement. Puis fraîcheur et amertume.",
+  contenu: `Un plat riche n'est pas un problème en soi ; il devient un problème quand rien ne le tranche.
+
+**L'acide, en premier**
+
+C'est presque toujours la réponse. Vinaigre, citron, cornichon haché, câpres, pickles, yaourt, tomate, verjus. Ajoute par petites touches et goûte.
+
+Le mécanisme est physiologique : l'acidité relance la salivation et nettoie le palais, ce qui permet à la bouchée suivante d'être perçue comme la première.
+
+**La fraîcheur**
+
+Herbes fraîches en quantité, ciselées au dernier moment. Persil, coriandre, aneth, menthe, ciboulette. Zeste d'agrume râpé — il apporte l'arôme sans l'acidité, et c'est un levier distinct qui vaut d'être connu.
+
+Une gremolata — persil, ail cru, zeste de citron — jetée sur un plat gras est le contrepoint classique, et elle prend deux minutes.
+
+**L'amertume et le piquant**
+
+Un accompagnement de salade amère (roquette, chicorée, endive), un peu de poivre concassé, du piment. L'amertume nettoie aussi.
+
+**Le croquant**
+
+Un plat gras et mou est plus écœurant qu'un plat gras et croquant. Ajoute une texture : chapelure dorée, noix concassées, oignon frit, graines toastées.
+
+**Dégraisser physiquement**
+
+Si le gras est visible en surface : passe une louche, ou pose une feuille de papier absorbant à plat sur la surface une seconde. À froid, le gras se fige et s'enlève en bloc — c'est la méthode la plus propre si tu as le temps.`,
+  vigilance: [
+    "Ajouter du sel en croyant corriger : ça aggrave la lourdeur.",
+    "Ajouter les herbes trop tôt : elles perdent leur fraîcheur.",
+    "Dégraisser à chaud alors qu'à froid c'est instantané."
+  ],
+  questions: [
+    "Quel est le premier levier à actionner, et pourquoi ça marche physiologiquement ?",
+    "Quelle est la différence d'effet entre du zeste et du jus de citron ?",
+    "Pourquoi le croquant réduit-il la sensation d'écœurement ?"
+  ],
+  variations: [],
+  lien: ['lev-acide', 'lev-gras', 'geste-fermentation']
+},
+
+{
+  id: 'dep-sec',
+  cat: 'depannage',
+  titre: "C'est sec",
+  resume: "On ne réhydrate pas une viande sèche. On la trance autrement et on l'accompagne.",
+  contenu: `Une viande sèche a perdu son eau, et cette eau ne revient pas. Toutes les solutions sont des contournements — mais certains fonctionnent très bien.
+
+**Trancher autrement**
+
+Tranches très fines, perpendiculaires au sens des fibres. Une tranche fine offre moins de résistance et paraît nettement plus tendre. Le sens de la coupe change la perception plus que n'importe quel autre paramètre.
+
+**Ajouter un milieu humide**
+
+Une sauce, un jus, un bouillon, une vinaigrette, un yaourt. La viande sèche mangée avec quelque chose d'humide et de gras redevient acceptable.
+
+Mieux : laisse-la tremper. Émince finement et laisse reposer dix minutes dans un jus tiède ou une vinaigrette. Elle en absorbe une partie.
+
+**Changer de format**
+
+Une viande sèche effilochée, mélangée à sa sauce et servie dans des pâtes, un sandwich, une galette ou un bol devient un plat correct. En pièce sur une assiette, elle reste une viande sèche.
+
+**Pour la prochaine fois**
+
+Trois causes, par ordre de fréquence : cuisson trop longue, absence de repos, morceau inadapté à la technique.
+
+Le repos est le levier gratuit — dix minutes après cuisson permettent aux fibres de se détendre et de réabsorber le jus au lieu de le rendre sur la planche.
+
+La saumure sèche la veille est le levier préventif le plus puissant, en particulier pour la volaille et le porc, qui sont maigres.
+
+Et pour les braisés : une viande sèche après braisage n'a pas été trop cuite, elle a bouilli. Baisse le feu.`,
+  vigilance: [
+    "Ajouter du liquide dans une viande déjà cuite et espérer qu'elle l'absorbe : ça ne se passe pas comme ça.",
+    "Trancher dans le sens des fibres.",
+    "Prolonger la cuisson d'un braisé sec en pensant que c'est le manque de cuisson — vérifie d'abord que ça ne bouillait pas."
+  ],
+  questions: [
+    "Pourquoi trancher perpendiculairement aux fibres change-t-il la perception ?",
+    "Quelles sont les trois causes principales d'une viande sèche ?",
+    "Pourquoi un braisé peut-il sortir sec alors qu'il a cuit longtemps ?"
+  ],
+  variations: [],
+  lien: ['lev-chaleur', 'ratio-saumure', 'geste-braiser']
+},
+
+{
+  id: 'dep-sauce-liquide',
+  cat: 'depannage',
+  titre: "La sauce est trop liquide",
+  resume: "Réduire si tu as le temps, lier si tu ne l'as pas.",
+  contenu: `**Réduire, si tu as dix minutes**
+
+C'est la meilleure méthode : elle épaissit et concentre le goût en même temps. Casserole large, à découvert, feu vif. Ne sale pas avant.
+
+**Lier, si tu es pressé**
+
+Fécule de maïs ou d'arachide : délaye 1 cuillère à café dans 2 cuillères d'eau froide, verse dans la sauce frémissante en remuant, laisse une minute. Le mélange à froid est obligatoire, sinon grumeaux. Compte environ 10 g de fécule par 500 ml.
+
+Beurre manié : autant de beurre mou que de farine, malaxés ensemble, incorporés par petits morceaux dans la sauce chaude. Plus fin au goût que la fécule, et pas de goût de farine crue parce que la quantité est faible.
+
+Roux : si tu as le temps de le faire à part.
+
+**Lier avec de la matière**
+
+Souvent meilleur que la fécule : mixe une partie du contenu du plat. Quelques légumes, une pomme de terre, une louche de la préparation passée au mixeur plongeant. Tu épaissis avec le plat lui-même, sans diluer le goût.
+
+Une purée de légumineuses, du pain rassis mixé, une poignée de flocons d'avoine dans une soupe font le même travail.
+
+**Monter au beurre**
+
+Ça n'épaissit pas beaucoup mais ça donne du corps et du nappant. À faire hors du feu, avec du beurre froid.
+
+**Ce qui ne marche pas**
+
+Ajouter de la farine directement dans la sauce : grumeaux immédiats et goût de cru.`,
+  vigilance: [
+    "Fécule ajoutée sèche ou délayée à l'eau chaude : grumeaux.",
+    "Saler avant de réduire.",
+    "Réduire une sauce contenant du lait ou de la crème en grande quantité.",
+    "Farine jetée directement dans la sauce."
+  ],
+  questions: [
+    "Pourquoi la fécule doit-elle être délayée à froid ?",
+    "Quel est l'avantage de lier en mixant une partie du plat ?",
+    "Qu'est-ce qu'un beurre manié et pourquoi est-il plus fin qu'un ajout de farine ?"
+  ],
+  variations: [],
+  lien: ['geste-reduire', 'ratio-roux', 'geste-monter-beurre']
+},
+
+{
+  id: 'dep-sauce-tranchee',
+  cat: 'depannage',
+  titre: "La sauce a tranché",
+  resume: "Repartir d'une petite base propre et y réincorporer la sauce cassée goutte à goutte.",
+  contenu: `Une sauce tranchée est une émulsion qui s'est séparée : les gouttelettes de gras ont fusionné et sont remontées. Le principe de rattrapage est toujours le même, quelle que soit la sauce — on reconstruit une émulsion neuve et on y verse l'ancienne.
+
+**Mayonnaise ou aïoli**
+
+Dans un bol propre, un jaune d'œuf neuf. Verse la mayonnaise cassée dessus goutte à goutte au début, puis en filet, en fouettant. Elle reprend.
+
+Alternative sans œuf supplémentaire : une cuillère à soupe d'eau tiède dans un bol propre, et la même incorporation progressive.
+
+**Sauce chaude au beurre (beurre blanc, sauce montée)**
+
+Retire du feu immédiatement. Dans une petite casserole, une cuillère d'eau ou de crème froide, et incorpore la sauce cassée au fouet, petit à petit. Le froid et l'agitation reforment l'émulsion.
+
+**Sauce à la crème qui a grainé**
+
+C'est souvent une coagulation due à la chaleur ou à l'acide, pas une simple séparation. Un mixeur plongeant récupère beaucoup de situations. Sinon, une cuillère de crème fraîche froide incorporée hors du feu.
+
+**Vinaigrette séparée**
+
+Ce n'est pas un problème — une vinaigrette est une émulsion temporaire par nature. Secoue ou fouette, et ajoute un peu de moutarde si tu veux qu'elle tienne plus longtemps.
+
+**Les causes, pour la prochaine fois**
+
+Trop chaud. Gras incorporé trop vite. Trop de gras pour la quantité d'émulsifiant. Ingrédients à des températures trop différentes. Sauce remise à bouillir après avoir été montée.`,
+  vigilance: [
+    "Continuer à chauffer une sauce qui commence à se séparer : c'est irréversible passé un certain point.",
+    "Fouetter plus fort dans le même récipient sans rien changer : ça n'a jamais rattrapé une émulsion.",
+    "Ajouter du gras pour rattraper : c'est l'inverse qu'il faut faire."
+  ],
+  questions: [
+    "Quel est le principe général de rattrapage, valable pour toutes les émulsions ?",
+    "Comment rattrapes-tu une mayonnaise sans utiliser un deuxième jaune ?",
+    "Cite trois causes d'une émulsion qui casse."
+  ],
+  variations: [],
+  lien: ['geste-emulsionner', 'ratio-mayonnaise', 'geste-monter-beurre']
+},
+
+{
+  id: 'dep-grumeaux',
+  cat: 'depannage',
+  titre: "Il y a des grumeaux",
+  resume: "Mixeur plongeant, ou passoire. Et comprendre pourquoi pour ne pas recommencer.",
+  contenu: `**La solution immédiate**
+
+Le mixeur plongeant règle la quasi-totalité des cas : béchamel, sauce liée, soupe, pâte à crêpes. Quelques secondes suffisent.
+
+À défaut, passe au chinois ou à la passoire fine en écrasant à la louche.
+
+**Pourquoi ça arrive**
+
+Un grumeau, c'est de l'amidon dont la surface a gélifié instantanément au contact d'un liquide chaud, formant une coque qui protège l'intérieur resté sec.
+
+Les trois causes :
+- Liquide chaud versé sur un roux chaud, ou fécule ajoutée directement dans un liquide chaud.
+- Farine ou fécule non dispersée avant contact avec le liquide.
+- Tout le liquide ajouté d'un coup au lieu d'être incorporé progressivement.
+
+**Les préventions**
+
+Pour un roux : le liquide et le roux doivent avoir des températures différentes. Froid sur chaud ou chaud sur froid, jamais chaud sur chaud. Et verse en plusieurs fois.
+
+Pour une fécule : délaye toujours à froid dans un peu d'eau avant d'ajouter.
+
+Pour une pâte à crêpes : commence par une pâte épaisse et lisse, puis détends progressivement. C'est quand la pâte est dense qu'on peut éliminer les grumeaux mécaniquement.
+
+Pour la polenta ou la semoule : verse en pluie fine dans un liquide en mouvement, en fouettant sans arrêt.`,
+  vigilance: [
+    "Ajouter de la fécule sèche dans un liquide chaud.",
+    "Verser tout le lait d'un coup sur un roux.",
+    "Croire qu'on rattrapera les grumeaux d'une pâte à crêpes en fouettant plus fort une pâte déjà liquide."
+  ],
+  questions: [
+    "Qu'est-ce qu'un grumeau, physiquement ?",
+    "Quelle est la règle de température entre un roux et son liquide ?",
+    "Pourquoi commence-t-on une pâte à crêpes épaisse ?"
+  ],
+  variations: [],
+  lien: ['ratio-roux', 'ratio-crepes', 'dep-sauce-liquide']
+},
+
+{
+  id: 'dep-legumes-detrempes',
+  cat: 'depannage',
+  titre: "Les légumes sont mous et pâles",
+  resume: "Trop d'eau, trop de monde dans la poêle, pas assez chaud.",
+  contenu: `Le problème n'est presque jamais un manque de temps de cuisson — c'est l'inverse, ou un problème de conditions.
+
+**Les trois causes, dans l'ordre**
+
+Poêle ou plaque surchargée. Les légumes libèrent leur eau, la température s'effondre, et ils cuisent dans leur propre vapeur. C'est la cause numéro un. Solution : deux fournées, ou deux plaques.
+
+Température insuffisante. Un légume dans une poêle tiède rend son eau avant d'avoir le temps de dorer.
+
+Légumes mouillés au départ. Sortis de l'eau de lavage sans être séchés, ils apportent l'eau qui empêche toute coloration.
+
+**Rattraper en cours**
+
+Si c'est déjà mou mais pas encore désintégré : augmente le feu à fond, étale, et laisse sans remuer deux à trois minutes. Une partie de l'eau s'évapore et une face colore. Ça ne redonne pas de croquant mais ça redonne du goût.
+
+Ajoute un élément croquant en finition : graines toastées, noix, chapelure dorée, oignon cru émincé. Le contraste de texture compense beaucoup.
+
+Et un acide, qui redonne du relief à un légume affadi.
+
+**Pour la prochaine fois**
+
+Sécher, chauffer avant, ne pas surcharger, ne pas remuer avant que la face en contact ait coloré.
+
+Pour les légumes verts spécifiquement : cuisson courte, à découvert, et pas d'acide pendant la cuisson — les deux ternissent la couleur.`,
+  vigilance: [
+    "Remuer sans arrêt : rien ne colore.",
+    "Couvrir une poêlée de légumes verts : ils virent au kaki.",
+    "Ajouter du citron en début de cuisson sur des verts.",
+    "Croire qu'il faut cuire plus longtemps."
+  ],
+  questions: [
+    "Quelle est la cause la plus fréquente de légumes mous ?",
+    "Que fais-tu pour rattraper une poêlée déjà molle ?",
+    "Pourquoi ne faut-il pas couvrir ni acidifier des légumes verts en cuisson ?"
+  ],
+  variations: [],
+  lien: ['lev-chaleur', 'geste-rotir', 'geste-blanchir']
+},
+
+{
+  id: 'dep-viande-grise',
+  cat: 'depannage',
+  titre: "La viande est grise, elle ne dore pas",
+  resume: "Surface humide, poêle trop froide, ou poêle trop chargée.",
+  contenu: `Trois causes, et elles se cumulent souvent.
+
+**Surface humide**
+
+C'est la première. Tant qu'il reste de l'eau libre en surface, la température ne dépasse pas 100 °C et la réaction de Maillard, qui démarre vers 140 °C, ne peut pas avoir lieu. Sèche systématiquement au papier absorbant.
+
+Attention aussi aux viandes vendues sous vide ou en barquette, qui baignent souvent dans un exsudat.
+
+**Poêle pas assez chaude**
+
+Attends que la poêle soit vraiment chaude avant d'ajouter le gras, puis attends que le gras soit chaud. Test : une goutte d'eau doit danser en boules sur la surface.
+
+**Poêle surchargée**
+
+Trop de morceaux d'un coup font chuter la température de la poêle et accumulent la vapeur. Fais deux fournées. C'est plus long de trois minutes et le résultat n'a rien à voir.
+
+**Le cas particulier de la viande salée récemment**
+
+Une viande salée quinze à trente minutes avant cuisson est dans la pire fenêtre : le sel a tiré l'eau à la surface mais n'a pas encore été réabsorbé. Sale soit juste avant, soit plusieurs heures avant.
+
+**Rattraper**
+
+Retire la viande, monte le feu à fond, laisse l'eau s'évaporer complètement de la poêle, puis remets la viande pour une coloration rapide. Ce sera moins bon qu'une saisie propre, mais récupérable.
+
+Et déglace : même une viande mal colorée laisse des sucs.`,
+  vigilance: [
+    "Sortir la viande du frigo et la jeter directement dans la poêle.",
+    "Ajouter la viande avant que la poêle soit chaude.",
+    "Saler vingt minutes avant.",
+    "Retourner sans arrêt."
+  ],
+  questions: [
+    "Pourquoi une surface humide empêche-t-elle totalement la coloration ?",
+    "Quelle est la mauvaise fenêtre de salage avant cuisson, et pourquoi ?",
+    "Comment testes-tu qu'une poêle est assez chaude ?"
+  ],
+  variations: [],
+  lien: ['geste-saisir', 'lev-chaleur', 'lev-sel']
+},
+
+{
+  id: 'dep-plat-superficiel',
+  cat: 'depannage',
+  titre: "C'est correct mais ça manque de profondeur",
+  resume: "Ni sel ni acide : c'est l'umami ou la caramélisation qui manque.",
+  contenu: `Le plat est équilibré, correctement salé et acidulé, mais il reste jeune, superficiel, sans longueur en bouche. C'est le diagnostic le plus fin des cinq, et il a deux réponses.
+
+**L'umami**
+
+Ajoute une source concentrée, une seule à la fois :
+- une cuillère de concentré de tomate roussie à part dans un peu d'huile
+- un ou deux anchois fondus dans de l'huile chaude
+- une cuillère de sauce soja
+- une cuillère de miso délayée, hors du feu
+- du parmesan, ou une croûte de parmesan si le plat continue de cuire
+- des champignons séchés réhydratés et leur eau de trempage
+
+Surveille le sel : toutes ces sources en apportent.
+
+**La caramélisation manquante**
+
+Si le plat a été construit sans aucune coloration — tout jeté dans la casserole et mouillé directement — il manque tous les composés de Maillard, et aucun assaisonnement ne les remplace.
+
+Rattrapage possible : fais dorer à part quelques oignons, des champignons ou un peu de concentré de tomate, très foncés, et incorpore-les. Ou ajoute un élément déjà coloré : lardons grillés, chapelure dorée, noix toastées, oignons frits.
+
+**Le temps**
+
+Certains plats n'ont simplement pas eu le temps de se lier. Une sauce, une soupe ou un braisé continuent de s'améliorer pendant les vingt minutes suivant l'arrêt du feu, et davantage encore le lendemain. Si tu as le temps, laisse reposer à couvert avant de servir.
+
+**La note finale**
+
+Une bonne partie de l'impression de profondeur vient en réalité de la finition : un gras cru, un aromate frais, un croquant. Un plat sans finition paraît toujours plus plat qu'il ne l'est.`,
+  vigilance: [
+    "Ajouter plusieurs sources d'umami à la fois sans surveiller le sel.",
+    "Confondre manque de profondeur et manque de sel.",
+    "Croire qu'une épice supplémentaire va donner de la profondeur — elle ajoute un parfum, pas du fond."
+  ],
+  questions: [
+    "Comment distingues-tu un manque d'umami d'un manque de sel ?",
+    "Que fais-tu si le plat a été construit sans aucune coloration ?",
+    "Pourquoi un plat est-il meilleur vingt minutes après l'arrêt du feu ?"
+  ],
+  variations: [],
+  lien: ['lev-umami', 'geste-suer', 'geste-saisir', 'dep-fade']
+},
+
+{
+  id: 'dep-amer',
+  cat: 'depannage',
+  titre: "C'est amer",
+  resume: "Sel, gras, sucre. Et identifier la source, car parfois c'est irrécupérable.",
+  contenu: `**D'abord, identifier la source**
+
+Ail brûlé, épices brûlées, oignon carbonisé : l'amertume est due à des composés de pyrolyse, et elle ne se corrige pas. Si les morceaux brûlés sont identifiables et séparables, retire-les. Sinon, dans les cas sévères, il faut recommencer la base — c'est frustrant mais c'est plus rapide que d'essayer de masquer.
+
+Légumes naturellement amers (endive, chicorée, aubergine, brocoli-rave, certains choux) : l'amertume est normale et se corrige.
+
+Huile d'olive vierge chauffée trop fort, ou huile réutilisée : amertume diffuse.
+
+Zeste d'agrume prélevé trop profondément, jusqu'au ziste blanc.
+
+**Les correcteurs**
+
+Le sel est le plus efficace : il inhibe directement la perception de l'amertume. Une pincée sur un légume amer change beaucoup.
+
+Le gras enrobe et adoucit : crème, beurre, huile, yaourt.
+
+Le sucre, en très petite quantité : miel, une pincée de sucre, un légume sucré comme la carotte ou l'oignon caramélisé.
+
+L'acide, plus contre-intuitif, redirige la perception vers autre chose.
+
+**Sur les légumes amers, en prévention**
+
+Blanchir dans une grande eau salée avant la cuisson finale retire une partie de l'amertume. Dégorger au sel fonctionne aussi.
+
+Une caramélisation poussée transforme l'amertume en douceur : une endive braisée avec un peu de sucre et de beurre n'a plus grand-chose à voir avec une endive crue.`,
+  vigilance: [
+    "Essayer de masquer de l'ail brûlé : ça ne fonctionne pas, il faut retirer ou recommencer.",
+    "Ajouter du sucre en quantité visible : tu déséquilibres tout.",
+    "Chauffer fort de l'huile d'olive vierge extra."
+  ],
+  questions: [
+    "Quel levier inhibe le plus directement l'amertume ?",
+    "Quelle amertume est irrécupérable, et pourquoi ?",
+    "Comment réduis-tu l'amertume d'un légume avant la cuisson finale ?"
+  ],
+  variations: [],
+  lien: ['lev-sel', 'lev-gras', 'geste-blanchir']
+},
+
+{
+  id: 'dep-trop-acide',
+  cat: 'depannage',
+  titre: "C'est trop acide",
+  resume: "Gras, sucre, volume, bicarbonate en dernier recours.",
+  contenu: `**Le gras**
+
+La première réponse. Crème, beurre, huile d'olive, lait de coco, yaourt, fromage. Le gras enrobe et arrondit l'acidité sans l'annuler.
+
+**Le sucre**
+
+Petites quantités : une pincée de sucre, un peu de miel, une carotte râpée, des oignons longuement caramélisés. C'est la correction classique d'une sauce tomate trop acide, et elle marche vraiment.
+
+**Augmenter le volume**
+
+Ajoute des ingrédients neutres : féculent, légumes doux, liquide non acide, légumineuses. Le classique dans une sauce tomate est d'ajouter des légumes doux plutôt que du sucre.
+
+**Le bicarbonate, en dernier recours**
+
+Une toute petite pincée neutralise chimiquement l'acide. Ça mousse — c'est normal. Attention : trop de bicarbonate donne un goût savonneux et métallique, bien pire que l'acidité de départ. Une pointe de couteau pour une casserole, pas plus, et goûte avant d'en remettre.
+
+**La prévention**
+
+L'acide s'ajoute en fin de cuisson, hors du feu, par petites touches en goûtant. C'est la seule façon de ne pas dépasser. Une fois dedans, il ne s'enlève pas.
+
+Attention aussi aux acides qui se concentrent en réduisant : un vin ou une tomate réduits deviennent plus acides, pas moins.`,
+  vigilance: [
+    "Trop de bicarbonate : goût savonneux irrécupérable.",
+    "Compenser avec beaucoup de sucre : le plat devient sucré-acide, déséquilibré autrement.",
+    "Oublier que l'acidité se concentre à la réduction."
+  ],
+  questions: [
+    "Quelle est la première correction à essayer, et pourquoi ?",
+    "Quel est le risque du bicarbonate ?",
+    "Pourquoi ajouter l'acide en fin de cuisson plutôt qu'au début ?"
+  ],
+  variations: [],
+  lien: ['lev-acide', 'lev-gras', 'geste-reduire']
+},
+
+{
+  id: 'dep-ca-colle',
+  cat: 'depannage',
+  titre: "Ça colle ou ça attache au fond",
+  resume: "Distinguer les sucs (bons) du brûlé (mauvais). Puis transvaser sans gratter.",
+  contenu: `**Premier réflexe : distinguer**
+
+Des sucs bruns collés au fond, c'est du goût — c'est même ce qu'on cherche quand on saisit. On les récupère en déglaçant.
+
+Du noir carbonisé, c'est amer et irrécupérable.
+
+**Si c'est brûlé au fond d'un plat en sauce**
+
+Ne gratte surtout pas. Transvase immédiatement le contenu dans une autre casserole en prenant par le dessus, sans racler le fond. Goûte ce que tu as sauvé. Si le goût de brûlé n'a pas encore migré, tu as sauvé le plat.
+
+Un morceau de pain de mie posé quelques minutes à la surface absorbe une partie des composés volatils de brûlé. Ça aide dans les cas légers.
+
+Si le goût est déjà partout, il n'y a rien à faire.
+
+**Pourquoi ça attache**
+
+Feu trop fort et pas assez de liquide. Casserole à fond mince, qui crée des points chauds — c'est la cause la plus fréquente à la maison. Préparation contenant du sucre, de la tomate ou du lait, qui caramélisent et accrochent. Pas remué assez souvent sur une préparation épaisse.
+
+**Si les aliments collent à la poêle**
+
+Poêle pas assez chaude au moment de l'ajout : les protéines adhèrent au métal avant que la croûte ne se forme.
+
+Ou aliment retourné trop tôt : une croûte bien formée se décolle d'elle-même. Si ça résiste, ce n'est pas prêt.
+
+Pour les poêles en inox : chauffer la poêle à vide, puis ajouter le gras, puis attendre qu'il ondule. Cette séquence change tout.`,
+  vigilance: [
+    "Gratter le fond brûlé : tu répartis l'amertume dans tout le plat.",
+    "Forcer pour décoller un aliment qui n'a pas fini de saisir.",
+    "Utiliser une casserole à fond mince pour un plat long."
+  ],
+  questions: [
+    "Comment distingues-tu des sucs récupérables d'un fond brûlé ?",
+    "Quel est le premier geste si ça a brûlé au fond ?",
+    "Pourquoi un aliment colle-t-il à une poêle en inox, et comment l'éviter ?"
+  ],
+  variations: [],
+  lien: ['geste-deglacer', 'geste-saisir', 'dep-amer']
+}
+
+  ]
+};
+
+/* Export pour usage dans le moteur */
+if (typeof module !== 'undefined') module.exports = CONTENU;
+
+/* =====================================================================
+   MOTEUR — ne dépend d'aucun contenu spécifique à la cuisine.
+   Consulter, réviser (répétition espacée), pratiquer, journal, progression.
+   ===================================================================== */
+
+/* ---------- Stockage : window.storage avec repli localStorage ---------- */
+const Store = (function(){
+  const backend = (typeof window.storage !== 'undefined' && window.storage
+    && typeof window.storage.getItem === 'function') ? window.storage : window.localStorage;
+  return {
+    get(key, fallback){
+      try{ const raw = backend.getItem(key); return raw != null ? JSON.parse(raw) : fallback; }
+      catch(e){ return fallback; }
+    },
+    set(key, value){
+      try{ backend.setItem(key, JSON.stringify(value)); } catch(e){}
+    }
+  };
+})();
+
+const STATE_KEY = 'trame_state_v1';
+
+function defaultState(){
+  return { version: 1, createdAt: new Date().toISOString(), review: {}, practice: {}, journal: [] };
+}
+
+let State = Store.get(STATE_KEY, null) || defaultState();
+function persist(){ Store.set(STATE_KEY, State); }
+
+/* ---------- Index du contenu ---------- */
+const NOTIONS = CONTENU.notions;
+const NOTION_BY_ID = {};
+NOTIONS.forEach(n => NOTION_BY_ID[n.id] = n);
+const CATS = CONTENU.categories;
+const CAT_BY_ID = {};
+CATS.forEach(c => CAT_BY_ID[c.id] = c);
+const REVISABLE = NOTIONS.filter(n => n.questions && n.questions.length);
+const PRACTICABLE = NOTIONS.filter(n => n.variations && n.variations.length);
+
+/* ---------- Aides de temps ---------- */
+function nowISO(){ return new Date().toISOString(); }
+function daysAgo(iso){
+  const d = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if(d <= 0) return "aujourd'hui";
+  if(d === 1) return "hier";
+  return `il y a ${d} jours`;
+}
+function fmtDate(iso){
+  return new Date(iso).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+}
+
+/* ---------- Répétition espacée (3 niveaux, pas de QCM) ---------- */
+function dueNotions(){
+  const now = Date.now();
+  return REVISABLE.filter(n => {
+    const r = State.review[n.id];
+    return !r || new Date(r.nextReview).getTime() <= now;
+  });
+}
+function scheduleNext(id, level){
+  const r = State.review[id] || { interval: 0, reviewCount: 0, history: [] };
+  let interval;
+  if(level === 1) interval = 0.4;
+  else if(level === 2) interval = r.interval >= 1 ? Math.round(r.interval * 1.8 * 10) / 10 : 1.5;
+  else interval = r.interval >= 1 ? Math.round(r.interval * 3.2 * 10) / 10 : 4;
+  interval = Math.max(interval, level === 1 ? 0.4 : 1);
+  r.interval = interval;
+  r.lastLevel = level;
+  r.reviewCount = (r.reviewCount || 0) + 1;
+  r.nextReview = new Date(Date.now() + interval * 86400000).toISOString();
+  r.history = r.history || [];
+  r.history.push({ date: nowISO(), level });
+  if(r.history.length > 20) r.history.shift();
+  State.review[id] = r;
+  persist();
+}
+
+/* ---------- Pratique : proposer une notion + un axe différent de la dernière fois ---------- */
+function pickPracticeNotion(excludeId){
+  const pool = PRACTICABLE.filter(n => n.id !== excludeId);
+  const neverPracticed = pool.filter(n => !State.practice[n.id]);
+  if(neverPracticed.length) return neverPracticed[Math.floor(Math.random() * neverPracticed.length)];
+  return pool.slice().sort((a, b) => new Date(State.practice[a.id].lastAt) - new Date(State.practice[b.id].lastAt))[0] || pool[0];
+}
+function pickVariationIndex(notion){
+  const p = State.practice[notion.id];
+  const vs = notion.variations;
+  if(!p || vs.length <= 1) return 0;
+  return (p.lastVariationIndex + 1) % vs.length;
+}
+function recordPractice(notionId, variationIndex, variationText, q1, q2){
+  const p = State.practice[notionId] || { count: 0 };
+  p.count = (p.count || 0) + 1;
+  p.lastAt = nowISO();
+  p.lastVariationIndex = variationIndex;
+  p.lastVariationText = variationText;
+  State.practice[notionId] = p;
+  State.journal.push({
+    id: 'j_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    notionId, date: nowISO(), q1, q2
+  });
+  persist();
+}
+
+/* ---------- Progression ---------- */
+function progressionData(){
+  const acquis = NOTIONS.filter(n => {
+    const r = State.review[n.id];
+    return r && r.lastLevel === 3 && r.reviewCount >= 2 && r.interval >= 10;
+  });
+  const traine = NOTIONS.filter(n => {
+    const r = State.review[n.id];
+    return r && new Date(r.nextReview).getTime() < Date.now();
+  });
+  const jamaisPratique = PRACTICABLE.filter(n => !State.practice[n.id]);
+  return { acquis, traine, jamaisPratique };
+}
+
+/* ---------- Export JSON ---------- */
+function exportJSON(){
+  const payload = { exportedAt: nowISO(), sujet: CONTENU.sujet, state: State };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `trame-${CONTENU.sujet.toLowerCase()}-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+/* ---------- Formatage léger du texte de contenu (gras + listes) ---------- */
+function escapeHtml(s){
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function inlineFormat(s){
+  return escapeHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+function formatContenu(text){
+  const blocks = text.trim().split(/\n\n+/);
+  let html = '';
+  blocks.forEach(block => {
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    if(lines.length === 1){
+      const m = lines[0].match(/^\*\*(.+)\*\*$/);
+      if(m){ html += `<h4>${escapeHtml(m[1])}</h4>`; return; }
+    }
+    let para = [], list = [];
+    const flushPara = () => { if(para.length){ html += '<p>' + para.map(inlineFormat).join(' ') + '</p>'; para = []; } };
+    const flushList = () => { if(list.length){ html += '<ul>' + list.map(l => `<li>${inlineFormat(l)}</li>`).join('') + '</ul>'; list = []; } };
+    lines.forEach(line => {
+      if(line.startsWith('- ')){ flushPara(); list.push(line.slice(2).trim()); }
+      else { flushList(); para.push(line); }
+    });
+    flushPara(); flushList();
+  });
+  return html;
+}
+
+/* =====================================================================
+   VUES
+   ===================================================================== */
+
+const ui = {
+  consulterCat: 'all',
+  consulterQuery: '',
+  reviser: { queue: null, index: 0, revealed: false, question: '', results: { 1:0, 2:0, 3:0 } },
+  pratique: { notionId: null, variationIndex: 0, step: 'proposal' }
+};
+
+function catLabel(id){ return CAT_BY_ID[id] ? CAT_BY_ID[id].nom : id; }
+
+function notionChip(n){
+  return `<a class="chip" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`;
+}
+
+function lienChips(n){
+  const liens = (n.lien || []).map(id => NOTION_BY_ID[id]).filter(Boolean);
+  if(!liens.length) return '';
+  return `<div class="block"><h2 class="section-title" style="margin-top:0">Notions liées</h2><div class="lien-chips">${liens.map(notionChip).join('')}</div></div>`;
+}
+
+function shell(inner, opts){
+  opts = opts || {};
+  const tabs = [
+    { id: 'home', label: 'Accueil', hash: '#/home' },
+    { id: 'consulter', label: 'Consulter', hash: '#/consulter' },
+    { id: 'reviser', label: 'Réviser', hash: '#/reviser' },
+    { id: 'pratiquer', label: 'Pratiquer', hash: '#/pratiquer' },
+    { id: 'suivi', label: 'Suivi', hash: '#/suivi' }
+  ];
+  const dueCount = dueNotions().length;
+  const tabbar = `
+    <nav class="tabbar"><div class="tabbar-inner">
+      ${tabs.map(t => `
+        <a class="tab${opts.active === t.id ? ' active' : ''}" href="${t.hash}">
+          <span class="mark"></span>${escapeHtml(t.label)}
+          ${t.id === 'reviser' && dueCount ? `<span class="tbadge">${dueCount}</span>` : ''}
+        </a>`).join('')}
+    </div></nav>`;
+  const topbar = opts.back
+    ? `<div class="topbar raised"><button class="back-btn" data-action="back">‹ Retour</button></div>`
+    : `<div class="topbar"><div class="brand">Trame<small>${escapeHtml(CONTENU.sujet)}</small></div></div>`;
+  return `${topbar}<main>${inner}</main>${tabbar}`;
+}
+
+function viewHome(){
+  const depannage = NOTIONS.filter(n => n.cat === 'depannage');
+  const due = dueNotions().length;
+  const prog = progressionData();
+  const cats = CATS.filter(c => c.id !== 'depannage');
+  const catCount = id => NOTIONS.filter(n => n.cat === id).length;
+  return shell(`
+    <div class="hero">
+      <h1>${escapeHtml(CONTENU.sujet)}</h1>
+      <div class="sub">${escapeHtml(CONTENU.sousTitre)}</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><span class="n">${due}</span><span class="l">à réviser</span></div>
+      <div class="stat"><span class="n">${prog.jamaisPratique.length}</span><span class="l">jamais pratiquées</span></div>
+      <div class="stat"><span class="n">${prog.acquis.length}</span><span class="l">acquises</span></div>
+    </div>
+
+    <div class="depannage-panel">
+      <h2>Dépannage</h2>
+      <div class="hint">Le plat est en cours, quelque chose cloche — tape directement.</div>
+      <div class="chip-grid">${depannage.map(n => `<a class="chip on-rouge" style="background:var(--bg-raised)" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`).join('')}</div>
+    </div>
+
+    <div class="section-title">Consulter par catégorie</div>
+    <div class="cat-grid">
+      ${cats.map(c => `
+        <a class="cat-card" href="#/consulter/${c.id}">
+          <h3>${escapeHtml(c.nom)}</h3>
+          <p>${escapeHtml(c.desc)}</p>
+          <span class="count">${catCount(c.id)} notions</span>
+        </a>`).join('')}
+    </div>
+
+    <div class="section-title">Modes</div>
+    <div class="nav-cards">
+      <a class="nav-card" href="#/reviser">
+        <div><div class="t">Réviser</div><div class="d">Répétition espacée, auto-évaluation en 3 niveaux</div></div>
+        ${due ? `<span class="badge">${due}</span>` : '<span class="arrow">›</span>'}
+      </a>
+      <a class="nav-card" href="#/pratiquer">
+        <div><div class="t">Pratiquer</div><div class="d">Une notion, un axe à changer par rapport à la dernière fois</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="nav-card" href="#/suivi">
+        <div><div class="t">Suivi</div><div class="d">Progression, journal, export de tes données</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  `, { active: 'home' });
+}
+
+function viewConsulter(cat){
+  cat = cat || 'all';
+  const q = ui.consulterQuery.trim();
+  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const qn = norm(q);
+  let list = NOTIONS.slice();
+  if(cat !== 'all') list = list.filter(n => n.cat === cat);
+  if(qn){
+    list = list.filter(n =>
+      norm(n.titre).includes(qn) ||
+      norm(n.resume).includes(qn) ||
+      norm(n.contenu).includes(qn)
+    );
+  }
+  const chips = [{ id: 'all', nom: 'Tout' }].concat(CATS).map(c => `
+    <div class="filter-chip${cat === c.id ? ' active' : ''}" data-action="consulter-cat" data-cat="${c.id}">${escapeHtml(c.nom)}</div>
+  `).join('');
+  const items = list.length ? list.map(n => `
+    <a class="notion-item" href="#/notion/${n.id}">
+      <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
+      <h3>${escapeHtml(n.titre)}</h3>
+      <p>${escapeHtml(n.resume)}</p>
+    </a>`).join('') : `<div class="empty-state">Rien ne correspond à cette recherche.</div>`;
+  return shell(`
+    <div class="search-wrap">
+      <input id="q-search" class="search-input" type="search" inputmode="search" placeholder="Chercher une notion…" value="${escapeHtml(ui.consulterQuery)}">
+      <div class="filter-row">${chips}</div>
+    </div>
+    <div class="notion-list">${items}</div>
+  `, { active: 'consulter' });
+}
+
+function viewNotion(id){
+  const n = NOTION_BY_ID[id];
+  if(!n) return shell(`<div class="empty-state">Cette notion n'existe pas (ou plus).</div>`, { active: 'consulter', back: true });
+  return shell(`
+    <div class="notion-head">
+      <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
+      <h1>${escapeHtml(n.titre)}</h1>
+      <div class="resume">${escapeHtml(n.resume)}</div>
+    </div>
+    <div class="block prose">${formatContenu(n.contenu)}</div>
+    ${n.vigilance && n.vigilance.length ? `
+      <div class="block vigilance-box">
+        <h2>Points de vigilance</h2>
+        <ul>${n.vigilance.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${n.questions && n.questions.length ? `
+      <div class="block">
+        <details class="fold"><summary>Questions de révision</summary>
+          <div class="fold-body"><ul>${n.questions.map(q => `<li>${escapeHtml(q)}</li>`).join('')}</ul></div>
+        </details>
+      </div>` : ''}
+    ${n.variations && n.variations.length ? `
+      <div class="block">
+        <details class="fold"><summary>Axes de pratique</summary>
+          <div class="fold-body"><ul>${n.variations.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul></div>
+        </details>
+      </div>` : ''}
+    ${lienChips(n)}
+  `, { active: 'consulter', back: true });
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pickQuestion(n){
+  if(n.questions && n.questions.length) return n.questions[Math.floor(Math.random() * n.questions.length)];
+  return n.resume;
+}
+
+function viewReviser(){
+  const st = ui.reviser;
+  if(!st.queue){
+    const due = dueNotions();
+    return shell(`
+      <div class="hero">
+        <h1>Réviser</h1>
+        <div class="sub">Une notion revient plus tôt si tu l'as mal jugée, plus tard si elle est acquise.</div>
+      </div>
+      ${due.length ? `
+        <div class="session-card" style="align-items:center;text-align:center;justify-content:center">
+          <div class="session-progress">${due.length} notion${due.length > 1 ? 's' : ''} à réviser</div>
+          <h2>Prêt·e ?</h2>
+          <p class="session-question">Auto-évaluation en 3 niveaux, pas de QCM.</p>
+          <button class="btn btn-primary" data-action="reviser-start" style="margin-top:18px">Commencer la session</button>
+        </div>
+      ` : `<div class="empty-state">Rien à réviser pour l'instant. Va plutôt consulter ou pratiquer.</div>`}
+    `, { active: 'reviser' });
+  }
+  if(st.index >= st.queue.length){
+    const r = st.results;
+    return shell(`
+      <div class="hero"><h1>Session terminée</h1></div>
+      <div class="session-card">
+        <div class="session-progress">${st.queue.length} notion${st.queue.length > 1 ? 's' : ''} revue${st.queue.length > 1 ? 's' : ''}</div>
+        <div class="eval-row" style="margin-top:4px">
+          <div class="eval-btn eval-1">${r[1]}<small>à revoir</small></div>
+          <div class="eval-btn eval-2">${r[2]}<small>hésité</small></div>
+          <div class="eval-btn eval-3">${r[3]}<small>su</small></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" data-action="reviser-reset">Retour à l'accueil</button></div>
+      </div>
+    `, { active: 'reviser' });
+  }
+  const n = NOTION_BY_ID[st.queue[st.index]];
+  return shell(`
+    <div class="session-progress">${st.index + 1} / ${st.queue.length}</div>
+    <div class="session-card">
+      <div>
+        <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
+        <h2>${escapeHtml(n.titre)}</h2>
+        <div class="session-question">${escapeHtml(st.question)}</div>
+      </div>
+      ${st.revealed ? `
+        <div class="session-answer prose">${formatContenu(n.contenu)}</div>
+        ${n.vigilance && n.vigilance.length ? `<div class="block vigilance-box"><h2>Points de vigilance</h2><ul>${n.vigilance.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul></div>` : ''}
+        <div class="eval-row">
+          <div class="eval-btn eval-1" data-action="reviser-eval" data-level="1">À revoir<small>revient vite</small></div>
+          <div class="eval-btn eval-2" data-action="reviser-eval" data-level="2">Hésité<small>revient bientôt</small></div>
+          <div class="eval-btn eval-3" data-action="reviser-eval" data-level="3">Su<small>revient plus tard</small></div>
+        </div>
+      ` : `
+        <div class="btn-row" style="margin-top:auto"><button class="btn btn-primary" data-action="reviser-reveal">Afficher la réponse</button></div>
+      `}
+    </div>
+  `, { active: 'reviser' });
+}
+
+function ensurePracticeProposal(){
+  const st = ui.pratique;
+  if(!st.notionId){
+    const n = pickPracticeNotion(st.excludeId || null);
+    st.notionId = n.id;
+    st.variationIndex = pickVariationIndex(n);
+    st.step = 'proposal';
+    st.excludeId = null;
+  }
+}
+
+function viewPratiquer(){
+  const st = ui.pratique;
+  if(!PRACTICABLE.length){
+    return shell(`<div class="empty-state">Aucune notion pratiquable pour l'instant.</div>`, { active: 'pratiquer' });
+  }
+  if(st.step === 'saved'){
+    return shell(`
+      <div class="hero"><h1>Noté.</h1><div class="sub">Ça alimente ta progression.</div></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" data-action="pratique-next">Nouvelle proposition</button>
+        <a class="btn btn-ghost" href="#/suivi/journal">Voir le journal</a>
+      </div>
+    `, { active: 'pratiquer' });
+  }
+  ensurePracticeProposal();
+  const n = NOTION_BY_ID[st.notionId];
+  const variation = n.variations[st.variationIndex];
+  const prevP = State.practice[n.id];
+
+  if(st.step === 'journal'){
+    return shell(`
+      <div class="hero"><h1>Pratiquer</h1></div>
+      <div class="practice-card">
+        <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
+        <h2>${escapeHtml(n.titre)}</h2>
+        <div class="variation-box"><div class="label">Ce que tu as changé</div><div class="txt">${escapeHtml(variation)}</div></div>
+      </div>
+      <div class="journal-q">
+        <label>Qu'est-ce qui a bien marché cette fois ?</label>
+        <textarea id="j-q1" placeholder="…"></textarea>
+      </div>
+      <div class="journal-q">
+        <label>Qu'est-ce que tu changes la prochaine fois ?</label>
+        <textarea id="j-q2" placeholder="…"></textarea>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" data-action="pratique-save">Enregistrer</button></div>
+    `, { active: 'pratiquer' });
+  }
+
+  return shell(`
+    <div class="hero"><h1>Pratiquer</h1><div class="sub">Une notion, un axe à changer par rapport à la dernière fois.</div></div>
+    <div class="practice-card">
+      <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
+      <h2>${escapeHtml(n.titre)}</h2>
+      <p>${escapeHtml(n.resume)}</p>
+      <div class="variation-box">
+        <div class="label">Aujourd'hui, change</div>
+        <div class="txt">${escapeHtml(variation)}</div>
+      </div>
+      ${prevP && prevP.lastVariationText ? `<div class="variation-last">Dernière fois (${daysAgo(prevP.lastAt)}) : ${escapeHtml(prevP.lastVariationText)}</div>` : ''}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" data-action="pratique-shuffle">Autre chose</button>
+      <a class="btn btn-ghost" href="#/notion/${n.id}">Voir la fiche</a>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" data-action="pratique-done">J'ai pratiqué</button></div>
+  `, { active: 'pratiquer' });
+}
+
+function viewSuivi(tab){
+  tab = tab || 'progression';
+  const prog = progressionData();
+  const group = (title, dotClass, list, emptyMsg) => `
+    <details class="progress-group">
+      <summary><span><span class="${dotClass}">●</span> ${title}</span><span class="count">${list.length}</span></summary>
+      <div class="glist">${list.length ? list.map(n => `<a class="grow-link" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`).join('') : `<div class="grow-link" style="color:var(--ink-faint)">${emptyMsg}</div>`}</div>
+    </details>`;
+
+  const progressionHtml = `
+    ${group('Acquis', 'dot-acquis', prog.acquis, "Rien pour l'instant.")}
+    ${group('Ça traîne', 'dot-traine', prog.traine, "Rien en retard, bien joué.")}
+    ${group('Jamais pratiqué', 'dot-jamais', prog.jamaisPratique, "Tout a été pratiqué au moins une fois.")}
+    <div class="export-box">
+      <p>Exporte toutes tes données (révisions, pratiques, journal) en JSON. Rien ne sort de l'appareil autrement.</p>
+      <button class="btn btn-ghost" data-action="export">Exporter mes données</button>
+    </div>
+  `;
+
+  const journalEntries = State.journal.slice().reverse();
+  const journalHtml = journalEntries.length ? journalEntries.map(e => {
+    const n = NOTION_BY_ID[e.notionId];
+    return `
+      <div class="journal-entry">
+        <div class="meta"><a href="#/notion/${e.notionId}">${n ? escapeHtml(n.titre) : '—'}</a> · ${fmtDate(e.date)}</div>
+        <div class="qa"><div class="q">Ce qui a marché</div>${escapeHtml(e.q1 || '—')}</div>
+        <div class="qa"><div class="q">La prochaine fois</div>${escapeHtml(e.q2 || '—')}</div>
+      </div>`;
+  }).join('') : `<div class="empty-state">Ton journal se remplit après chaque pratique.</div>`;
+
+  return shell(`
+    <div class="hero"><h1>Suivi</h1></div>
+    <div class="seg">
+      <div class="seg-btn${tab === 'progression' ? ' active' : ''}" data-action="suivi-tab" data-tab="progression">Progression</div>
+      <div class="seg-btn${tab === 'journal' ? ' active' : ''}" data-action="suivi-tab" data-tab="journal">Journal</div>
+    </div>
+    ${tab === 'progression' ? progressionHtml : journalHtml}
+  `, { active: 'suivi' });
+}
+
+/* =====================================================================
+   ROUTEUR
+   ===================================================================== */
+
+function parseRoute(){
+  const h = location.hash.replace(/^#\/?/, '');
+  const parts = h.split('/').filter(Boolean);
+  if(!parts.length || parts[0] === 'home') return { name: 'home' };
+  if(parts[0] === 'consulter') return { name: 'consulter', cat: parts[1] || 'all' };
+  if(parts[0] === 'notion') return { name: 'notion', id: parts[1] };
+  if(parts[0] === 'reviser') return { name: 'reviser' };
+  if(parts[0] === 'pratiquer') return { name: 'pratiquer' };
+  if(parts[0] === 'suivi') return { name: 'suivi', tab: parts[1] || 'progression' };
+  return { name: 'home' };
+}
+
+function currentViewHtml(){
+  const r = parseRoute();
+  switch(r.name){
+    case 'consulter': return viewConsulter(r.cat);
+    case 'notion': return viewNotion(r.id);
+    case 'reviser': return viewReviser();
+    case 'pratiquer': return viewPratiquer();
+    case 'suivi': return viewSuivi(r.tab);
+    default: return viewHome();
+  }
+}
+
+const appEl = document.getElementById('app');
+
+function rerender(){
+  const active = document.activeElement;
+  const activeId = active && active.id;
+  const selStart = active && 'selectionStart' in active ? active.selectionStart : null;
+  const selEnd = active && 'selectionEnd' in active ? active.selectionEnd : null;
+  appEl.innerHTML = currentViewHtml();
+  if(activeId){
+    const el = document.getElementById(activeId);
+    if(el){
+      el.focus();
+      if(selStart != null && el.setSelectionRange){ try{ el.setSelectionRange(selStart, selEnd); }catch(e){} }
+    }
+  }
+}
+
+window.addEventListener('hashchange', () => { window.scrollTo(0, 0); rerender(); });
+
+appEl.addEventListener('click', function(e){
+  if(e.target.closest('[data-action="back"]')){ history.back(); return; }
+
+  const catChip = e.target.closest('[data-action="consulter-cat"]');
+  if(catChip){
+    const cat = catChip.getAttribute('data-cat');
+    location.hash = cat === 'all' ? '#/consulter' : '#/consulter/' + cat;
+    return;
+  }
+
+  if(e.target.closest('[data-action="reviser-start"]')){
+    const q = shuffle(dueNotions().map(n => n.id));
+    ui.reviser = { queue: q, index: 0, revealed: false, question: pickQuestion(NOTION_BY_ID[q[0]]), results: { 1: 0, 2: 0, 3: 0 } };
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="reviser-reveal"]')){
+    ui.reviser.revealed = true;
+    rerender();
+    return;
+  }
+  const revEval = e.target.closest('[data-action="reviser-eval"]');
+  if(revEval){
+    const level = parseInt(revEval.getAttribute('data-level'), 10);
+    const st = ui.reviser;
+    const id = st.queue[st.index];
+    scheduleNext(id, level);
+    st.results[level] = (st.results[level] || 0) + 1;
+    st.index += 1;
+    st.revealed = false;
+    if(st.index < st.queue.length) st.question = pickQuestion(NOTION_BY_ID[st.queue[st.index]]);
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="reviser-reset"]')){
+    ui.reviser = { queue: null, index: 0, revealed: false, question: '', results: { 1: 0, 2: 0, 3: 0 } };
+    location.hash = '#/home';
+    return;
+  }
+
+  if(e.target.closest('[data-action="pratique-shuffle"]')){
+    ui.pratique.excludeId = ui.pratique.notionId;
+    ui.pratique.notionId = null;
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="pratique-done"]')){
+    ui.pratique.step = 'journal';
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="pratique-save"]')){
+    const q1 = (document.getElementById('j-q1') || {}).value || '';
+    const q2 = (document.getElementById('j-q2') || {}).value || '';
+    const n = NOTION_BY_ID[ui.pratique.notionId];
+    recordPractice(n.id, ui.pratique.variationIndex, n.variations[ui.pratique.variationIndex], q1.trim(), q2.trim());
+    ui.pratique.step = 'saved';
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="pratique-next"]')){
+    ui.pratique.notionId = null;
+    rerender();
+    return;
+  }
+
+  const suiviTab = e.target.closest('[data-action="suivi-tab"]');
+  if(suiviTab){
+    location.hash = '#/suivi/' + suiviTab.getAttribute('data-tab');
+    return;
+  }
+
+  if(e.target.closest('[data-action="export"]')){ exportJSON(); return; }
+});
+
+appEl.addEventListener('input', function(e){
+  if(e.target.id === 'q-search'){
+    ui.consulterQuery = e.target.value;
+    rerender();
+  }
+});
+
+rerender();
+
+})();
+</script>
+</body>
+</html>
