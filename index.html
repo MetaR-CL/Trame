@@ -21,6 +21,7 @@
    ===================================================================== */
 :root{
   --bg:#f7f1e3;
+  --bg-sunken:#efe4c8;
   --bg-card:#fffdf7;
   --bg-raised:#ffffff;
   --ink:#2a2116;
@@ -41,6 +42,12 @@
   --radius-m:14px;
   --radius-l:24px;
   --shadow:0 1px 2px rgba(40,28,15,.06), 0 10px 24px -14px rgba(40,28,15,.35);
+  --weave:
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--ink) 5%, transparent) 0 1px, transparent 1px 13px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ink) 5%, transparent) 0 1px, transparent 1px 13px);
+  --weave-accent:
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--accent) 8%, transparent) 0 1px, transparent 1px 13px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--accent) 8%, transparent) 0 1px, transparent 1px 13px);
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Noto Serif",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   color-scheme: light dark;
@@ -48,22 +55,23 @@
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#1a1610;
-    --bg-card:#231e16;
-    --bg-raised:#2a241a;
+    --bg-sunken:#201a12;
+    --bg-card:#231d15;
+    --bg-raised:#2b2318;
     --ink:#f3e9d6;
-    --ink-soft:#c4b59c;
-    --ink-faint:#8a7c67;
-    --line:#3a3223;
-    --line-soft:#2d2819;
+    --ink-soft:#c9b89e;
+    --ink-faint:#8a7a63;
+    --line:#3a3020;
+    --line-soft:#2f271a;
     --accent:#e28457;
     --accent-ink:#1a1610;
-    --accent-soft:#3c2a20;
-    --sauge:#a3b98a;
-    --sauge-soft:#2b3323;
-    --ocre:#d9ac5c;
-    --ocre-soft:#3a2f1b;
-    --rouge:#e08e7d;
-    --rouge-soft:#3a2620;
+    --accent-soft:#3a2418;
+    --sauge:#9db27e;
+    --sauge-soft:#2a3020;
+    --ocre:#d1a24a;
+    --ocre-soft:#3a2e14;
+    --rouge:#d9846a;
+    --rouge-soft:#3a231c;
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -123,27 +131,32 @@ main.view-anim{animation:view-in .22s ease;}
 }
 
 /* --- Home --- */
-.hero{padding:6px 0 18px;}
-.hero h1{font-size:1.6rem;margin-bottom:.15em;}
-.hero .sub{color:var(--ink-soft);font-size:.95rem;}
+.hero{padding:10px 0 18px;}
+.hero-weave{margin:0 -18px;padding-left:18px;padding-right:18px;background-image:var(--weave);}
+.hero h1{font-weight:700;font-size:1.875rem;line-height:2.25rem;margin-bottom:.15em;}
+.hero .sub{color:var(--ink-soft);font-size:1rem;line-height:1.4375rem;}
 
 .stat-row{display:flex;gap:10px;margin:16px 0 22px;}
 .stat{
   flex:1;background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
-  padding:12px 14px;text-align:left;
+  padding:14px;text-align:left;box-shadow:var(--shadow);
 }
 .stat .n{font-family:var(--serif);font-size:1.5rem;font-weight:700;line-height:1;display:block;}
-.stat .l{font-size:.72rem;color:var(--ink-soft);margin-top:4px;display:block;}
+.stat .l{font-size:.75rem;line-height:.9375rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-top:5px;display:block;}
 
 .section-title{
-  font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);
-  margin:22px 0 10px;
+  font-family:var(--serif);font-weight:600;font-size:1.1875rem;line-height:1.5rem;color:var(--ink);
+  margin:24px 0 10px;
 }
 
 .depannage-panel{
-  background:var(--rouge-soft);border-radius:var(--radius-l);padding:16px;margin-bottom:6px;
+  background:var(--accent-soft);border-radius:var(--radius-l);padding:16px;margin-bottom:6px;
+  background-image:var(--weave-accent);
 }
-.depannage-panel h2{font-size:1rem;color:var(--rouge);margin-bottom:2px;}
+.depannage-panel h2{
+  font-family:var(--sans);font-size:.75rem;line-height:.9375rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:2px;
+}
 .depannage-panel .hint{font-size:.82rem;color:var(--ink-soft);margin-bottom:12px;}
 .chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
 .chip{
@@ -153,34 +166,41 @@ main.view-anim{animation:view-in .22s ease;}
   transition:transform .1s ease;
 }
 .chip:active{transform:scale(.96);}
-.chip.on-rouge{border-color:transparent;}
+.chip-depannage{
+  background:var(--accent);color:var(--accent-ink);border:none;
+  padding:12px 16px;font-size:.875rem;font-weight:600;min-height:44px;
+}
 
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .cat-card{
-  background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
-  padding:14px;text-align:left;cursor:pointer;text-decoration:none;display:block;color:var(--ink);
+  background:var(--bg-sunken);border:none;border-radius:var(--radius-m);
+  padding:14px;text-align:left;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:10px;color:var(--ink);
   transition:transform .12s ease,opacity .12s ease;
 }
 .cat-card:active{transform:scale(.97);opacity:.85;}
-.cat-card h3{font-size:.98rem;margin-bottom:3px;}
-.cat-card p{font-size:.76rem;color:var(--ink-soft);margin-bottom:6px;}
-.cat-card .count{font-size:.72rem;color:var(--ink-faint);}
+.cat-card .dot{width:10px;height:10px;border-radius:99px;flex:none;}
+.cat-card .label{font-size:.9375rem;font-weight:500;}
+.cat-card .count{font-size:.72rem;color:var(--ink-faint);margin-left:auto;flex:none;}
 
 .nav-cards{display:flex;flex-direction:column;gap:10px;}
 .nav-card{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  background:var(--bg-raised);border:1px solid var(--line);border-radius:var(--radius-m);
-  padding:15px 16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);
+  background:var(--bg-raised);border:1px solid var(--line);border-radius:var(--radius-l);
+  padding:16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);
   transition:transform .12s ease,opacity .12s ease;
 }
 .nav-card:active{transform:scale(.98);opacity:.85;}
-.nav-card .t{font-family:var(--serif);font-weight:700;font-size:1.02rem;}
-.nav-card .d{font-size:.78rem;color:var(--ink-soft);margin-top:2px;}
+.nav-card .icon{
+  width:40px;height:40px;border-radius:99px;display:flex;align-items:center;justify-content:center;flex:none;
+}
+.nav-card .body{flex:1;min-width:0;}
+.nav-card .t{font-family:var(--serif);font-weight:600;font-size:1rem;}
+.nav-card .d{font-size:.8125rem;color:var(--ink-soft);margin-top:2px;}
 .nav-card .badge{
   background:var(--accent);color:var(--accent-ink);border-radius:100px;min-width:24px;height:24px;
   display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;padding:0 7px;flex:none;
 }
-.nav-card .arrow{color:var(--ink-faint);font-size:1.1rem;flex:none;}
+.nav-card .arrow{color:var(--ink-faint);flex:none;display:flex;}
 
 /* --- Search / filters --- */
 .search-wrap{position:sticky;top:calc(env(safe-area-inset-top) + 60px);z-index:4;background:var(--bg);padding-bottom:10px;}
@@ -196,7 +216,7 @@ main.view-anim{animation:view-in .22s ease;}
   padding:7px 13px;font-size:.82rem;color:var(--ink-soft);cursor:pointer;white-space:nowrap;
   transition:transform .1s ease;
 }
-.filter-chip.active{background:var(--ink);border-color:var(--ink);color:var(--bg);}
+.filter-chip.active{background:transparent;border-color:var(--accent);color:var(--accent);}
 .filter-chip:active{transform:scale(.94);}
 
 .notion-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
@@ -271,7 +291,7 @@ details.fold ul{padding-left:1.1em;}
 .session-answer{margin-top:14px;border-top:1px solid var(--line-soft);padding-top:14px;}
 .eval-row{display:flex;gap:8px;margin-top:18px;}
 .eval-btn{
-  flex:1;border-radius:var(--radius-m);padding:14px 6px;text-align:center;border:1px solid var(--line);
+  flex:1;border-radius:var(--radius-m);padding:14px 6px;text-align:center;border:1.5px solid var(--line);
   background:var(--bg-card);cursor:pointer;font-size:.85rem;font-weight:600;
   transition:transform .1s ease,opacity .1s ease;
 }
@@ -283,7 +303,7 @@ details.fold ul{padding-left:1.1em;}
 
 /* --- Pratiquer --- */
 .practice-card{
-  background:linear-gradient(180deg,var(--accent-soft),var(--bg-card));
+  background:var(--accent-soft);background-image:var(--weave-accent);
   border-radius:var(--radius-l);padding:22px 20px;margin-top:12px;
 }
 .practice-card .tag{font-size:.7rem;text-transform:uppercase;color:var(--accent);font-weight:700;letter-spacing:.05em;}
@@ -343,22 +363,22 @@ details.fold ul{padding-left:1.1em;}
 /* --- Bottom nav --- */
 .tabbar{
   position:fixed;left:0;right:0;bottom:0;z-index:10;
-  background:var(--bg-raised);border-top:1px solid var(--line);
+  background:var(--bg-card);border-top:1px solid var(--line-soft);
   padding:8px 6px calc(8px + env(safe-area-inset-bottom));
   display:flex;justify-content:center;
 }
 .tabbar-inner{display:flex;width:100%;max-width:560px;}
 .tab{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  text-decoration:none;color:var(--ink-faint);font-size:.68rem;padding:6px 2px;position:relative;
-  transition:transform .1s ease;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  text-decoration:none;color:var(--ink-faint);font-size:.656rem;font-weight:600;
+  padding:6px 4px;min-height:44px;position:relative;border-radius:12px;
+  transition:transform .1s ease,background .12s ease,color .12s ease;
 }
+.tab-icon{display:flex;line-height:0;}
 .tab:active{transform:scale(.92);}
-.tab.active{color:var(--accent);font-weight:700;}
-.tab .mark{width:20px;height:3px;border-radius:3px;background:transparent;}
-.tab.active .mark{background:var(--accent);}
+.tab.active{background:var(--accent-soft);color:var(--accent);font-weight:700;}
 .tab .tbadge{
-  position:absolute;top:0;right:18%;background:var(--rouge);color:#fff;font-size:.62rem;font-weight:700;
+  position:absolute;top:2px;right:18%;background:var(--rouge);color:#fff;font-size:.62rem;font-weight:700;
   border-radius:100px;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;padding:0 3px;
 }
 
@@ -2811,6 +2831,16 @@ const ui = {
 
 function catLabel(id){ return CAT_BY_ID[id] ? CAT_BY_ID[id].nom : id; }
 
+/* Icônes — SVG inline, currentColor, aucune dépendance. */
+const ICONS = {
+  home: `<svg viewBox="0 0 24 24" width="20" height="20"><polygon points="12,3 21,11 19,11 19,20 5,20 5,11 3,11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  consulter: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="8" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.6"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.6"/></svg>`,
+  reviser: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="6" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" transform="rotate(-6 11 11)"/><rect x="6" y="8" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
+  pratiquer: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="5" y="10" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="3" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="19" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="10" x2="12" y2="7" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="6" r="1.4" fill="currentColor"/></svg>`,
+  suivi: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="12" width="4" height="8" fill="currentColor"/><rect x="10" y="7" width="4" height="13" fill="currentColor"/><rect x="16" y="3" width="4" height="17" fill="currentColor"/></svg>`,
+  chevron: `<svg width="8" height="14" viewBox="0 0 8 14"><polyline points="1,1 7,7 1,13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+};
+
 function notionChip(n){
   return `<a class="chip" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`;
 }
@@ -2824,18 +2854,18 @@ function lienChips(n){
 function shell(inner, opts){
   opts = opts || {};
   const tabs = [
-    { id: 'home', label: 'Accueil', hash: '#/home' },
-    { id: 'consulter', label: 'Consulter', hash: '#/consulter' },
-    { id: 'reviser', label: 'Réviser', hash: '#/reviser' },
-    { id: 'pratiquer', label: 'Pratiquer', hash: '#/pratiquer' },
-    { id: 'suivi', label: 'Suivi', hash: '#/suivi' }
+    { id: 'home', label: 'Accueil', hash: '#/home', icon: ICONS.home },
+    { id: 'consulter', label: 'Consulter', hash: '#/consulter', icon: ICONS.consulter },
+    { id: 'reviser', label: 'Réviser', hash: '#/reviser', icon: ICONS.reviser },
+    { id: 'pratiquer', label: 'Pratiquer', hash: '#/pratiquer', icon: ICONS.pratiquer },
+    { id: 'suivi', label: 'Suivi', hash: '#/suivi', icon: ICONS.suivi }
   ];
   const dueCount = dueNotions().length;
   const tabbar = `
     <nav class="tabbar"><div class="tabbar-inner">
       ${tabs.map(t => `
         <a class="tab${opts.active === t.id ? ' active' : ''}" href="${t.hash}">
-          <span class="mark"></span>${escapeHtml(t.label)}
+          <span class="tab-icon">${t.icon}</span><span>${escapeHtml(t.label)}</span>
           ${t.id === 'reviser' && dueCount ? `<span class="tbadge">${dueCount}</span>` : ''}
         </a>`).join('')}
     </div></nav>`;
@@ -2851,8 +2881,9 @@ function viewHome(){
   const prog = progressionData();
   const cats = CATS.filter(c => c.id !== 'depannage');
   const catCount = id => NOTIONS.filter(n => n.cat === id).length;
+  const catColors = ['accent', 'rouge', 'ocre', 'sauge'];
   return shell(`
-    <div class="hero">
+    <div class="hero hero-weave">
       <h1>${escapeHtml(CONTENU.sujet)}</h1>
       <div class="sub">${escapeHtml(CONTENU.sousTitre)}</div>
     </div>
@@ -2866,32 +2897,35 @@ function viewHome(){
     <div class="depannage-panel">
       <h2>Dépannage</h2>
       <div class="hint">Le plat est en cours, quelque chose cloche — tape directement.</div>
-      <div class="chip-grid">${depannage.map(n => `<a class="chip on-rouge" style="background:var(--bg-raised)" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`).join('')}</div>
+      <div class="chip-grid">${depannage.map(n => `<a class="chip chip-depannage" href="#/notion/${n.id}">${escapeHtml(n.titre)}</a>`).join('')}</div>
     </div>
 
     <div class="section-title">Consulter par catégorie</div>
     <div class="cat-grid">
-      ${cats.map(c => `
+      ${cats.map((c, i) => `
         <a class="cat-card" href="#/consulter/${c.id}">
-          <h3>${escapeHtml(c.nom)}</h3>
-          <p>${escapeHtml(c.desc)}</p>
-          <span class="count">${catCount(c.id)} notions</span>
+          <span class="dot" style="background:var(--${catColors[i % catColors.length]})"></span>
+          <span class="label">${escapeHtml(c.nom)}</span>
+          <span class="count">${catCount(c.id)}</span>
         </a>`).join('')}
     </div>
 
     <div class="section-title">Modes</div>
     <div class="nav-cards">
       <a class="nav-card" href="#/reviser">
-        <div><div class="t">Réviser</div><div class="d">Répétition espacée, auto-évaluation en 3 niveaux</div></div>
-        ${due ? `<span class="badge">${due}</span>` : '<span class="arrow">›</span>'}
+        <div class="icon" style="background:var(--accent-soft);color:var(--accent)">${ICONS.reviser}</div>
+        <div class="body"><div class="t">Réviser</div><div class="d">Répétition espacée, auto-évaluation en 3 niveaux</div></div>
+        ${due ? `<span class="badge">${due}</span>` : `<span class="arrow">${ICONS.chevron}</span>`}
       </a>
       <a class="nav-card" href="#/pratiquer">
-        <div><div class="t">Pratiquer</div><div class="d">Une notion, un axe à changer par rapport à la dernière fois</div></div>
-        <span class="arrow">›</span>
+        <div class="icon" style="background:var(--sauge-soft);color:var(--sauge)">${ICONS.pratiquer}</div>
+        <div class="body"><div class="t">Pratiquer</div><div class="d">Une notion, un axe à changer par rapport à la dernière fois</div></div>
+        <span class="arrow">${ICONS.chevron}</span>
       </a>
       <a class="nav-card" href="#/suivi">
-        <div><div class="t">Suivi</div><div class="d">Progression, journal, export de tes données</div></div>
-        <span class="arrow">›</span>
+        <div class="icon" style="background:var(--ocre-soft);color:var(--ocre)">${ICONS.suivi}</div>
+        <div class="body"><div class="t">Suivi</div><div class="d">Progression, journal, export de tes données</div></div>
+        <span class="arrow">${ICONS.chevron}</span>
       </a>
     </div>
   `, { active: 'home' });
