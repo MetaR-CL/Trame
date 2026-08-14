@@ -289,6 +289,12 @@ details.fold ul{padding-left:1.1em;}
 .session-card h2{font-size:1.2rem;margin:.3em 0 .5em;}
 .session-question{font-size:1.02rem;color:var(--ink-soft);flex:1;}
 .session-answer{margin-top:14px;border-top:1px solid var(--line-soft);padding-top:14px;}
+.session-answer .answer-label{
+  font-size:.75rem;line-height:.9375rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--sauge);margin-bottom:6px;
+}
+.session-answer .answer-text{font-size:1.02rem;color:var(--ink);}
+.session-answer .fiche-link{display:inline-block;margin-top:10px;font-size:.85rem;color:var(--accent);text-decoration:none;font-weight:600;}
 .eval-row{display:flex;gap:8px;margin-top:18px;}
 .eval-btn{
   flex:1;border-radius:var(--radius-m);padding:14px 6px;text-align:center;border:1.5px solid var(--line);
@@ -409,7 +415,10 @@ details.fold ul{padding-left:1.1em;}
      resume:    une phrase — ce qui s'affiche en liste
      contenu:   le cours, en texte long
      vigilance: [] points d'attention / erreurs fréquentes
-     questions: [] auto-évaluation pour le mode Révision
+     questions: [{ q, r }] auto-évaluation pour le mode Révision —
+                q = la question posée, r = une réponse concise
+                (1 à 3 phrases) qui répond précisément à q, sans
+                renvoyer à toute la fiche
      variations:[] axes de variation pour le mode Pratique
      lien:      [] ids de notions connexes
    }
@@ -481,9 +490,9 @@ Un plat correctement salé ne donne pas l'impression d'être salé. Il donne l'i
     "Oublier de saler l'eau des pâtes et des légumes — c'est une couche d'assaisonnement perdue définitivement."
   ],
   questions: [
-    "Pourquoi saler un poulet la veille change plus de choses que saler à table ?",
-    "Tu fais une sauce qui va réduire de moitié. Quand sales-tu, et pourquoi ?",
-    "Quelle est la différence perceptible entre un plat sous-salé et un plat qui manque d'acide ?"
+    { q: "Pourquoi saler un poulet la veille change plus de choses que saler à table ?", r: "Le sel met des heures à pénétrer une pièce épaisse : salé la veille, il diffuse en profondeur puis ressort sécher la peau, ce qui améliore aussi la coloration. Salé à table, il ne fait qu'assaisonner la surface, sans rien changer à la cuisson." },
+    { q: "Tu fais une sauce qui va réduire de moitié. Quand sales-tu, et pourquoi ?", r: "Par petites touches en cours de cuisson, jamais à fond au départ — la réduction concentre le sel, donc un dosage correct au début devient vite trop salé une fois réduit." },
+    { q: "Quelle est la différence perceptible entre un plat sous-salé et un plat qui manque d'acide ?", r: "Sous-salé, le plat semble fade et sans intensité de goût. Sans acide, il peut être bien assaisonné mais reste plat, monotone, sans relief ni contraste." }
   ],
   variations: [
     "Sale le même légume en début puis en fin de cuisson sur deux poêlées, et compare.",
@@ -543,9 +552,9 @@ Avant de servir n'importe quel plat riche — braisé, gratin, plat en sauce, so
     "Oublier que les légumes verts virent au kaki en présence d'acide et de chaleur."
   ],
   questions: [
-    "Un plat est bien salé mais reste plat. Quelle est ta première hypothèse et comment la testes-tu ?",
-    "Pourquoi mettre le jus de citron hors du feu et pas pendant la cuisson ?",
-    "Quelle différence de résultat entre du vinaigre de vin et du vinaigre de riz sur une même poêlée ?"
+    { q: "Un plat est bien salé mais reste plat. Quelle est ta première hypothèse et comment la testes-tu ?", r: "Il manque probablement d'acide. Teste en prélevant une petite quantité dans un bol à part, ajoute une goutte de citron ou de vinaigre : si le goût s'illumine, l'acide est bien le manque." },
+    { q: "Pourquoi mettre le jus de citron hors du feu et pas pendant la cuisson ?", r: "Le jus de citron est vif et volatil : la chaleur prolongée le fait s'évaporer, donc ajouté trop tôt il ne reste plus rien de son effet en fin de cuisson." },
+    { q: "Quelle différence de résultat entre du vinaigre de vin et du vinaigre de riz sur une même poêlée ?", r: "Le vinaigre de vin est plus rond et persistant, il tient bien la cuisson. Le vinaigre de riz est beaucoup plus doux, pour une acidité présente mais discrète." }
   ],
   variations: [
     "Refais le même plat qu'une fois précédente en changeant uniquement la source d'acide.",
@@ -601,9 +610,9 @@ Le geste le plus sous-estimé. Un filet d'huile d'olive crue, une noisette de be
     "Oublier le gras de finition — c'est trente secondes de travail pour un gain immédiat."
   ],
   questions: [
-    "Pourquoi fait-on revenir le concentré de tomate dans l'huile avant d'ajouter le liquide ?",
-    "Quel gras choisis-tu pour saisir une entrecôte, et pourquoi pas un autre ?",
-    "Qu'est-ce qui change concrètement quand on ajoute une noisette de beurre hors du feu en fin de sauce ?"
+    { q: "Pourquoi fait-on revenir le concentré de tomate dans l'huile avant d'ajouter le liquide ?", r: "Beaucoup de molécules aromatiques sont solubles dans le gras et pas dans l'eau : les faire revenir dans l'huile chaude les libère, sinon la moitié de l'arôme reste enfermée." },
+    { q: "Quel gras choisis-tu pour saisir une entrecôte, et pourquoi pas un autre ?", r: "Une huile neutre à point de fumée élevé (arachide, tournesol, colza raffinée) ou du beurre clarifié — pas d'huile d'olive vierge extra, dont les arômes seraient détruits et le goût deviendrait âcre à haute température." },
+    { q: "Qu'est-ce qui change concrètement quand on ajoute une noisette de beurre hors du feu en fin de sauce ?", r: "Le beurre cru garde tous ses arômes intacts et lie la sauce, qui devient plus brillante et onctueuse — c'est le gras de finition, différent du gras de cuisson." }
   ],
   variations: [
     "Fais la même poêlée de légumes une fois à l'huile neutre, une fois au beurre, une fois au gras de canard.",
@@ -656,9 +665,9 @@ Le réflexe le plus rentable : commencer plus chaud que ce que tu crois pour tou
     "Faire mijoter à gros bouillons : ça durcit les fibres au lieu de les fondre. Un braisé doit frémir, pas bouillir."
   ],
   questions: [
-    "Pourquoi une viande sortie du frigo et jetée telle quelle dans la poêle grise-t-elle au lieu de dorer ?",
-    "À quoi sert le repos d'une viande, et combien de temps pour un rôti ?",
-    "Quelle différence entre frémir et bouillir pour un braisé, et pourquoi ça compte ?"
+    { q: "Pourquoi une viande sortie du frigo et jetée telle quelle dans la poêle grise-t-elle au lieu de dorer ?", r: "Tant qu'il reste de l'eau libre en surface, la température plafonne à 100 °C et la réaction de Maillard, qui démarre vers 140 °C, ne peut pas se produire — la viande cuit à l'étuvée au lieu de dorer." },
+    { q: "À quoi sert le repos d'une viande, et combien de temps pour un rôti ?", r: "Il laisse les fibres, contractées par la chaleur, se détendre et réabsorber le jus au lieu de le perdre sur la planche. Compte environ vingt minutes pour un rôti." },
+    { q: "Quelle différence entre frémir et bouillir pour un braisé, et pourquoi ça compte ?", r: "Frémir (60-90 °C) convertit doucement le collagène en gélatine et attendrit la viande ; bouillir contracte les fibres musculaires et la rend sèche et filandreuse." }
   ],
   variations: [
     "Cuis la même quantité de champignons en une fournée puis en deux, et compare la couleur.",
@@ -707,9 +716,9 @@ Quand un plat est correctement salé, correctement acidulé, mais qu'il te sembl
     "Jeter l'eau de trempage des champignons séchés — c'est la partie la plus intéressante."
   ],
   questions: [
-    "Quel est l'effet du concentré de tomate roussi par rapport au concentré ajouté cru ?",
-    "Pourquoi tomate + champignon fonctionne mieux que deux fois plus de tomate ?",
-    "Tu as une soupe de légumes correcte mais superficielle. Cite trois ajouts possibles et leur effet."
+    { q: "Quel est l'effet du concentré de tomate roussi par rapport au concentré ajouté cru ?", r: "Roussi une minute dans l'huile chaude, il perd son acidité crue et devient profond ; ajouté cru directement au liquide, il reste plat et acidulé." },
+    { q: "Pourquoi tomate + champignon fonctionne mieux que deux fois plus de tomate ?", r: "L'umami vient du glutamate et de nucléotides qui se multiplient entre eux : associer une source de glutamate (tomate) et une source de nucléotide (champignon) donne un effet bien supérieur à doubler une seule source." },
+    { q: "Tu as une soupe de légumes correcte mais superficielle. Cite trois ajouts possibles et leur effet.", r: "Une cuillère de sauce soja, un anchois fondu dans l'huile, ou une croûte de parmesan retirée avant de servir — chacun ajoute de la profondeur sans changer la nature du plat." }
   ],
   variations: [
     "Fais deux fois la même sauce tomate, une avec deux anchois fondus au départ, une sans.",
@@ -758,9 +767,9 @@ Fais-en un bocal pour la semaine. Le ratio se garde, elle se sépare et tu secou
     "Assaisonner la salade trop en avance : les feuilles se flétrissent en quelques minutes sous l'effet du sel."
   ],
   questions: [
-    "Pourquoi la moutarde est-elle dans presque toutes les vinaigrettes classiques ?",
-    "Tu utilises du vinaigre de riz. Gardes-tu le 3:1 ? Pourquoi ?",
-    "Dans quel ordre montes-tu une vinaigrette et pourquoi cet ordre-là ?"
+    { q: "Pourquoi la moutarde est-elle dans presque toutes les vinaigrettes classiques ?", r: "C'est un émulsifiant : elle stabilise le mélange huile-vinaigre et l'empêche de se séparer immédiatement, en plus d'apporter du goût." },
+    { q: "Tu utilises du vinaigre de riz. Gardes-tu le 3:1 ? Pourquoi ?", r: "Non, tu peux descendre vers 2:1 — le vinaigre de riz est beaucoup plus doux qu'un vinaigre de vin, donc le ratio standard donnerait une vinaigrette trop fade en acidité." },
+    { q: "Dans quel ordre montes-tu une vinaigrette et pourquoi cet ordre-là ?", r: "Acide, sel et moutarde d'abord — le sel doit se dissoudre dans le liquide, pas dans l'huile — puis l'huile en filet en fouettant pour monter l'émulsion." }
   ],
   variations: [
     "Même salade, trois vinaigrettes : vinaigre de vin, citron, saumure de pickles.",
@@ -809,9 +818,9 @@ C'est ici que le principe « une base, N variations » prend tout son sens. Béc
     "Croire qu'un roux brun épaissit autant qu'un roux blanc — non, il faut en mettre plus."
   ],
   questions: [
-    "Combien de beurre, de farine et de lait pour une béchamel nappante de 750 ml ?",
-    "Pourquoi ne peut-on pas verser un liquide chaud sur un roux chaud ?",
-    "Pourquoi un roux brun épaissit-il moins qu'un roux blanc ?"
+    { q: "Combien de beurre, de farine et de lait pour une béchamel nappante de 750 ml ?", r: "Environ 75 g de beurre, 75 g de farine, pour 750 ml de lait — le ratio nappant est 1:1:10." },
+    { q: "Pourquoi ne peut-on pas verser un liquide chaud sur un roux chaud ?", r: "Chaud sur chaud fait gélifier l'amidon instantanément en surface et forme des grumeaux ; il faut une différence de température entre les deux (froid sur chaud, ou chaud sur froid)." },
+    { q: "Pourquoi un roux brun épaissit-il moins qu'un roux blanc ?", r: "Plus un roux cuit longtemps, plus il perd de son pouvoir épaississant — il faut donc en mettre davantage pour un roux brun que pour un roux blanc à consistance égale." }
   ],
   variations: [
     "Fais la même béchamel avec du lait infusé (laurier, oignon, muscade) contre du lait nature.",
@@ -856,9 +865,9 @@ Un ratio à garder en tête vu ton intérêt pour la fermentation : à parts ég
     "Resaler à la cuisson par réflexe après une saumure."
   ],
   questions: [
-    "Combien de sel pour saumurer à sec un poulet de 1,5 kg ?",
-    "Pourquoi la saumure sèche donne-t-elle une meilleure coloration que la saumure liquide ?",
-    "Combien de temps pour des blancs de poulet en saumure liquide à 6 % ?"
+    { q: "Combien de sel pour saumurer à sec un poulet de 1,5 kg ?", r: "Environ 1 % du poids de la viande, soit 15 g de sel pour un poulet de 1,5 kg." },
+    { q: "Pourquoi la saumure sèche donne-t-elle une meilleure coloration que la saumure liquide ?", r: "La surface reste sèche avec une saumure sèche, ce qui permet la coloration à la cuisson ; une saumure liquide laisse une surface mouillée qui résiste au brunissement." },
+    { q: "Combien de temps pour des blancs de poulet en saumure liquide à 6 % ?", r: "Une heure suffit pour des blancs de poulet en saumure rapide à 5-8 %." }
   ],
   variations: [
     "Poulet salé à sec la veille contre poulet salé juste avant. Même cuisson.",
@@ -904,9 +913,9 @@ Pâtes : 1 litre d'eau et 10 g de sel pour 100 g de pâtes. Et garde toujours un
     "Jeter l'eau de cuisson des pâtes — c'est un ingrédient, pas un déchet."
   ],
   questions: [
-    "Quelle quantité d'eau pour 300 ml de riz basmati ?",
-    "À quoi servent les dix minutes de repos hors du feu ?",
-    "Pourquoi garder l'eau de cuisson des pâtes ?"
+    { q: "Quelle quantité d'eau pour 300 ml de riz basmati ?", r: "450 ml d'eau, soit 1,5 fois le volume de riz." },
+    { q: "À quoi servent les dix minutes de repos hors du feu ?", r: "La vapeur résiduelle finit la cuisson et répartit l'humidité de façon homogène dans le riz — sauter cette étape donne un riz inégal." },
+    { q: "Pourquoi garder l'eau de cuisson des pâtes ?", r: "Son amidon est un émulsifiant : mélangée à la sauce et au gras, elle les fait adhérer aux pâtes au lieu de glisser dessus." }
   ],
   variations: [
     "Riz à l'eau contre riz au bouillon, même méthode.",
@@ -953,9 +962,9 @@ Ce ratio farine/œuf/liquide se décline. Plus épais, tu obtiens des pancakes (
     "Première crêpe ratée — c'est normal, elle sert à régler la poêle."
   ],
   questions: [
-    "Quel poids de farine, d'œuf et de liquide pour une pâte à crêpes de base ?",
-    "Pourquoi mélanger d'abord une pâte épaisse avant d'ajouter le lait ?",
-    "Combien d'œufs pour 400 ml de crème dans un appareil à quiche ?"
+    { q: "Quel poids de farine, d'œuf et de liquide pour une pâte à crêpes de base ?", r: "Un ratio d'environ 1:1:2 en poids — par exemple 100 g de farine, 100 g d'œuf (2 œufs), 200-250 ml de lait." },
+    { q: "Pourquoi mélanger d'abord une pâte épaisse avant d'ajouter le lait ?", r: "C'est quand la pâte est encore dense qu'on peut éliminer les grumeaux mécaniquement ; une fois détendue au lait, ils ne partent plus qu'au mixeur." },
+    { q: "Combien d'œufs pour 400 ml de crème dans un appareil à quiche ?", r: "4 œufs — le ratio est d'un œuf pour 100 ml de crème ou de lait." }
   ],
   variations: [
     "Un quart du lait remplacé par de la bière.",
@@ -1000,9 +1009,9 @@ Si tu manques de temps : même ratio, tout au robot par impulsions courtes, cinq
     "Sauter le repos : la pâte se rétracte dans le moule."
   ],
   questions: [
-    "Quel est le rôle du beurre dans une pâte brisée, au-delà du goût ?",
-    "Pourquoi faut-il voir encore des morceaux de beurre avant d'ajouter l'eau ?",
-    "Quelles quantités pour une tarte à partir de 200 g de farine ?"
+    { q: "Quel est le rôle du beurre dans une pâte brisée, au-delà du goût ?", r: "Il enrobe la farine et empêche le gluten de se développer au contact de l'eau — moins de gluten donne plus de friabilité." },
+    { q: "Pourquoi faut-il voir encore des morceaux de beurre avant d'ajouter l'eau ?", r: "Ces morceaux, de la taille d'un pois, fondront en cuisson et créeront des feuillets ; un sablage trop poussé donne une pâte dense au lieu de friable." },
+    { q: "Quelles quantités pour une tarte à partir de 200 g de farine ?", r: "Environ 130 g de beurre, 65 g d'eau et 4 g de sel, selon le ratio 3:2:1 (farine:beurre:eau)." }
   ],
   variations: [
     "Remplace 20 % de la farine par de la farine complète ou de sarrasin.",
@@ -1053,9 +1062,9 @@ Mélange farine et eau seules, laisse reposer trente minutes, puis ajoute sel et
     "Enfourner sans avoir bien préchauffé et sans vapeur : pas de croûte."
   ],
   questions: [
-    "Combien d'eau, de sel et de levure pour 800 g de farine ?",
-    "Quel est l'effet d'une hydratation à 75 % par rapport à 60 % ?",
-    "Pourquoi peu de levure et beaucoup de temps donne-t-il un meilleur pain ?"
+    { q: "Combien d'eau, de sel et de levure pour 800 g de farine ?", r: "520 g d'eau (65 %), 16 g de sel (2 %), et 8 g de levure fraîche (1 %) — ou 0,3 % pour une pousse lente au frigo." },
+    { q: "Quel est l'effet d'une hydratation à 75 % par rapport à 60 % ?", r: "Une pâte collante à travailler à la corne, donnant une mie beaucoup plus alvéolée et humide, contre une pâte ferme et une mie serrée à 60 %." },
+    { q: "Pourquoi peu de levure et beaucoup de temps donne-t-il un meilleur pain ?", r: "La fermentation lente développe davantage d'arômes ; beaucoup de levure fait lever vite mais donne un pain fade." }
   ],
   variations: [
     "Même pâte, 60 % puis 70 % d'hydratation.",
@@ -1098,9 +1107,9 @@ Ce qui fait la différence : l'émulsifiant (jaune, moutarde, amidon, protéines
     "Chauffer une émulsion chaude au-delà de 65-70 °C : l'œuf coagule et la sauce granule."
   ],
   questions: [
-    "Combien d'huile peut stabiliser un seul jaune, et que se passe-t-il au-delà ?",
-    "Comment rattrapes-tu une mayonnaise tranchée ?",
-    "Qu'est-ce qui distingue une vinaigrette d'une mayonnaise, structurellement ?"
+    { q: "Combien d'huile peut stabiliser un seul jaune, et que se passe-t-il au-delà ?", r: "Environ 200 à 250 ml. Au-delà, il n'y a plus assez de lécithine pour couvrir toutes les gouttelettes de gras, et la sauce se sépare." },
+    { q: "Comment rattrapes-tu une mayonnaise tranchée ?", r: "Dans un bol propre, un jaune neuf (ou une cuillère d'eau tiède), et tu verses la mayonnaise cassée goutte à goutte dessus en fouettant — elle reprend." },
+    { q: "Qu'est-ce qui distingue une vinaigrette d'une mayonnaise, structurellement ?", r: "La vinaigrette est une émulsion temporaire qui se sépare normalement ; la mayonnaise est une émulsion froide stable grâce au jaune d'œuf." }
   ],
   variations: [
     "Remplace la moutarde par du tahini ou du miso.",
@@ -1148,9 +1157,9 @@ Congèle tes carcasses de poulet rôti au fur et à mesure. Quand tu en as trois
     "Couvrir complètement : ça monte en température et ça finit par bouillir."
   ],
   questions: [
-    "Pourquoi démarrer un bouillon à l'eau froide ?",
-    "Que se passe-t-il exactement si le bouillon bout ?",
-    "Quelle différence entre un bouillon d'os crus et d'os rôtis ?"
+    { q: "Pourquoi démarrer un bouillon à l'eau froide ?", r: "Les protéines migrent progressivement dans l'eau au lieu de coaguler immédiatement en surface, ce qui donne un bouillon plus clair et plus riche." },
+    { q: "Que se passe-t-il exactement si le bouillon bout ?", r: "L'ébullition émulsionne les graisses et les impuretés dans le liquide : le bouillon devient trouble et gras, de façon irréversible." },
+    { q: "Quelle différence entre un bouillon d'os crus et d'os rôtis ?", r: "Les os crus donnent un bouillon clair et délicat ; les os rôtis au four ajoutent toute la profondeur de la réaction de Maillard, pour un bouillon brun et plus corsé." }
   ],
   variations: [
     "Même carcasse, une fois crue, une fois rôtie au four avant.",
@@ -1200,9 +1209,9 @@ Tous les sucs bruns collés au fond sont du goût pur. Ne lave jamais cette poê
     "Jeter les sucs du fond de la poêle."
   ],
   questions: [
-    "Quelles sont les trois conditions d'une bonne coloration ?",
-    "Pourquoi ne faut-il pas bouger l'aliment pendant qu'il saisit ?",
-    "À quelle température démarre la réaction de Maillard, et pourquoi l'eau l'empêche ?"
+    { q: "Quelles sont les trois conditions d'une bonne coloration ?", r: "Une surface sèche, une poêle vraiment chaude, et pas trop d'aliments à la fois." },
+    { q: "Pourquoi ne faut-il pas bouger l'aliment pendant qu'il saisit ?", r: "La croûte doit se former et se détache d'elle-même une fois prête ; si ça colle, c'est que ce n'est pas encore fait — bouger trop tôt arrache la croûte en formation." },
+    { q: "À quelle température démarre la réaction de Maillard, et pourquoi l'eau l'empêche ?", r: "Vers 140 °C. Tant qu'il y a de l'eau libre en surface, la température plafonne à 100 °C et ne peut pas l'atteindre." }
   ],
   variations: [
     "Même aliment, une fois séché au papier, une fois non.",
@@ -1243,9 +1252,9 @@ Il transforme n'importe quelle cuisson à la poêle en plat avec sauce, sans ing
     "Ajouter le beurre sur le feu vif : la sauce se sépare. Hors du feu, beurre froid."
   ],
   questions: [
-    "Que sont exactement les sucs au fond de la poêle ?",
-    "Dans quel ordre : échalote, liquide, beurre ? Pourquoi ?",
-    "Comment savoir si les sucs sont récupérables ou brûlés ?"
+    { q: "Que sont exactement les sucs au fond de la poêle ?", r: "Le concentré aromatique de tout ce qui vient d'y cuire — des particules brunes collées qu'on récupère en les dissolvant dans un liquide." },
+    { q: "Dans quel ordre : échalote, liquide, beurre ? Pourquoi ?", r: "Échalote d'abord dans le gras restant, puis le liquide pour déglacer, puis le beurre froid hors du feu — l'échalote après déglaçage ne ferait que bouillir sans revenir." },
+    { q: "Comment savoir si les sucs sont récupérables ou brûlés ?", r: "Bruns, ils sont récupérables et pleins de goût. Noirs et carbonisés, ils seront amers — mieux vaut ne pas déglacer cette poêle-là." }
   ],
   variations: [
     "Même cuisson, déglace au vin blanc puis au cidre puis au bouillon.",
@@ -1294,9 +1303,9 @@ Prépare une grande quantité de base aromatique le week-end, congèle-la en por
     "Bâcler cette étape — c'est elle qui donne le fond du plat."
   ],
   questions: [
-    "Quelle différence entre suer et dorer, et quand choisir l'un ou l'autre ?",
-    "Pourquoi l'ail se met-il en dernier ?",
-    "Quel est l'effet d'une pincée de sel sur les oignons dès le départ ?"
+    { q: "Quelle différence entre suer et dorer, et quand choisir l'un ou l'autre ?", r: "Suer attendrit à feu doux sans coloration, pour développer la douceur (soupe délicate). Dorer colore davantage pour plus de profondeur (sauce bolognaise)." },
+    { q: "Pourquoi l'ail se met-il en dernier ?", r: "Il brûle en une minute et devient amer s'il cuit aussi longtemps que l'oignon." },
+    { q: "Quel est l'effet d'une pincée de sel sur les oignons dès le départ ?", r: "Elle accélère la sortie de l'eau des oignons, ce qui fait gagner du temps sur l'étape de suée." }
   ],
   variations: [
     "Même plat, base suée cinq minutes contre base dorée vingt minutes.",
@@ -1342,9 +1351,9 @@ Bœuf : joue, paleron, macreuse, jarret, queue. Porc : épaule, jarret, travers.
     "Écourter la cuisson — un braisé passe par une phase où la viande est encore dure avant de devenir fondante. Si c'est dur, ce n'est pas cuit, il faut continuer."
   ],
   questions: [
-    "Pourquoi un morceau dur devient-il fondant en braisage alors qu'un morceau maigre devient sec ?",
-    "À quelle hauteur doit monter le liquide, et pourquoi pas plus ?",
-    "Ta viande est encore dure après deux heures. Que fais-tu ?"
+    { q: "Pourquoi un morceau dur devient-il fondant en braisage alors qu'un morceau maigre devient sec ?", r: "Les morceaux durs sont riches en collagène, qui se convertit en gélatine à basse température prolongée ; les morceaux maigres n'ont pas ce collagène et perdent simplement leur eau." },
+    { q: "À quelle hauteur doit monter le liquide, et pourquoi pas plus ?", r: "À mi-hauteur de la viande — la partie émergée continue de rôtir pendant que la partie immergée mijote ; noyer la viande en fait un pot-au-feu, pas un braisé." },
+    { q: "Ta viande est encore dure après deux heures. Que fais-tu ?", r: "Tu continues la cuisson — un braisé passe par une phase où la viande est encore dure avant de devenir fondante ; ce n'est simplement pas encore assez cuit." }
   ],
   variations: [
     "Change le liquide : vin rouge, bière, cidre, bouillon, lait.",
@@ -1396,9 +1405,9 @@ Pour tout ce qui doit être croustillant sur toutes les faces, pose sur une gril
     "Ne pas préchauffer réellement le four — la plupart des fours sonnent avant d'être à température."
   ],
   questions: [
-    "Pourquoi une plaque trop chargée donne-t-elle des légumes mous ?",
-    "Quel intérêt de préchauffer la plaque à vide ?",
-    "Quand utiliser 220 °C plutôt que 150 °C ?"
+    { q: "Pourquoi une plaque trop chargée donne-t-elle des légumes mous ?", r: "Les légumes libèrent leur eau et la température s'effondre : ils cuisent alors dans leur propre vapeur au lieu de dorer." },
+    { q: "Quel intérêt de préchauffer la plaque à vide ?", r: "Les légumes commencent à colorer dès le contact avec la plaque déjà chaude, au lieu d'attendre que tout monte en température ensemble." },
+    { q: "Quand utiliser 220 °C plutôt que 150 °C ?", r: "220 °C pour les petites pièces et les légumes coupés qui doivent colorer vite ; 150 °C pour les grosses pièces qui ont besoin d'une cuisson homogène jusqu'au centre." }
   ],
   variations: [
     "Mêmes légumes sur une plaque bien étalée contre une plaque chargée.",
@@ -1445,9 +1454,9 @@ C'est le geste qui sauve une sauce trop liquide sans ajouter de farine ni de fé
     "Utiliser une casserole étroite : très lent."
   ],
   questions: [
-    "Pourquoi une casserole large réduit-elle plus vite ?",
-    "Comment testes-tu qu'une sauce est nappante ?",
-    "Que se passe-t-il si tu sales avant de réduire de moitié ?"
+    { q: "Pourquoi une casserole large réduit-elle plus vite ?", r: "La vitesse d'évaporation dépend de la surface exposée à l'air, pas du volume du liquide." },
+    { q: "Comment testes-tu qu'une sauce est nappante ?", r: "Trempe une cuillère, passe le doigt sur le dos : si la trace reste nette sans se refermer, la sauce est nappante." },
+    { q: "Que se passe-t-il si tu sales avant de réduire de moitié ?", r: "Le sel se concentre en même temps que le goût — un dosage correct au départ devient trop salé une fois le liquide réduit." }
   ],
   variations: [
     "Réduis un bouillon de moitié puis aux trois quarts et compare les usages.",
@@ -1490,9 +1499,9 @@ Beurre d'herbes préparé à l'avance et congelé en rondelles : tu en prends un
     "Refaire bouillir la sauce après l'avoir montée : elle se sépare."
   ],
   questions: [
-    "Pourquoi le beurre doit-il être froid ?",
-    "Que se passe-t-il si la sauce est trop chaude au moment de monter ?",
-    "Combien de beurre pour 200 ml de sauce ?"
+    { q: "Pourquoi le beurre doit-il être froid ?", r: "Le froid ralentit sa fonte et laisse le temps à l'émulsion de se former ; fondu trop vite, il se sépare en flaque d'huile au lieu de se disperser." },
+    { q: "Que se passe-t-il si la sauce est trop chaude au moment de monter ?", r: "Au-delà d'environ 90 °C, l'émulsion tranche au lieu de se former." },
+    { q: "Combien de beurre pour 200 ml de sauce ?", r: "Entre 20 et 50 g de beurre froid, incorporé en petits cubes hors du feu." }
   ],
   variations: [
     "Beurre nature contre beurre d'herbes congelé.",
@@ -1539,9 +1548,9 @@ Le principe est toujours le même : repartir d'une petite base propre et y incor
     "Jeter l'eau de cuisson des pâtes."
   ],
   questions: [
-    "Quelles sont les trois conditions d'une émulsion réussie ?",
-    "Pourquoi l'eau de cuisson des pâtes lie-t-elle une sauce ?",
-    "Comment rattrape-t-on une émulsion cassée, dans le principe ?"
+    { q: "Quelles sont les trois conditions d'une émulsion réussie ?", r: "De l'agitation mécanique pour créer les gouttelettes, un émulsifiant pour les empêcher de refusionner, et une incorporation progressive du gras au départ." },
+    { q: "Pourquoi l'eau de cuisson des pâtes lie-t-elle une sauce ?", r: "Son amidon agit comme émulsifiant : mélangée au gras et remuée vigoureusement, elle crée une émulsion qui enrobe les pâtes." },
+    { q: "Comment rattrape-t-on une émulsion cassée, dans le principe ?", r: "On repart d'une petite base propre (un jaune neuf, un peu d'eau) et on y incorpore l'ancienne sauce cassée goutte à goutte." }
   ],
   variations: [
     "Fais des pâtes avec et sans eau de cuisson dans la sauce.",
@@ -1589,9 +1598,9 @@ C'est la seule occasion d'assaisonner un légume de l'intérieur. Une eau insuff
     "Couvrir la casserole : les acides volatils restent piégés et ternissent le vert."
   ],
   questions: [
-    "Pourquoi faut-il un grand volume d'eau ?",
-    "Que se passe-t-il si on saute l'étape de l'eau glacée ?",
-    "Comment blanchir peut-il faciliter tes repas de semaine ?"
+    { q: "Pourquoi faut-il un grand volume d'eau ?", r: "Une petite casserole voit sa température s'effondrer dès qu'on y ajoute les légumes, qui cuisent alors dans une eau tiède au lieu de rester bouillante." },
+    { q: "Que se passe-t-il si on saute l'étape de l'eau glacée ?", r: "La cuisson continue par inertie et la couleur des légumes verts vire au kaki au lieu de rester vive." },
+    { q: "Comment blanchir peut-il faciliter tes repas de semaine ?", r: "En blanchissant tes légumes à l'avance (le week-end par exemple), il suffit ensuite de les réchauffer trente secondes à la poêle en semaine." }
   ],
   variations: [
     "Blanchi-rafraîchi puis sauté à la poêle contre cuit directement à la poêle.",
@@ -1634,9 +1643,9 @@ Le liquide de pochage devient un bouillon parfumé, réutilisable. Ne le jette p
     "Jeter le liquide de pochage."
   ],
   questions: [
-    "Quelle est la fourchette de température du pochage, et comment la reconnaître visuellement ?",
-    "Pourquoi le liquide de pochage doit-il être savoureux ?",
-    "Décris la méthode pour un blanc de poulet moelleux."
+    { q: "Quelle est la fourchette de température du pochage, et comment la reconnaître visuellement ?", r: "Entre 70 et 85 °C — quelques bulles isolées remontent, la surface bouge à peine, bien en dessous de l'ébullition." },
+    { q: "Pourquoi le liquide de pochage doit-il être savoureux ?", r: "Le pochage ne produit aucune réaction de Maillard, donc aucun goût de grillé : tout le goût du plat vient du liquide, qui doit être un bouillon ou un lait aromatisé, pas de l'eau nue." },
+    { q: "Décris la méthode pour un blanc de poulet moelleux.", r: "Immerge-le dans un bouillon frémissant, éteins le feu, couvre, et laisse quinze à vingt minutes : la chaleur résiduelle suffit à le cuire tout en le gardant moelleux." }
   ],
   variations: [
     "Poche un blanc de poulet dans de l'eau puis dans un bouillon aromatisé.",
@@ -1692,9 +1701,9 @@ Ce n'est pas seulement un condiment. La saumure remplace le vinaigre dans une vi
     "Confondre le voile de levure inoffensif avec une vraie moisissure colorée."
   ],
   questions: [
-    "Quel pourcentage de sel, et calculé sur quoi exactement ?",
-    "Quelle est la règle absolue concernant le niveau de liquide ?",
-    "Comment distingues-tu une fermentation saine d'une fermentation ratée ?"
+    { q: "Quel pourcentage de sel, et calculé sur quoi exactement ?", r: "2 %, calculé sur le poids total légumes + eau confondus." },
+    { q: "Quelle est la règle absolue concernant le niveau de liquide ?", r: "Tout ce qui est sous le liquide fermente ; tout ce qui dépasse moisit — il faut un poids pour maintenir l'immersion complète." },
+    { q: "Comment distingues-tu une fermentation saine d'une fermentation ratée ?", r: "Saine : ça sent acide et frais, trouble et bulles sont normaux. Ratée : moisissures colorées et duveteuses, ou odeur putride et non acide — dans ce cas, on jette tout." }
   ],
   variations: [
     "Même légume à 2 % et à 3 % de sel, et compare le rythme et le goût.",
@@ -1749,9 +1758,9 @@ Une planche stable — un linge humide dessous — et un couteau qui coupe rédu
     "Hacher les herbes fragiles au lieu de les trancher : elles noircissent."
   ],
   questions: [
-    "Pourquoi un couteau émoussé est-il plus dangereux ?",
-    "Décris la position de la main qui tient l'aliment.",
-    "Quelle différence entre couper un oignon dans le sens des fibres ou perpendiculairement ?"
+    { q: "Pourquoi un couteau émoussé est-il plus dangereux ?", r: "Il glisse au lieu de mordre dans l'aliment, ce qui augmente le risque de dérapage — contrairement à un couteau affûté, plus prévisible." },
+    { q: "Décris la position de la main qui tient l'aliment.", r: "Une griffe : doigts repliés, ongles vers l'aliment, la lame restant en contact avec la deuxième phalange comme guide." },
+    { q: "Quelle différence entre couper un oignon dans le sens des fibres ou perpendiculairement ?", r: "Dans le sens des fibres, l'oignon tient mieux à la cuisson ; coupé perpendiculairement aux fibres, il fond plus facilement." }
   ],
   variations: [
     "Coupe un oignon dans les deux sens et compare la tenue après cuisson.",
@@ -1809,9 +1818,9 @@ Tout mettre dans la poêle en même temps. Chaque famille d'ingrédients a son t
     "Ail ou épices ajoutés trop tôt : ils brûlent."
   ],
   questions: [
-    "Cite les cinq étapes dans l'ordre.",
-    "Que fais-tu si ton légume est trop dur pour cuire à la poêle en 5 minutes ?",
-    "Quels sont les trois éléments de finition à ajouter systématiquement ?"
+    { q: "Cite les cinq étapes dans l'ordre.", r: "Base aromatique, protéine, légume, liaison, finition." },
+    { q: "Que fais-tu si ton légume est trop dur pour cuire à la poêle en 5 minutes ?", r: "Ajoute une louche d'eau et couvre deux minutes pour l'attendrir à la vapeur, puis découvre pour finir à sec et colorer." },
+    { q: "Quels sont les trois éléments de finition à ajouter systématiquement ?", r: "De l'acide, un gras cru, et un élément frais ou croquant." }
   ],
   variations: [
     "Même trame, change uniquement l'épice.",
@@ -1862,9 +1871,9 @@ Fais-en une plaque et demie : le surplus devient le déjeuner du lendemain, froi
     "Servir sans élément acide ni frais."
   ],
   questions: [
-    "Quels ingrédients enfournes-tu en premier, et lesquels dans les dix dernières minutes ?",
-    "Pourquoi vaut-il mieux deux plaques qu'une seule bien remplie ?",
-    "Qu'ajoutes-tu systématiquement en sortie de four ?"
+    { q: "Quels ingrédients enfournes-tu en premier, et lesquels dans les dix dernières minutes ?", r: "En premier les légumes racines et protéines longues (pommes de terre, carottes, cuisses de poulet). Dans les dix dernières minutes : tomates cerises, ail en gousses, poisson, feta." },
+    { q: "Pourquoi vaut-il mieux deux plaques qu'une seule bien remplie ?", r: "Une plaque surchargée fait rendre l'eau des légumes, qui cuisent mous à la vapeur au lieu de dorer." },
+    { q: "Qu'ajoutes-tu systématiquement en sortie de four ?", r: "De l'acide et de la fraîcheur — citron, yaourt, herbes ou une sauce comme le tahini-citron." }
   ],
   variations: [
     "Change la famille d'épices en gardant les mêmes légumes.",
@@ -1913,9 +1922,9 @@ C'est le format le plus adapté à quelqu'un dont le temps est fragmenté : le t
     "Tout assaisonner de la même façon — chaque composant doit être assaisonné pour lui-même."
   ],
   questions: [
-    "Cite les six lignes de la formule.",
-    "Quel élément manque le plus souvent quand un bol paraît fade et mou ?",
-    "Que prépares-tu le week-end pour que l'assemblage prenne cinq minutes ?"
+    { q: "Cite les six lignes de la formule.", r: "Féculent, protéine, légume cuit, légume cru ou fermenté, sauce, croquant." },
+    { q: "Quel élément manque le plus souvent quand un bol paraît fade et mou ?", r: "L'élément cru ou fermenté, ou le croquant — ce sont les deux lignes qu'on saute le plus facilement." },
+    { q: "Que prépares-tu le week-end pour que l'assemblage prenne cinq minutes ?", r: "Un grand volume de féculent cuit, des légumes blanchis, une protéine pochée ou rôtie, et deux sauces montées d'avance." }
   ],
   variations: [
     "Même contenu, trois sauces différentes sur trois jours.",
@@ -1965,9 +1974,9 @@ Une soupe se fait en grande quantité, se congèle bien, et se transforme : la m
     "Servir sans acide ni gras cru."
   ],
   questions: [
-    "Quelles sont les six étapes ?",
-    "Qu'est-ce qui donne du corps à une soupe sans ajouter de crème ?",
-    "Que change le fait de rôtir les légumes avant ?"
+    { q: "Quelles sont les six étapes ?", r: "Base aromatique suée, légumes sués, liquide, cuisson jusqu'à tendreté, corps, finition." },
+    { q: "Qu'est-ce qui donne du corps à une soupe sans ajouter de crème ?", r: "Une pomme de terre, des légumineuses, du riz, ou mixer une partie de la soupe elle-même pour épaissir avec sa propre matière." },
+    { q: "Que change le fait de rôtir les légumes avant ?", r: "La caramélisation apporte toute la profondeur de la réaction de Maillard — c'est la même soupe mais un tout autre registre de goût." }
   ],
   variations: [
     "Même soupe, légumes sués contre légumes rôtis au four.",
@@ -2012,9 +2021,9 @@ C'est la même logique que l'entraînement — une base stable, des variables qu
     "Réchauffer à ébullition : la viande se défait et sèche. Réchauffage doux, à couvert."
   ],
   questions: [
-    "Pourquoi un braisé est-il meilleur le lendemain ?",
-    "Quel est le seul paramètre à changer d'un jour à l'autre pour que ça ne lasse pas ?",
-    "Quel est le temps de travail actif réel ?"
+    { q: "Pourquoi un braisé est-il meilleur le lendemain ?", r: "Au repos au frigo, la gélatine se fige, le gras remonte et se retire facilement, et les saveurs ont le temps de se lier." },
+    { q: "Quel est le seul paramètre à changer d'un jour à l'autre pour que ça ne lasse pas ?", r: "La finition et l'accompagnement (gremolata, yaourt-cumin, pickles...) — jamais le cœur du plat, qui reste la même base." },
+    { q: "Quel est le temps de travail actif réel ?", r: "Environ trente minutes — le reste (trois heures de four) ne demande aucune présence." }
   ],
   variations: [
     "Change la région : vin rouge et laurier, bière et moutarde, coco et curry, tomate et olives.",
@@ -2065,9 +2074,9 @@ Rincer les pâtes — jamais, on enlève l'amidon. Ajouter de l'huile dans l'eau
     "Eau insuffisamment salée."
   ],
   questions: [
-    "Pourquoi l'eau de cuisson lie-t-elle la sauce ?",
-    "À quel moment sors-tu les pâtes de l'eau, et pourquoi ?",
-    "Que se passe-t-il exactement dans la poêle pendant la dernière minute ?"
+    { q: "Pourquoi l'eau de cuisson lie-t-elle la sauce ?", r: "Son amidon émulsionne la sauce avec le gras et la fait adhérer aux pâtes, au lieu de rester séparée au fond de l'assiette." },
+    { q: "À quel moment sors-tu les pâtes de l'eau, et pourquoi ?", r: "Une à deux minutes avant le temps indiqué, pour les finir dans la poêle avec la sauce — elles absorbent ainsi la sauce au lieu d'être simplement nappées." },
+    { q: "Que se passe-t-il exactement dans la poêle pendant la dernière minute ?", r: "La sauce, mélangée énergiquement avec une louche d'eau de cuisson, passe de liquide à crémeuse par émulsion — sans qu'aucune crème ne soit ajoutée." }
   ],
   variations: [
     "Même sauce, une fois avec eau de cuisson et finition en poêle, une fois nappée.",
@@ -2118,9 +2127,9 @@ Ne fais jamais deux corrections à la fois : tu ne saurais pas laquelle a foncti
     "Ajouter des herbes en croyant que c'est le problème : les herbes parfument, elles n'assaisonnent pas."
   ],
   questions: [
-    "Dans quel ordre testes-tu les leviers, et pourquoi cet ordre ?",
-    "Comment fais-tu un test sans risquer de ruiner le plat entier ?",
-    "Quel est le signe qu'il manque de l'umami plutôt que du sel ?"
+    { q: "Dans quel ordre testes-tu les leviers, et pourquoi cet ordre ?", r: "Sel d'abord (le plus fréquent), puis acide, puis umami — on corrige un levier à la fois pour savoir lequel a réellement résolu le problème." },
+    { q: "Comment fais-tu un test sans risquer de ruiner le plat entier ?", r: "Prélève une petite quantité dans un bol à part, corrige-la, goûte — et applique seulement la correction validée à toute la casserole." },
+    { q: "Quel est le signe qu'il manque de l'umami plutôt que du sel ?", r: "Le sel et l'acide sont déjà corrects, mais le plat reste superficiel, sans profondeur ni longueur en bouche." }
   ],
   variations: [],
   lien: ['lev-sel', 'lev-acide', 'lev-umami', 'dep-plat-superficiel']
@@ -2164,9 +2173,9 @@ La seule vraie solution est en amont : saler par petites touches, goûter à cha
     "Diluer avec de l'eau seule : le plat devient fade et aqueux, dilue avec du liquide savoureux non salé."
   ],
   questions: [
-    "Quelle est la seule méthode qui traite réellement l'excès de sel ?",
-    "Pourquoi la pomme de terre ne fonctionne-t-elle pas ?",
-    "Comment le gras agit-il sur la perception du sel ?"
+    { q: "Quelle est la seule méthode qui traite réellement l'excès de sel ?", r: "Augmenter le volume avec des ingrédients non salés (liquide, légumes, féculent) pour répartir le sel dans une masse plus grande." },
+    { q: "Pourquoi la pomme de terre ne fonctionne-t-elle pas ?", r: "Elle absorbe du liquide salé dans les mêmes proportions que le reste du plat — elle ne capte pas le sel spécifiquement, elle dilue à peine plus qu'un ajout d'eau." },
+    { q: "Comment le gras agit-il sur la perception du sel ?", r: "Il enrobe le palais et masque la perception du sel, sans réellement le retirer du plat." }
   ],
   variations: [],
   lien: ['lev-sel', 'geste-reduire']
@@ -2208,9 +2217,9 @@ Si le gras est visible en surface : passe une louche, ou pose une feuille de pap
     "Dégraisser à chaud alors qu'à froid c'est instantané."
   ],
   questions: [
-    "Quel est le premier levier à actionner, et pourquoi ça marche physiologiquement ?",
-    "Quelle est la différence d'effet entre du zeste et du jus de citron ?",
-    "Pourquoi le croquant réduit-il la sensation d'écœurement ?"
+    { q: "Quel est le premier levier à actionner, et pourquoi ça marche physiologiquement ?", r: "L'acide — il relance la salivation et nettoie le palais, ce qui permet à la bouchée suivante d'être perçue comme la première." },
+    { q: "Quelle est la différence d'effet entre du zeste et du jus de citron ?", r: "Le zeste apporte l'arôme d'agrume sans l'acidité ; le jus apporte l'acidité elle-même. Ce sont deux leviers distincts." },
+    { q: "Pourquoi le croquant réduit-il la sensation d'écœurement ?", r: "Un plat gras et mou est plus écœurant qu'un plat gras et croquant — le contraste de texture casse la sensation de lourdeur uniforme." }
   ],
   variations: [],
   lien: ['lev-acide', 'lev-gras', 'geste-fermentation']
@@ -2252,9 +2261,9 @@ Et pour les braisés : une viande sèche après braisage n'a pas été trop cuit
     "Prolonger la cuisson d'un braisé sec en pensant que c'est le manque de cuisson — vérifie d'abord que ça ne bouillait pas."
   ],
   questions: [
-    "Pourquoi trancher perpendiculairement aux fibres change-t-il la perception ?",
-    "Quelles sont les trois causes principales d'une viande sèche ?",
-    "Pourquoi un braisé peut-il sortir sec alors qu'il a cuit longtemps ?"
+    { q: "Pourquoi trancher perpendiculairement aux fibres change-t-il la perception ?", r: "Une tranche fine coupée contre les fibres offre moins de résistance en bouche et paraît nettement plus tendre, même si la viande elle-même n'a pas changé." },
+    { q: "Quelles sont les trois causes principales d'une viande sèche ?", r: "Cuisson trop longue, absence de repos après cuisson, et morceau inadapté à la technique utilisée." },
+    { q: "Pourquoi un braisé peut-il sortir sec alors qu'il a cuit longtemps ?", r: "Parce qu'il a bouilli au lieu de frémir — l'ébullition contracte les fibres et en chasse l'eau, malgré une longue cuisson." }
   ],
   variations: [],
   lien: ['lev-chaleur', 'ratio-saumure', 'geste-braiser']
@@ -2297,9 +2306,9 @@ Ajouter de la farine directement dans la sauce : grumeaux immédiats et goût de
     "Farine jetée directement dans la sauce."
   ],
   questions: [
-    "Pourquoi la fécule doit-elle être délayée à froid ?",
-    "Quel est l'avantage de lier en mixant une partie du plat ?",
-    "Qu'est-ce qu'un beurre manié et pourquoi est-il plus fin qu'un ajout de farine ?"
+    { q: "Pourquoi la fécule doit-elle être délayée à froid ?", r: "Délayée directement dans un liquide chaud, elle gélifie instantanément en surface et forme des grumeaux." },
+    { q: "Quel est l'avantage de lier en mixant une partie du plat ?", r: "Ça épaissit avec la matière du plat lui-même, sans diluer le goût ni ajouter un ingrédient étranger comme la fécule." },
+    { q: "Qu'est-ce qu'un beurre manié et pourquoi est-il plus fin qu'un ajout de farine ?", r: "Un mélange à parts égales de beurre mou et de farine, incorporé par petits morceaux — la quantité de farine crue est faible, donc pas de goût de cru contrairement à une farine jetée directement dans la sauce." }
   ],
   variations: [],
   lien: ['geste-reduire', 'ratio-roux', 'geste-monter-beurre']
@@ -2339,9 +2348,9 @@ Trop chaud. Gras incorporé trop vite. Trop de gras pour la quantité d'émulsif
     "Ajouter du gras pour rattraper : c'est l'inverse qu'il faut faire."
   ],
   questions: [
-    "Quel est le principe général de rattrapage, valable pour toutes les émulsions ?",
-    "Comment rattrapes-tu une mayonnaise sans utiliser un deuxième jaune ?",
-    "Cite trois causes d'une émulsion qui casse."
+    { q: "Quel est le principe général de rattrapage, valable pour toutes les émulsions ?", r: "Repartir d'une petite base propre (un jaune neuf, un peu d'eau ou de crème froide) et y réincorporer l'ancienne sauce cassée goutte à goutte." },
+    { q: "Comment rattrapes-tu une mayonnaise sans utiliser un deuxième jaune ?", r: "Avec une cuillère à soupe d'eau tiède dans un bol propre, en y versant la mayonnaise cassée progressivement en fouettant." },
+    { q: "Cite trois causes d'une émulsion qui casse.", r: "Trop chaud, gras incorporé trop vite, ou trop de gras pour la quantité d'émulsifiant disponible." }
   ],
   variations: [],
   lien: ['geste-emulsionner', 'ratio-mayonnaise', 'geste-monter-beurre']
@@ -2382,9 +2391,9 @@ Pour la polenta ou la semoule : verse en pluie fine dans un liquide en mouvement
     "Croire qu'on rattrapera les grumeaux d'une pâte à crêpes en fouettant plus fort une pâte déjà liquide."
   ],
   questions: [
-    "Qu'est-ce qu'un grumeau, physiquement ?",
-    "Quelle est la règle de température entre un roux et son liquide ?",
-    "Pourquoi commence-t-on une pâte à crêpes épaisse ?"
+    { q: "Qu'est-ce qu'un grumeau, physiquement ?", r: "De l'amidon dont la surface a gélifié instantanément au contact d'un liquide chaud, formant une coque qui protège l'intérieur resté sec." },
+    { q: "Quelle est la règle de température entre un roux et son liquide ?", r: "Ils doivent avoir des températures différentes — froid sur chaud ou chaud sur froid, jamais chaud sur chaud." },
+    { q: "Pourquoi commence-t-on une pâte à crêpes épaisse ?", r: "C'est quand elle est encore dense qu'on peut éliminer les grumeaux mécaniquement, avant de la détendre progressivement avec le lait." }
   ],
   variations: [],
   lien: ['ratio-roux', 'ratio-crepes', 'dep-sauce-liquide']
@@ -2425,9 +2434,9 @@ Pour les légumes verts spécifiquement : cuisson courte, à découvert, et pas 
     "Croire qu'il faut cuire plus longtemps."
   ],
   questions: [
-    "Quelle est la cause la plus fréquente de légumes mous ?",
-    "Que fais-tu pour rattraper une poêlée déjà molle ?",
-    "Pourquoi ne faut-il pas couvrir ni acidifier des légumes verts en cuisson ?"
+    { q: "Quelle est la cause la plus fréquente de légumes mous ?", r: "Une poêle ou une plaque surchargée : les légumes libèrent leur eau, la température s'effondre, et ils cuisent dans leur propre vapeur." },
+    { q: "Que fais-tu pour rattraper une poêlée déjà molle ?", r: "Feu à fond, étale sans remuer deux à trois minutes pour évaporer l'eau et colorer une face, puis ajoute un élément croquant et un acide en finition." },
+    { q: "Pourquoi ne faut-il pas couvrir ni acidifier des légumes verts en cuisson ?", r: "Les deux ternissent la couleur — la chlorophylle vire au kaki sous l'effet combiné de la chaleur prolongée et de l'acide." }
   ],
   variations: [],
   lien: ['lev-chaleur', 'geste-rotir', 'geste-blanchir']
@@ -2470,9 +2479,9 @@ Et déglace : même une viande mal colorée laisse des sucs.`,
     "Retourner sans arrêt."
   ],
   questions: [
-    "Pourquoi une surface humide empêche-t-elle totalement la coloration ?",
-    "Quelle est la mauvaise fenêtre de salage avant cuisson, et pourquoi ?",
-    "Comment testes-tu qu'une poêle est assez chaude ?"
+    { q: "Pourquoi une surface humide empêche-t-elle totalement la coloration ?", r: "Tant qu'il reste de l'eau libre, la température ne dépasse pas 100 °C, en dessous du seuil de 140 °C où démarre la réaction de Maillard." },
+    { q: "Quelle est la mauvaise fenêtre de salage avant cuisson, et pourquoi ?", r: "Quinze à trente minutes avant : le sel a tiré l'eau à la surface mais elle n'a pas encore été réabsorbée, ce qui laisse une surface humide qui empêche la coloration." },
+    { q: "Comment testes-tu qu'une poêle est assez chaude ?", r: "Une goutte d'eau doit danser en boules sur la surface, pas grésiller mollement en s'évaporant lentement." }
   ],
   variations: [],
   lien: ['geste-saisir', 'lev-chaleur', 'lev-sel']
@@ -2516,9 +2525,9 @@ Une bonne partie de l'impression de profondeur vient en réalité de la finition
     "Croire qu'une épice supplémentaire va donner de la profondeur — elle ajoute un parfum, pas du fond."
   ],
   questions: [
-    "Comment distingues-tu un manque d'umami d'un manque de sel ?",
-    "Que fais-tu si le plat a été construit sans aucune coloration ?",
-    "Pourquoi un plat est-il meilleur vingt minutes après l'arrêt du feu ?"
+    { q: "Comment distingues-tu un manque d'umami d'un manque de sel ?", r: "Le sel et l'acide sont déjà corrects, mais le plat reste jeune et sans longueur en bouche malgré tout — c'est le signe qu'il manque de profondeur, pas d'assaisonnement." },
+    { q: "Que fais-tu si le plat a été construit sans aucune coloration ?", r: "Fais dorer à part quelques oignons, champignons ou un peu de concentré de tomate bien foncés, et incorpore-les — ou ajoute un élément déjà coloré comme des lardons grillés ou une chapelure dorée." },
+    { q: "Pourquoi un plat est-il meilleur vingt minutes après l'arrêt du feu ?", r: "Une sauce, une soupe ou un braisé continuent de se lier et de s'améliorer pendant qu'ils reposent — le temps fait partie de la recette." }
   ],
   variations: [],
   lien: ['lev-umami', 'geste-suer', 'geste-saisir', 'dep-fade']
@@ -2560,9 +2569,9 @@ Une caramélisation poussée transforme l'amertume en douceur : une endive brais
     "Chauffer fort de l'huile d'olive vierge extra."
   ],
   questions: [
-    "Quel levier inhibe le plus directement l'amertume ?",
-    "Quelle amertume est irrécupérable, et pourquoi ?",
-    "Comment réduis-tu l'amertume d'un légume avant la cuisson finale ?"
+    { q: "Quel levier inhibe le plus directement l'amertume ?", r: "Le sel — il inhibe directement la perception de l'amertume, plus efficacement que le gras ou le sucre." },
+    { q: "Quelle amertume est irrécupérable, et pourquoi ?", r: "Celle due à des composés de pyrolyse (ail brûlé, épices brûlées, oignon carbonisé) — elle ne se corrige pas, il faut retirer les morceaux brûlés ou recommencer la base." },
+    { q: "Comment réduis-tu l'amertume d'un légume avant la cuisson finale ?", r: "En le blanchissant dans une grande eau salée, ou en le faisant dégorger au sel, avant de le cuisiner." }
   ],
   variations: [],
   lien: ['lev-sel', 'lev-gras', 'geste-blanchir']
@@ -2600,9 +2609,9 @@ Attention aussi aux acides qui se concentrent en réduisant : un vin ou une toma
     "Oublier que l'acidité se concentre à la réduction."
   ],
   questions: [
-    "Quelle est la première correction à essayer, et pourquoi ?",
-    "Quel est le risque du bicarbonate ?",
-    "Pourquoi ajouter l'acide en fin de cuisson plutôt qu'au début ?"
+    { q: "Quelle est la première correction à essayer, et pourquoi ?", r: "Le gras — crème, beurre, huile ou yaourt enrobent et arrondissent l'acidité sans l'annuler, c'est la réponse la plus fiable." },
+    { q: "Quel est le risque du bicarbonate ?", r: "Trop de bicarbonate donne un goût savonneux et métallique, souvent pire que l'acidité de départ — une pointe de couteau suffit, jamais plus." },
+    { q: "Pourquoi ajouter l'acide en fin de cuisson plutôt qu'au début ?", r: "C'est la seule façon de doser par petites touches en goûtant, sans dépasser — une fois l'acide dans le plat, il ne s'enlève plus." }
   ],
   variations: [],
   lien: ['lev-acide', 'lev-gras', 'geste-reduire']
@@ -2644,9 +2653,9 @@ Pour les poêles en inox : chauffer la poêle à vide, puis ajouter le gras, pui
     "Utiliser une casserole à fond mince pour un plat long."
   ],
   questions: [
-    "Comment distingues-tu des sucs récupérables d'un fond brûlé ?",
-    "Quel est le premier geste si ça a brûlé au fond ?",
-    "Pourquoi un aliment colle-t-il à une poêle en inox, et comment l'éviter ?"
+    { q: "Comment distingues-tu des sucs récupérables d'un fond brûlé ?", r: "Des sucs bruns collés au fond sont récupérables et pleins de goût ; du noir carbonisé est amer et irrécupérable." },
+    { q: "Quel est le premier geste si ça a brûlé au fond ?", r: "Transvaser immédiatement le contenu dans une autre casserole en prenant par le dessus, sans jamais gratter le fond — ça répartirait l'amertume dans tout le plat." },
+    { q: "Pourquoi un aliment colle-t-il à une poêle en inox, et comment l'éviter ?", r: "Parce que la poêle n'était pas assez chaude au moment de l'ajout, ou que l'aliment a été retourné trop tôt avant que sa croûte ne se forme et ne se détache d'elle-même." }
   ],
   variations: [],
   lien: ['geste-deglacer', 'geste-saisir', 'dep-amer']
@@ -2825,7 +2834,7 @@ function formatContenu(text){
 const ui = {
   consulterCat: 'all',
   consulterQuery: '',
-  reviser: { queue: null, index: 0, revealed: false, question: '', results: { 1:0, 2:0, 3:0 } },
+  reviser: { queue: null, index: 0, revealed: false, qa: null, results: { 1:0, 2:0, 3:0 } },
   pratique: { notionId: null, variationIndex: 0, step: 'proposal' }
 };
 
@@ -2981,7 +2990,7 @@ function viewNotion(id){
     ${n.questions && n.questions.length ? `
       <div class="block">
         <details class="fold"><summary>Questions de révision</summary>
-          <div class="fold-body"><ul>${n.questions.map(q => `<li>${escapeHtml(q)}</li>`).join('')}</ul></div>
+          <div class="fold-body"><ul>${n.questions.map(qa => `<li>${escapeHtml(qa.q)}</li>`).join('')}</ul></div>
         </details>
       </div>` : ''}
     ${n.variations && n.variations.length ? `
@@ -3002,9 +3011,9 @@ function shuffle(arr){
   }
   return a;
 }
-function pickQuestion(n){
+function pickQA(n){
   if(n.questions && n.questions.length) return n.questions[Math.floor(Math.random() * n.questions.length)];
-  return n.resume;
+  return { q: n.resume, r: n.resume };
 }
 
 function viewReviser(){
@@ -3048,11 +3057,14 @@ function viewReviser(){
       <div>
         <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
         <h2>${escapeHtml(n.titre)}</h2>
-        <div class="session-question">${escapeHtml(st.question)}</div>
+        <div class="session-question">${escapeHtml(st.qa.q)}</div>
       </div>
       ${st.revealed ? `
-        <div class="session-answer prose">${formatContenu(n.contenu)}</div>
-        ${n.vigilance && n.vigilance.length ? `<div class="block vigilance-box"><h2>Points de vigilance</h2><ul>${n.vigilance.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul></div>` : ''}
+        <div class="session-answer">
+          <div class="answer-label">Réponse</div>
+          <p class="answer-text">${escapeHtml(st.qa.r)}</p>
+          <a class="fiche-link" href="#/notion/${n.id}">Voir la fiche complète →</a>
+        </div>
         <div class="eval-row">
           <div class="eval-btn eval-1" data-action="reviser-eval" data-level="1">À revoir<small>revient vite</small></div>
           <div class="eval-btn eval-2" data-action="reviser-eval" data-level="2">Hésité<small>revient bientôt</small></div>
@@ -3238,7 +3250,7 @@ appEl.addEventListener('click', function(e){
 
   if(e.target.closest('[data-action="reviser-start"]')){
     const q = shuffle(dueNotions().map(n => n.id));
-    ui.reviser = { queue: q, index: 0, revealed: false, question: pickQuestion(NOTION_BY_ID[q[0]]), results: { 1: 0, 2: 0, 3: 0 } };
+    ui.reviser = { queue: q, index: 0, revealed: false, qa: pickQA(NOTION_BY_ID[q[0]]), results: { 1: 0, 2: 0, 3: 0 } };
     rerender(true);
     return;
   }
@@ -3256,12 +3268,12 @@ appEl.addEventListener('click', function(e){
     st.results[level] = (st.results[level] || 0) + 1;
     st.index += 1;
     st.revealed = false;
-    if(st.index < st.queue.length) st.question = pickQuestion(NOTION_BY_ID[st.queue[st.index]]);
+    if(st.index < st.queue.length) st.qa = pickQA(NOTION_BY_ID[st.queue[st.index]]);
     rerender(true);
     return;
   }
   if(e.target.closest('[data-action="reviser-reset"]')){
-    ui.reviser = { queue: null, index: 0, revealed: false, question: '', results: { 1: 0, 2: 0, 3: 0 } };
+    ui.reviser = { queue: null, index: 0, revealed: false, qa: null, results: { 1: 0, 2: 0, 3: 0 } };
     location.hash = '#/home';
     return;
   }
