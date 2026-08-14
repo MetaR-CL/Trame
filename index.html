@@ -92,9 +92,10 @@ input,textarea,.prose,.session-answer{-webkit-user-select:text;user-select:text;
 h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0 0 .4em;color:var(--ink);}
 p{margin:0 0 .8em;}
 p:last-child{margin-bottom:0;}
-ul{margin:0 0 .8em;padding-left:1.2em;}
-ul:last-child{margin-bottom:0;}
+ul,ol{margin:0 0 .8em;padding-left:1.2em;}
+ul:last-child,ol:last-child{margin-bottom:0;}
 li{margin-bottom:.3em;}
+ol li::marker{font-weight:700;color:var(--accent);}
 a{color:inherit;}
 button{font:inherit;color:inherit;}
 input,textarea{font:inherit;color:inherit;}
@@ -243,6 +244,17 @@ main.view-anim{animation:view-in .22s ease;}
 .prose h4{font-size:.92rem;margin-top:1.1em;color:var(--accent);}
 .prose{font-size:.94rem;}
 .prose strong{color:var(--ink);}
+
+.table-wrap{overflow-x:auto;margin:0 0 .8em;-webkit-overflow-scrolling:touch;border-radius:var(--radius-s);border:1px solid var(--line-soft);}
+.table-wrap:last-child{margin-bottom:0;}
+.table-wrap table{border-collapse:collapse;width:100%;font-size:.88rem;}
+.table-wrap th,.table-wrap td{padding:8px 12px;text-align:left;}
+.table-wrap th{
+  background:var(--bg-sunken);color:var(--ink-soft);font-weight:700;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;
+}
+.table-wrap td{border-top:1px solid var(--line-soft);}
+.table-wrap tr:first-child td{border-top:none;}
 
 .vigilance-box{
   background:var(--ocre-soft);border-radius:var(--radius-m);padding:14px 16px;
@@ -839,7 +851,13 @@ C'est ici que le principe « une base, N variations » prend tout son sens. Béc
 
 **Le ratio**
 
-Saumure rapide, 5 à 8 % : 50 à 80 g de sel par litre d'eau. Pour des blancs de poulet, une heure suffit. Pour des cuisses, deux à trois heures. Pour un poulet entier, six à douze heures à 5 %.
+Saumure rapide, 5 à 8 % : 50 à 80 g de sel par litre d'eau.
+
+| Pièce | Durée |
+| --- | --- |
+| Blancs de poulet | 1 h |
+| Cuisses | 2-3 h |
+| Poulet entier (à 5 %) | 6-12 h |
 
 Ne dépasse pas ces durées : au-delà, la texture devient spongieuse et le goût trop salé.
 
@@ -886,13 +904,18 @@ Un ratio à garder en tête vu ton intérêt pour la fermentation : à parts ég
 
 **Le ratio**
 
-Riz long, basmati, thaï : 1 volume de riz pour 1,5 volume d'eau. Riz complet : 1 pour 2, et vingt minutes de plus. Riz rond type arborio en risotto : autre logique, ajout progressif de bouillon, environ 1 pour 4 au total.
+| Riz | Eau | Cuisson |
+| --- | --- | --- |
+| Basmati | 1 : 1,5 | 11 min |
+| Long (autre) | 1 : 1,5 | 15 min |
+| Complet | 1 : 2 | 40 min |
+| Rond (risotto) | ~1 : 4, progressif | — |
 
 **La méthode**
 
 Rince le riz long jusqu'à ce que l'eau soit claire — tu enlèves l'amidon de surface qui colle les grains. Pour un riz plus parfumé, fais-le revenir une minute dans un peu de gras avant d'ajouter l'eau : c'est le geste du pilaf, il change tout.
 
-Eau salée, porte à ébullition, couvre, feu au minimum. Onze minutes pour du basmati, quinze pour du riz long, quarante pour du complet. Puis — c'est l'étape que tout le monde saute — dix minutes hors du feu, couvercle fermé. La vapeur résiduelle finit la cuisson et l'humidité se répartit. Ensuite seulement tu ouvres et tu aères à la fourchette.
+Eau salée, porte à ébullition, couvre, feu au minimum selon les temps ci-dessus. Puis — c'est l'étape que tout le monde saute — dix minutes hors du feu, couvercle fermé. La vapeur résiduelle finit la cuisson et l'humidité se répartit. Ensuite seulement tu ouvres et tu aères à la fourchette.
 
 Ne soulève jamais le couvercle pendant la cuisson. Chaque coup d'œil coûte de la vapeur.
 
@@ -902,9 +925,13 @@ Une fois le ratio acquis, tu peux remplacer l'eau par du bouillon, ajouter un ar
 
 **Les autres féculents utiles**
 
-Polenta : 1 volume pour 4 à 5 de liquide, à verser en pluie en fouettant.
-Quinoa : 1 pour 1,75, quinze minutes.
-Pâtes : 1 litre d'eau et 10 g de sel pour 100 g de pâtes. Et garde toujours une louche d'eau de cuisson — son amidon est ce qui lie une sauce à des pâtes.`,
+| Féculent | Ratio | Cuisson |
+| --- | --- | --- |
+| Polenta | 1 : 4-5 | en pluie, en fouettant |
+| Quinoa | 1 : 1,75 | 15 min |
+| Pâtes | 10 g sel / L d'eau, pour 100 g de pâtes | selon paquet |
+
+Garde toujours une louche d'eau de cuisson des pâtes — son amidon est ce qui lie une sauce à des pâtes.`,
   vigilance: [
     "Soulever le couvercle pendant la cuisson.",
     "Sauter les dix minutes de repos hors du feu.",
@@ -1372,11 +1399,11 @@ Bœuf : joue, paleron, macreuse, jarret, queue. Porc : épaule, jarret, travers.
 
 **Le choix de la température**
 
-Chaleur forte, 220-240 °C : pour les petites pièces et les légumes coupés. Coloration rapide, intérieur qui reste juteux. C'est ce qu'il faut pour des légumes rôtis.
-
-Chaleur modérée, 180 °C : le réglage passe-partout, pour les pièces moyennes.
-
-Chaleur douce, 120-150 °C : pour les grosses pièces. Cuisson homogène du bord au centre, très peu de perte de jus.
+| Chaleur | Pour | Effet |
+| --- | --- | --- |
+| Forte, 220-240 °C | Petites pièces, légumes coupés | Coloration rapide, intérieur juteux |
+| Modérée, 180 °C | Pièces moyennes | Réglage passe-partout |
+| Douce, 120-150 °C | Grosses pièces | Cuisson homogène, peu de perte de jus |
 
 La méthode combinée est la meilleure sur un gros rôti ou un poulet : basse température jusqu'à quelques degrés du but, puis four à fond dix minutes pour la croûte. Ou l'inverse. Les deux fonctionnent.
 
@@ -1392,7 +1419,13 @@ Ne remue pas avant que la face en contact ait bruni.
 
 **Les temps de référence à 220 °C**
 
-Courgettes, poivrons, oignons : 20-25 minutes. Brocoli, chou-fleur en fleurettes : 20-25 minutes. Carottes, panais en morceaux : 30-35 minutes. Pommes de terre en quartiers : 40-45 minutes. Courge en cubes : 30-35 minutes.
+| Légume | Temps |
+| --- | --- |
+| Courgettes, poivrons, oignons | 20-25 min |
+| Brocoli, chou-fleur en fleurettes | 20-25 min |
+| Carottes, panais en morceaux | 30-35 min |
+| Courge en cubes | 30-35 min |
+| Pommes de terre en quartiers | 40-45 min |
 
 **La grille**
 
@@ -1583,7 +1616,14 @@ Plonge, compte le temps, sors, et immerge immédiatement dans de l'eau très fro
 
 **Les temps**
 
-Haricots verts : 3-4 minutes. Brocoli en fleurettes : 2-3 minutes. Petits pois : 2 minutes. Épinards : 30 secondes. Asperges vertes : 2-4 minutes selon la taille. Chou-fleur : 4-5 minutes.
+| Légume | Temps |
+| --- | --- |
+| Épinards | 30 sec |
+| Petits pois | 2 min |
+| Brocoli en fleurettes | 2-3 min |
+| Haricots verts | 3-4 min |
+| Asperges vertes | 2-4 min selon taille |
+| Chou-fleur | 4-5 min |
 
 Le test reste le couteau : il doit entrer avec une légère résistance.
 
@@ -2806,15 +2846,41 @@ function escapeHtml(s){
 function inlineFormat(s){
   return escapeHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 }
+function formatTable(lines){
+  const rows = lines.map(l => l.replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+  let head = null, body = rows;
+  if(rows.length > 1 && rows[1].every(c => /^:?-{2,}:?$/.test(c))){
+    head = rows[0];
+    body = rows.slice(2);
+  }
+  let html = '<div class="table-wrap"><table>';
+  if(head) html += '<thead><tr>' + head.map(c => `<th>${inlineFormat(c)}</th>`).join('') + '</tr></thead>';
+  html += '<tbody>' + body.map(r => '<tr>' + r.map(c => `<td>${inlineFormat(c)}</td>`).join('') + '</tr>').join('') + '</tbody>';
+  html += '</table></div>';
+  return html;
+}
 function formatContenu(text){
   const blocks = text.trim().split(/\n\n+/);
   let html = '';
+  let olBuffer = [];
+  const flushOl = () => { if(olBuffer.length){ html += '<ol>' + olBuffer.map(t => `<li>${inlineFormat(t)}</li>`).join('') + '</ol>'; olBuffer = []; } };
+
   blocks.forEach(block => {
     const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
-    if(lines.length === 1){
-      const m = lines[0].match(/^\*\*(.+)\*\*$/);
-      if(m){ html += `<h4>${escapeHtml(m[1])}</h4>`; return; }
+
+    if(lines.length >= 2 && lines.every(l => l.startsWith('|'))){
+      flushOl();
+      html += formatTable(lines);
+      return;
     }
+    if(lines.length === 1){
+      const h = lines[0].match(/^\*\*(.+)\*\*$/);
+      if(h){ flushOl(); html += `<h4>${escapeHtml(h[1])}</h4>`; return; }
+      const o = lines[0].match(/^\d+\.\s+(.*)$/);
+      if(o){ olBuffer.push(o[1]); return; }
+    }
+    flushOl();
+
     let para = [], list = [];
     const flushPara = () => { if(para.length){ html += '<p>' + para.map(inlineFormat).join(' ') + '</p>'; para = []; } };
     const flushList = () => { if(list.length){ html += '<ul>' + list.map(l => `<li>${inlineFormat(l)}</li>`).join('') + '</ul>'; list = []; } };
@@ -2824,6 +2890,7 @@ function formatContenu(text){
     });
     flushPara(); flushList();
   });
+  flushOl();
   return html;
 }
 
