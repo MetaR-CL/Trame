@@ -422,7 +422,7 @@ details.fold ul{padding-left:1.1em;}
    SCHÉMA D'UNE NOTION
    {
      id:        string unique
-     cat:       'levier' | 'ratio' | 'geste' | 'depannage' | 'trame'
+     cat:       'levier' | 'ratio' | 'geste' | 'trame' | 'accord' | 'organisation' | 'depannage'
      titre:     string
      resume:    une phrase — ce qui s'affiche en liste
      contenu:   le cours, en texte long
@@ -443,8 +443,10 @@ const CONTENU = {
     { id: 'levier',    nom: 'Leviers',    desc: "Les cinq curseurs qui décident si un plat est bon" },
     { id: 'ratio',     nom: 'Ratios',     desc: "Les proportions à connaître par cœur" },
     { id: 'geste',     nom: 'Gestes',     desc: "Les techniques fondamentales, une par fiche" },
-    { id: 'trame',     nom: 'Trames',     desc: "Des canevas de repas, pas des recettes" },
-    { id: 'depannage', nom: 'Dépannage',  desc: "Le plat est en cours et quelque chose cloche" }
+    { id: 'trame',        nom: 'Trames',        desc: "Des canevas de repas, pas des recettes" },
+    { id: 'accord',       nom: 'Accords',       desc: "Quels aliments se marient, et pourquoi" },
+    { id: 'organisation', nom: 'Organisation',  desc: "S'organiser pour cuisiner sans y passer sa vie" },
+    { id: 'depannage',    nom: 'Dépannage',     desc: "Le plat est en cours et quelque chose cloche" }
   ],
 
   notions: [
@@ -573,7 +575,7 @@ Avant de servir n'importe quel plat riche — braisé, gratin, plat en sauce, so
     "Sur une soupe de légumes : sers-la moitié nature, moitié avec un trait de vinaigre de cidre.",
     "Utilise la saumure d'un bocal de pickles maison à la place du vinaigre dans une vinaigrette."
   ],
-  lien: ['lev-sel', 'lev-gras', 'ratio-vinaigrette', 'dep-lourd', 'geste-fermentation']
+  lien: ['lev-sel', 'lev-gras', 'ratio-vinaigrette', 'dep-lourd', 'geste-fermentation', 'geste-mariner']
 },
 
 {
@@ -631,7 +633,7 @@ Le geste le plus sous-estimé. Un filet d'huile d'olive crue, une noisette de be
     "Sur un plat aux épices : compare épices ajoutées au liquide contre épices passées dans l'huile chaude.",
     "Sers une soupe sans rien, puis avec un filet d'huile d'olive crue. Note l'écart."
   ],
-  lien: ['lev-acide', 'lev-chaleur', 'geste-monter-beurre', 'dep-lourd']
+  lien: ['lev-acide', 'lev-chaleur', 'geste-monter-beurre', 'dep-lourd', 'geste-neige', 'accord-epices']
 },
 
 {
@@ -737,7 +739,7 @@ Quand un plat est correctement salé, correctement acidulé, mais qu'il te sembl
     "Ajoute une croûte de parmesan dans une soupe pendant la cuisson, retire-la avant de servir.",
     "Compare une poêlée de champignons frais et la même avec un shiitaké séché réhydraté plus son eau."
   ],
-  lien: ['lev-sel', 'geste-fermentation', 'dep-plat-superficiel']
+  lien: ['lev-sel', 'geste-fermentation', 'dep-plat-superficiel', 'accord-epices']
 },
 
 /* =====================================================================
@@ -892,7 +894,7 @@ Un ratio à garder en tête vu ton intérêt pour la fermentation : à parts ég
     "Ajoute du sucre dans la saumure sèche et compare la couleur obtenue.",
     "Fais un bocal de pickles rapides et utilise sa saumure comme acide dans une vinaigrette."
   ],
-  lien: ['lev-sel', 'geste-rotir', 'geste-fermentation']
+  lien: ['lev-sel', 'geste-rotir', 'geste-fermentation', 'geste-mariner']
 },
 
 {
@@ -1194,6 +1196,119 @@ Congèle tes carcasses de poulet rôti au fur et à mesure. Quand tu en as trois
     "Réduis de moitié un litre de bouillon et compare l'usage."
   ],
   lien: ['lev-umami', 'geste-reduire', 'trame-soupe']
+},
+
+{
+  id: 'ratio-choux',
+  cat: 'ratio',
+  titre: "Pâte à choux — 1 : 2 : 2 : 4",
+  resume: "Eau, beurre, farine, œufs : une pâte cuite deux fois, une seule fois ratée si tu te presses.",
+  contenu: `La pâte à choux est la seule pâte qui cuit deux fois : une fois sur le feu, une fois au four. Comprendre pourquoi permet de ne plus jamais avoir de choux plats ou creux.
+
+**Le ratio, pour 100 g de farine**
+
+| Ingrédient | Quantité |
+| --- | --- |
+| Eau (ou moitié eau/moitié lait) | 200 ml |
+| Beurre | 80 g |
+| Farine | 100 g |
+| Œufs | environ 4 (à ajuster) |
+| Sel | 2 g |
+| Sucre (si version sucrée) | 5 g |
+
+Cette base donne environ 20 choux moyens ou 12 éclairs.
+
+**La panade, première cuisson**
+
+Porte l'eau, le beurre coupé en dés, le sel et le sucre à ébullition — le beurre doit être fondu avant que l'eau ne bout, sinon elle s'évapore trop et fausse le ratio. Hors du feu, verse la farine en une fois, mélange vite à la spatule.
+
+Remets sur feu doux et dessèche la panade : remue sans arrêt pendant une à deux minutes, jusqu'à ce que la pâte se détache des parois et forme une boule, avec un léger voile qui se dépose au fond de la casserole. C'est cette étape, souvent sautée, qui fait la différence entre un chou qui gonfle et un chou qui reste plat — elle évapore l'excès d'eau et permet à la pâte d'absorber davantage d'œufs ensuite.
+
+**Les œufs, un à un**
+
+Hors du feu, laisse tiédir légèrement puis incorpore les œufs un par un, en mélangeant bien entre chaque avant d'ajouter le suivant. Le nombre exact varie selon l'évaporation pendant le dessèchement — arrête-toi quand la pâte forme un ruban souple qui retombe en pointe depuis la spatule, ni trop liquide, ni trop ferme.
+
+**Le dressage et la cuisson**
+
+Poche la pâte sur une plaque, four déjà chaud à 180-200 °C. Ne jamais ouvrir la porte du four pendant les vingt premières minutes : un appel d'air fait retomber les choux avant que leur structure ne soit fixée. Ils sont prêts quand ils sonnent creux et sont bien dorés, secs au toucher.
+
+**Pourquoi ils retombent**
+
+Trois causes : la panade pas assez desséchée (trop d'eau résiduelle), la porte du four ouverte trop tôt, ou une cuisson trop courte qui laisse l'intérieur encore humide — la vapeur emprisonnée fait s'affaisser la structure en refroidissant.`,
+  vigilance: [
+    "Verser la farine avant que le beurre ne soit fondu : le ratio eau/beurre est faussé par l'évaporation.",
+    "Sauter le dessèchement de la panade : la pâte absorbe moins d'œufs et les choux gonflent mal.",
+    "Ajouter tous les œufs d'un coup : impossible d'ajuster la texture, risque de pâte trop liquide.",
+    "Ouvrir le four dans les vingt premières minutes : un appel d'air fait retomber les choux.",
+    "Sortir les choux dès qu'ils sont dorés sans vérifier qu'ils sonnent creux : l'intérieur encore humide les fait s'affaisser en refroidissant."
+  ],
+  questions: [
+    { q: "Pourquoi la pâte à choux cuit-elle deux fois, et à quoi sert la première cuisson ?", r: "La première cuisson (la panade, sur le feu) dessèche la pâte et lui permet d'absorber davantage d'œufs ; sans cette étape, les choux gonflent mal au four." },
+    { q: "Comment sais-tu que tu as ajouté assez d'œufs ?", r: "La pâte doit former un ruban souple qui retombe en pointe depuis la spatule — ni trop liquide, ni trop ferme. Le nombre exact d'œufs varie donc d'une fournée à l'autre." },
+    { q: "Pourquoi ne faut-il jamais ouvrir le four dans les vingt premières minutes ?", r: "Un appel d'air fait retomber les choux avant que leur structure ne soit fixée par la chaleur — ils n'ont pas encore assez cuit pour tenir seuls." }
+  ],
+  variations: [
+    "Dessèche la panade une minute puis deux minutes sur deux fournées identiques, et compare le gonflé.",
+    "Fais une version sucrée et une version salée (sans le sucre, avec du fromage râpé) à partir de la même panade.",
+    "Teste une cuisson avec la porte entrouverte les dix dernières minutes pour assécher l'intérieur, contre une cuisson classique."
+  ],
+  lien: ['ratio-creme-patissiere', 'geste-neige']
+},
+
+{
+  id: 'ratio-creme-patissiere',
+  cat: 'ratio',
+  titre: "Crème pâtissière — 1 : 1 : 2 : 10",
+  resume: "Jaunes, sucre, maïzena, lait : la base de la plupart des entremets, ratée seulement si tu as peur de trop cuire.",
+  contenu: `La crème pâtissière est une base qui revient partout — choux, tartes, mille-feuilles, entremets — et le seul vrai risque est de ne pas assez la cuire par peur qu'elle attache.
+
+**Le ratio, pour 500 ml de lait**
+
+| Ingrédient | Quantité |
+| --- | --- |
+| Lait | 500 ml |
+| Jaunes d'œufs | 4 |
+| Sucre | 100 g |
+| Maïzena (ou farine) | 40 g |
+| Beurre (facultatif, en fin de cuisson) | 20-30 g |
+
+**La méthode**
+
+Fais chauffer le lait avec la moitié du sucre — et une gousse de vanille fendue si tu veux l'infuser, à retirer avant la suite. Pendant ce temps, fouette les jaunes avec l'autre moitié du sucre jusqu'à blanchiment, puis incorpore la maïzena.
+
+Verse le lait chaud sur ce mélange en filet, en fouettant sans arrêt pour ne pas cuire les jaunes trop vite, puis reverse le tout dans la casserole.
+
+**La cuisson, l'étape qui fait peur pour rien**
+
+Sur feu moyen, fouette sans arrêt. La crème épaissit d'un coup autour de 82-85 °C. Continue à cuire, toujours en fouettant, encore une à deux minutes après l'épaississement — c'est cette cuisson prolongée qui désactive une enzyme du jaune et élimine le goût de farine crue de la maïzena. Une crème pâtissière sous-cuite a un arrière-goût pâteux et se liquéfie en refroidissant.
+
+Hors du feu, ajoute le beurre en morceaux si tu en utilises : il apporte du brillant et de l'onctuosité.
+
+**Le refroidissement**
+
+Étale la crème sur une plaque ou dans un plat large pour qu'elle refroidisse vite, filme au contact direct de la surface — sinon une peau se forme — et mets au frigo. Elle épaissit encore en refroidissant : ne juge jamais sa texture chaude.
+
+**Les dérivés**
+
+Crème pâtissière + crème fouettée = crème diplomate. Crème pâtissière + beurre pommade fouetté = crème mousseline, pour les fraisiers. Crème pâtissière + praliné = crème pralinée. Une base, plusieurs desserts.`,
+  vigilance: [
+    "Sous-cuire par peur que ça attache : la crème garde un goût de farine crue et se liquéfie en refroidissant.",
+    "Verser le lait chaud d'un coup sur les jaunes sans fouetter : les jaunes cuisent en grumeaux.",
+    "Juger la texture à chaud : la crème épaissit encore fortement en refroidissant.",
+    "Oublier le film au contact : une peau se forme en surface.",
+    "Ne pas fouetter pendant la cuisson : le fond attache et brûle avant que le centre n'épaississe."
+  ],
+  questions: [
+    { q: "Pourquoi continue-t-on à cuire la crème une à deux minutes après qu'elle a épaissi ?", r: "Cette cuisson prolongée désactive une enzyme du jaune et élimine le goût de farine crue de la maïzena — une crème qui s'arrête juste à l'épaississement reste pâteuse et se liquéfie en refroidissant." },
+    { q: "Pourquoi ne faut-il jamais juger la texture d'une crème pâtissière chaude ?", r: "Elle épaissit encore fortement en refroidissant — une crème qui semble juste correcte chaude sera souvent trop ferme une fois froide." },
+    { q: "Que donne crème pâtissière + beurre pommade fouetté ?", r: "Une crème mousseline, utilisée notamment pour les fraisiers." }
+  ],
+  variations: [
+    "Compare une crème cuite pile à l'épaississement contre une cuite deux minutes de plus — goûte les deux une fois froides.",
+    "Infuse un autre parfum que la vanille (zeste, café, pistache) dans le lait chaud avant de continuer la recette.",
+    "Transforme une base en crème diplomate en lui incorporant de la crème fouettée."
+  ],
+  lien: ['ratio-choux', 'geste-emulsionner']
 },
 
 /* =====================================================================
@@ -1590,7 +1705,7 @@ Le principe est toujours le même : repartir d'une petite base propre et y incor
     "Émulsionne une vinaigrette au fouet, au bocal secoué, puis au mixeur plongeant.",
     "Change d'émulsifiant : moutarde, tahini, miso, yaourt."
   ],
-  lien: ['ratio-mayonnaise', 'ratio-vinaigrette', 'geste-monter-beurre', 'dep-sauce-tranchee']
+  lien: ['ratio-mayonnaise', 'ratio-vinaigrette', 'geste-monter-beurre', 'dep-sauce-tranchee', 'geste-neige', 'ratio-creme-patissiere']
 },
 
 {
@@ -1807,7 +1922,115 @@ Une planche stable — un linge humide dessous — et un couteau qui coupe rédu
     "Chronomètre une même préparation avant et après un passage au fusil.",
     "Fais une poêlée en dés réguliers puis en morceaux irréguliers, et observe la cuisson."
   ],
-  lien: ['geste-suer', 'trame-poelee']
+  lien: ['geste-suer', 'trame-poelee', 'organisation-mise-en-place']
+},
+
+{
+  id: 'geste-mariner',
+  cat: 'geste',
+  titre: "Mariner",
+  resume: "L'acide attendrit en surface et cuit s'il reste trop longtemps. Le sel, l'huile et le temps ne se dosent pas de la même façon.",
+  contenu: `Mariner, c'est laisser un aliment au contact d'un liquide assaisonné avant cuisson, pour l'attendrir, l'aromatiser, ou les deux. Le piège est de croire qu'une seule règle s'applique à tout : le temps et l'ingrédient actif changent complètement selon ce que tu cherches.
+
+**Trois familles de marinade**
+
+La marinade acide (citron, vinaigre, yaourt) dénature les protéines en surface — c'est ce qui attendrit, mais aussi ce qui peut cuire l'aliment si tu laisses trop longtemps : c'est exactement le principe du ceviche. Sur du poisson ou des fruits de mer, une marinade acide agit en quinze à trente minutes ; au-delà, la texture devient farineuse et cotonneuse.
+
+La marinade grasse (huile, yaourt, lait ribot) porte les arômes des épices et des herbes sans attendrir agressivement — c'est la plus tolérante au temps long, adaptée aux viandes qui vont griller ou rôtir.
+
+La marinade sèche, ou dry rub, remplace le liquide par du sel et des épices frottés directement sur la surface. Elle agit comme une mini-saumure : elle tire l'eau, la fait revenir chargée en assaisonnement. C'est la plus simple à préparer à l'avance.
+
+**Le temps, par type d'aliment**
+
+| Aliment | Marinade acide | Marinade grasse |
+| --- | --- | --- |
+| Poisson, fruits de mer | 15-30 min | 30 min - 1 h |
+| Volaille en morceaux | 30 min - 2 h | 2-12 h |
+| Viande rouge, morceaux tendres | 30 min - 1 h | 2-8 h |
+| Viande à braiser | peu utile | 12-24 h |
+| Légumes | 10-20 min | 30 min - quelques heures |
+
+**Ce que la marinade ne fait pas**
+
+Elle ne pénètre presque jamais en profondeur : l'essentiel de son effet reste dans le premier millimètre de surface, sauf injection ou très longue immersion. Ne compte pas sur elle pour assaisonner le cœur d'une pièce épaisse — c'est le rôle du sel, appliqué à sec, bien avant.
+
+**Au frigo, jamais à température ambiante**
+
+Une marinade contient souvent de l'acide ou du sel qui ne suffisent pas à sécuriser l'aliment à température ambiante sur plusieurs heures. Toujours au frigo, dans un contenant non réactif (verre, inox, plastique alimentaire — jamais d'aluminium avec une marinade acide, qui réagit et donne un goût métallique).
+
+**Après la marinade**
+
+Sèche toujours la surface avant de saisir — une viande sortie de sa marinade est mouillée, et tu retombes sur le problème classique : elle grisera au lieu de dorer. La marinade elle-même, si elle a été au contact de viande crue, doit être bouillie au moins une minute avant d'être réutilisée comme sauce.`,
+  vigilance: [
+    "Laisser une marinade acide trop longtemps sur du poisson : la texture devient cotonneuse, comme trop cuite.",
+    "Mariner à température ambiante plusieurs heures : risque bactérien, toujours au frigo.",
+    "Utiliser un contenant en aluminium avec une marinade acide : réaction chimique, goût métallique.",
+    "Saisir une viande sortie directement de la marinade sans la sécher : elle grisera au lieu de dorer.",
+    "Réutiliser une marinade ayant touché de la viande crue sans la faire bouillir d'abord."
+  ],
+  questions: [
+    { q: "Pourquoi une marinade acide peut-elle rendre un poisson cotonneux si on le laisse trop longtemps ?", r: "L'acide dénature les protéines en surface — c'est ce qui attendrit à petite dose, mais au-delà d'un certain temps ça 'cuit' littéralement l'aliment sans chaleur, comme un ceviche trop poussé, et la texture devient farineuse." },
+    { q: "Pourquoi faut-il sécher une viande sortie de sa marinade avant de la saisir ?", r: "Elle est mouillée par le liquide de marinade, et une surface humide empêche la réaction de Maillard : elle grisera au lieu de dorer, exactement comme une viande non séchée après le frigo." },
+    { q: "Quelle est la différence de rôle entre une marinade acide et une marinade grasse ?", r: "L'acide attendrit en surface mais doit être dosé dans le temps ; le gras porte les arômes des épices et herbes sans attendrir agressivement, donc il tolère des temps beaucoup plus longs." }
+  ],
+  variations: [
+    "Marine deux fois le même légume, une fois acide (vinaigre) une fois grasse (huile-épices), et compare le résultat après cuisson.",
+    "Teste une marinade sèche (sel + épices frottés) sur une pièce de viande, contre ta marinade liquide habituelle.",
+    "Récupère et fais bouillir une marinade utilisée pour badigeonner en fin de cuisson — observe comment elle se transforme en glaçage."
+  ],
+  lien: ['lev-acide', 'lev-sel', 'ratio-saumure', 'geste-saisir']
+},
+
+{
+  id: 'geste-neige',
+  cat: 'geste',
+  titre: "Monter des blancs en neige",
+  resume: "De l'air emprisonné dans un réseau de protéines. Le moindre corps gras et tout s'effondre.",
+  contenu: `Des blancs montés, c'est de l'air mécaniquement incorporé et stabilisé par les protéines du blanc d'œuf, qui se déplient sous le fouettage et forment un réseau autour des bulles. Comprendre ce mécanisme évite les deux ratés les plus fréquents : les blancs qui ne montent jamais, et ceux qui retombent.
+
+**L'ennemi numéro un : le gras**
+
+La moindre trace de jaune, de gras sur le bol ou le fouet, empêche les protéines de se déplier correctement — les blancs plafonnent ou ne montent pas du tout. Sépare les œufs avec soin, utilise un bol et un fouet parfaitement propres et secs, idéalement en inox ou en verre (le plastique retient le gras même lavé).
+
+**La température**
+
+Des blancs à température ambiante montent plus vite et plus haut que des blancs froids sortis du frigo — les protéines se déplient plus facilement. Sors-les vingt minutes avant si tu peux.
+
+**Les trois stades**
+
+| Stade | Aspect | Usage |
+| --- | --- | --- |
+| Mousseux | Bulles grosses, liquide encore visible | Base, pas encore utilisable |
+| Bec d'oiseau (souple) | Forme une pointe qui retombe légèrement | Mousses, soufflés délicats |
+| Bec ferme | Pointe qui tient droite, brillante | Meringues, macarons, la plupart des usages |
+
+Au-delà du bec ferme, les blancs deviennent grainés et secs — les protéines se sont trop resserrées et expulsent l'eau qu'elles retenaient. C'est irréversible : il faut recommencer avec des blancs neufs.
+
+**Le sel et le sucre**
+
+Une pincée de sel ou quelques gouttes de citron/vinaigre au démarrage aide à stabiliser la mousse en acidifiant légèrement le milieu. Le sucre, lui, se verse en pluie une fois que les blancs sont déjà mousseux — trop tôt, il ralentit voire empêche le foisonnement ; c'est le geste classique de la meringue.
+
+**Incorporer sans casser**
+
+Une fois montés, les blancs se mélangent toujours en deux temps : un tiers incorporé vigoureusement pour détendre l'appareil, puis le reste délicatement à la maryse, en soulevant de bas en haut plutôt qu'en tournant — tourner écrase les bulles d'air que tu viens de créer.`,
+  vigilance: [
+    "La moindre trace de jaune ou de gras dans le bol : les blancs ne monteront pas ou plafonneront bas.",
+    "Ajouter le sucre trop tôt : ça ralentit ou empêche le foisonnement.",
+    "Dépasser le stade du bec ferme : les blancs grainent et deviennent secs, irrécupérables.",
+    "Incorporer les blancs en tournant à la cuillère au lieu de soulever à la maryse : l'air s'échappe et l'appareil retombe.",
+    "Blancs sortis du frigo juste avant de monter : ils foisonnent moins bien que des blancs à température ambiante."
+  ],
+  questions: [
+    { q: "Pourquoi la moindre trace de gras empêche-t-elle les blancs de monter ?", r: "Le gras empêche les protéines du blanc de se déplier et de former le réseau qui emprisonne l'air — même une trace de jaune suffit à limiter ou bloquer le foisonnement." },
+    { q: "Pourquoi ajoute-t-on le sucre seulement une fois les blancs déjà mousseux ?", r: "Ajouté trop tôt, le sucre ralentit voire empêche le foisonnement des protéines ; il faut d'abord que la structure d'air soit amorcée." },
+    { q: "Comment incorpores-tu des blancs montés à un appareil sans les casser ?", r: "En deux temps : un tiers mélangé vigoureusement pour détendre l'appareil, puis le reste délicatement à la maryse en soulevant de bas en haut, jamais en tournant." }
+  ],
+  variations: [
+    "Monte deux fois la même quantité de blancs, une fois à température ambiante, une fois sortis directement du frigo, et chronomètre.",
+    "Teste avec une pincée de sel au départ contre sans, et compare la stabilité de la mousse après dix minutes.",
+    "Pousse volontairement des blancs jusqu'au stade grainé pour reconnaître visuellement la limite à ne pas dépasser."
+  ],
+  lien: ['geste-emulsionner', 'lev-gras']
 },
 
 /* =====================================================================
@@ -1867,7 +2090,7 @@ Tout mettre dans la poêle en même temps. Chaque famille d'ingrédients a son t
     "Même trame, change uniquement la liaison.",
     "Même trame, change uniquement le croquant de finition."
   ],
-  lien: ['geste-suer', 'geste-saisir', 'lev-acide', 'geste-blanchir']
+  lien: ['geste-suer', 'geste-saisir', 'lev-acide', 'geste-blanchir', 'accord-herbes', 'organisation-mise-en-place']
 },
 
 {
@@ -1971,7 +2194,7 @@ C'est le format le plus adapté à quelqu'un dont le temps est fragmenté : le t
     "Change uniquement le fermenté.",
     "Change le croquant : graines de courge, amandes, chapelure dorée à l'huile."
   ],
-  lien: ['ratio-riz', 'geste-blanchir', 'geste-fermentation', 'geste-pocher']
+  lien: ['ratio-riz', 'geste-blanchir', 'geste-fermentation', 'geste-pocher', 'organisation-planifier']
 },
 
 {
@@ -2070,7 +2293,7 @@ C'est la même logique que l'entraînement — une base stable, des variables qu
     "Change la finition de chaque jour.",
     "Utilise le jus réduit comme sauce de pâtes le troisième jour."
   ],
-  lien: ['geste-braiser', 'trame-bol', 'lev-umami']
+  lien: ['geste-braiser', 'trame-bol', 'lev-umami', 'organisation-planifier']
 },
 
 {
@@ -2127,7 +2350,211 @@ Rincer les pâtes — jamais, on enlève l'amidon. Ajouter de l'huile dans l'eau
 },
 
 /* =====================================================================
-   5. DÉPANNAGE — accès rapide pendant la cuisson
+   5. LES ACCORDS
+   ===================================================================== */
+
+{
+  id: 'accord-herbes',
+  cat: 'accord',
+  titre: "Herbes fraîches — quoi avec quoi",
+  resume: "Une herbe n'est pas interchangeable avec une autre. Le moment où tu l'ajoutes compte autant que le choix.",
+  contenu: `Les herbes fraîches ne sont pas un assaisonnement générique — chacune a un profil et un usage plus ou moins fixe dans les cuisines qui les emploient depuis longtemps. Les connaître évite le réflexe "j'ajoute du persil partout".
+
+**Le repère par famille**
+
+| Herbe | Va bien avec | Évite avec |
+| --- | --- | --- |
+| Basilic | Tomate, mozzarella, huile d'olive, pêche | Cuisson longue — noircit et perd son arôme |
+| Persil plat | À peu près tout, base neutre | Rien de particulier |
+| Coriandre | Agrumes, piment, poisson cru, Asie/Amérique latine | Cuisson prolongée — perd son parfum vite |
+| Aneth | Poisson, concombre, yaourt, œufs | Plats tomate/méditerranéens — le mélange détonne |
+| Menthe | Agneau, pois, agrumes, yaourt, chocolat | Cuisson longue — s'oxyde et noircit |
+| Thym, romarin | Cuissons longues, viandes, légumes racines | Poisson délicat, cru |
+| Ciboulette | Œufs, pommes de terre, fromage frais | Cuisson — perd tout son goût, à ajouter cru |
+| Estragon | Poulet, œufs, beurre blanc, vinaigre | Plats déjà très aromatiques |
+
+**Le principe qui les regroupe**
+
+Les herbes tendres (basilic, persil, coriandre, aneth, menthe, ciboulette) perdent leur arôme à la cuisson prolongée — elles s'ajoutent crues ou en toute fin. Les herbes ligneuses (thym, romarin, laurier, sauge) résistent à la cuisson longue et y développent même leur parfum — elles se mettent dès le début.
+
+**Associer plusieurs herbes**
+
+Une base neutre (persil) plus une herbe plus marquée (menthe, estragon, aneth) fonctionne presque toujours, à condition de garder la seconde en petite quantité. Deux herbes fortes ensemble (menthe et coriandre, par exemple) peuvent fonctionner mais demandent d'être dosées avec prudence — goûte au fur et à mesure.
+
+**Le geste simple qui change tout**
+
+Ciseler au dernier moment plutôt qu'à l'avance : une herbe hachée s'oxyde et perd de son parfum en quelques minutes à l'air libre. Pour une grande quantité, ciseler juste avant de servir plutôt que pendant la préparation du reste du plat.`,
+  vigilance: [
+    "Ajouter une herbe tendre (basilic, coriandre, menthe) trop tôt dans une cuisson : elle perd son parfum et parfois noircit.",
+    "Utiliser le thym ou le romarin cru en grande quantité : leur goût est puissant et peut dominer tout le plat.",
+    "Ciseler les herbes bien à l'avance : elles s'oxydent et perdent en fraîcheur.",
+    "Mélanger deux herbes fortes sans goûter au fur et à mesure : le risque de déséquilibre est réel."
+  ],
+  questions: [
+    { q: "Quelle est la différence de comportement entre une herbe tendre et une herbe ligneuse à la cuisson ?", r: "Les herbes tendres (basilic, persil, coriandre) perdent leur arôme à la cuisson longue et s'ajoutent crues ou en fin de cuisson ; les herbes ligneuses (thym, romarin) résistent et développent leur parfum en cuisson longue." },
+    { q: "Pourquoi vaut-il mieux ciseler les herbes au dernier moment ?", r: "Une herbe hachée s'oxyde et perd de son parfum en quelques minutes à l'air libre." },
+    { q: "Comment associer deux herbes sans rater le dosage ?", r: "Garde une base neutre (persil) avec une herbe plus marquée en petite quantité, et si tu associes deux herbes fortes, goûte au fur et à mesure plutôt que doser à l'aveugle." }
+  ],
+  variations: [
+    "Fais la même sauce ou salade avec deux herbes différentes de la même famille (tendre ou ligneuse) et compare.",
+    "Teste d'ajouter une herbe ligneuse en début de cuisson contre en fin, sur le même plat.",
+    "Associe une herbe que tu n'utilises jamais avec un plat où elle est classique (aneth + poisson, estragon + poulet)."
+  ],
+  lien: ['lev-acide', 'trame-poelee', 'accord-epices']
+},
+
+{
+  id: 'accord-epices',
+  cat: 'accord',
+  titre: "Épices — associations classiques",
+  resume: "Les épices fonctionnent par familles régionales cohérentes. Piocher au hasard donne rarement un résultat harmonieux.",
+  contenu: `Les épices, contrairement aux herbes, se marient souvent en groupes constitués depuis longtemps par une cuisine régionale — les mélanger au hasard donne un goût brouillon plus souvent qu'une découverte heureuse. Connaître quelques groupes de base suffit à improviser juste.
+
+**Les groupes qui fonctionnent**
+
+| Groupe | Épices | Terrain |
+| --- | --- | --- |
+| Chaud méditerranéen | Cumin, paprika, coriandre en graines, ail | Légumes rôtis, légumineuses, agneau |
+| Indien de base | Cumin, coriandre, curcuma, gingembre, piment | Curry, lentilles, légumes |
+| Garam masala | Cannelle, cardamome, clou de girofle, poivre | À ajouter en fin de cuisson, jamais au début |
+| Nord-africain (ras el hanout) | Cumin, cannelle, gingembre, curcuma, piment doux | Tajines, couscous, carottes |
+| Pâtisserie / épices douces | Cannelle, vanille, muscade, cardamome, anis | Desserts, fruits cuits, pain d'épices |
+| Fumé | Paprika fumé, cumin, chipotle | Grillades, légumineuses, plats mijotés |
+
+**La règle du tempérage**
+
+La plupart des épices en poudre donnent bien plus si elles passent trente secondes à une minute dans un gras chaud avant d'ajouter le liquide — beaucoup de leurs molécules aromatiques sont solubles dans le gras, pas dans l'eau. Les épices entières (graines de cumin, bâton de cannelle, cardamome) supportent une cuisson plus longue et se mettent dès le début.
+
+**Le garam masala, cas à part**
+
+Contrairement aux autres mélanges, le garam masala se saupoudre en toute fin de cuisson ou juste avant de servir — cuit longtemps, il perd sa complexité aromatique au lieu de l'infuser dans le plat.
+
+**Construire son propre mélange**
+
+Trois familles suffisent à couvrir la plupart des besoins : une base terreuse (cumin, coriandre), une note piquante ou chaude (piment, poivre, gingembre), et une note sucrée-boisée en petite quantité (cannelle, muscade). Pars de ce squelette et ajuste au goût plutôt que de suivre un mélange figé.`,
+  vigilance: [
+    "Ajouter le garam masala en début de cuisson : il perd sa complexité au lieu de parfumer le plat.",
+    "Mélanger des épices de groupes très différents sans réflexion (ex. cannelle et paprika fumé) : le résultat est souvent confus.",
+    "Ajouter les épices en poudre directement dans le liquide sans passage dans le gras chaud : la moitié de l'arôme reste inexploité.",
+    "Utiliser des épices entières comme si c'étaient des épices en poudre : elles doivent infuser plus longtemps pour livrer leur goût."
+  ],
+  questions: [
+    { q: "Pourquoi les épices en poudre gagnent-elles à passer dans le gras chaud avant le liquide ?", r: "Beaucoup de leurs molécules aromatiques sont solubles dans le gras et pas dans l'eau : sans ce passage, une bonne partie de l'arôme reste inexploitée." },
+    { q: "Pourquoi le garam masala s'ajoute-t-il en toute fin de cuisson, contrairement à d'autres mélanges ?", r: "Cuit longtemps, il perd sa complexité aromatique au lieu de l'infuser dans le plat — il est fait pour parfumer à la dernière minute, pas pour mijoter." },
+    { q: "Quelles sont les trois familles de base pour construire son propre mélange d'épices ?", r: "Une base terreuse (cumin, coriandre), une note piquante ou chaude (piment, gingembre, poivre), et une note sucrée-boisée en petite quantité (cannelle, muscade)." }
+  ],
+  variations: [
+    "Reprends une même poêlée de légumes avec un mélange chaud méditerranéen, puis avec un mélange indien de base, et compare.",
+    "Teste le garam masala ajouté en début de cuisson contre ajouté à la toute fin, sur le même plat.",
+    "Construis ton propre mélange à partir des trois familles de base et note les proportions qui te plaisent."
+  ],
+  lien: ['accord-herbes', 'lev-gras', 'lev-umami']
+},
+
+/* =====================================================================
+   6. L'ORGANISATION
+   ===================================================================== */
+
+{
+  id: 'organisation-planifier',
+  cat: 'organisation',
+  titre: "Planifier ses repas de la semaine",
+  resume: "Ce n'est pas prévoir sept recettes. C'est décider une fois où va ton temps de cuisine.",
+  contenu: `Planifier ne veut pas dire choisir sept plats précis à l'avance — c'est une contrainte qui casse vite face aux imprévus. Il s'agit plutôt de répartir ton temps de cuisine disponible sur la semaine, et de laisser le contenu précis se décider au dernier moment à partir de ce que tu as sous la main.
+
+**Le principe : un socle, pas un menu**
+
+Repère dans ta semaine les moments où tu as réellement du temps (souvent un week-end, parfois une soirée creuse) et ceux où tu n'en as aucun. Le temps disponible se transforme en socle — un braisé du dimanche, un grand volume de féculent cuit, deux sauces montées, des légumes blanchis — que tu piocheras dans le reste de la semaine.
+
+**Les trois questions à te poser une fois par semaine**
+
+1. Qu'est-ce que j'ai le temps de préparer en profondeur cette semaine, et quand ?
+
+2. Qu'est-ce qui doit être prêt en moins de vingt minutes les autres soirs ?
+
+3. Qu'est-ce qui va se périmer en premier dans mon frigo, et qui doit passer avant le reste ?
+
+**S'appuyer sur des trames, pas des recettes**
+
+Une trame (la poêlée complète, le bol composé, le plat unique au four) te dit la structure sans te dire les ingrédients exacts — c'est elle qui absorbe l'incertitude de "je ne sais pas encore ce que j'aurai envie de manger mercredi". Décide de la trame du soir en ouvrant le frigo, pas trois jours avant.
+
+**La liste de courses, en deux temps**
+
+Une base récurrente (féculents, alliacés, œufs, produits laitiers) que tu réassortis presque sans réfléchir, et une liste variable (légumes de saison, protéine de la semaine) que tu ajustes en fonction de ce que tu as prévu de préparer en profondeur. Séparer les deux évite d'oublier les basiques en te concentrant sur le repas du moment.
+
+**Le vrai gain**
+
+Ce n'est pas de gagner du temps sur l'instant — c'est de ne plus jamais te retrouver à 19h à improviser sans rien de prêt. Le temps investi le week-end achète de la marge en semaine, pas l'inverse.`,
+  vigilance: [
+    "Planifier sept recettes précises à l'avance : le plan casse au premier imprévu et devient une contrainte plutôt qu'une aide.",
+    "Faire les courses sans avoir regardé ce qui traîne déjà dans le frigo.",
+    "Consacrer tout ton temps disponible à un seul plat compliqué plutôt qu'à un socle réutilisable sur plusieurs jours.",
+    "Séparer les courses trop tard, en oubliant les basiques (féculents, œufs) parce que toute l'attention va sur le plat principal."
+  ],
+  questions: [
+    { q: "Quelle est la différence entre planifier des recettes et planifier son temps de cuisine ?", r: "Planifier des recettes précises casse au premier imprévu. Planifier son temps consiste à préparer un socle réutilisable (braisé, féculent cuit, sauces) pendant les moments disponibles, et à décider du détail au dernier moment." },
+    { q: "Pourquoi les trames sont-elles plus utiles qu'une liste de recettes pour la semaine ?", r: "Une trame donne la structure sans figer les ingrédients — elle absorbe l'incertitude de ce que tu auras vraiment envie ou besoin de cuisiner le jour même." },
+    { q: "Pourquoi séparer la liste de courses en une base récurrente et une liste variable ?", r: "Ça évite d'oublier les basiques (féculents, œufs, produits laitiers) parce que toute l'attention se porte sur le plat du moment." }
+  ],
+  variations: [
+    "Cette semaine, identifie ton seul vrai moment disponible et prépare un socle (braisé, féculent, sauce) dedans avant de penser au reste.",
+    "Fais tes courses en deux listes séparées (base récurrente / variable) et note si ça change quelque chose à la fin de la semaine.",
+    "Choisis une trame plutôt qu'une recette précise pour un repas cette semaine, et décide du détail seulement en ouvrant le frigo."
+  ],
+  lien: ['trame-braise-dimanche', 'trame-bol', 'organisation-mise-en-place']
+},
+
+{
+  id: 'organisation-mise-en-place',
+  cat: 'organisation',
+  titre: "Mise en place",
+  resume: "Tout préparer et peser avant d'allumer le feu. Le geste qui élimine le stress pendant la cuisson.",
+  contenu: `La mise en place, c'est préparer et disposer tous tes ingrédients — coupés, mesurés, prêts — avant de commencer à cuisiner. C'est l'habitude numéro un des cuisines professionnelles, et elle change tout autant à la maison, surtout sur des cuissons rapides où tu n'as pas le temps de couper un oignon une fois la poêle chaude.
+
+**Pourquoi ça change tout**
+
+Une fois le feu allumé, le temps devient la contrainte : un oignon qui n'a pas eu le temps de dorer parce que tu coupais encore les carottes, c'est une cuisson ratée pour une raison purement organisationnelle, pas technique. La mise en place déplace tout le travail de réflexion et de découpe avant la pression du feu.
+
+**Ce qu'on prépare à l'avance**
+
+- Tous les légumes lavés, épluchés, coupés à la taille voulue, regroupés par ordre d'entrée dans la cuisson.
+- Les liquides mesurés dans des contenants séparés (bouillon, vin, crème).
+- Les épices sèches pesées ou regroupées ensemble, prêtes à être versées d'un geste.
+- La viande ou le poisson sortis du frigo à temps pour revenir à température, séchés si besoin.
+- Les outils sortis : la spatule, l'écumoire, le plat de service, le torchon.
+
+**Le rangement par ordre d'usage**
+
+Dispose les ingrédients dans l'ordre où ils entreront dans la poêle ou la casserole, de gauche à droite ou en cercle autour de ton plan de travail. Tu ne cherches jamais rien pendant la cuisson — tu avances simplement de tas en tas.
+
+**Le gain réel, en semaine**
+
+Sur une trame comme la poêlée complète, la mise en place prend cinq à dix minutes, pendant lesquelles rien ne cuit encore et rien ne presse. Une fois le feu allumé, tout s'enchaîne sans pause ni improvisation — c'est ce qui rend un plat de vingt minutes vraiment faisable en sortant du travail.
+
+**Le prolongement : la mise en place de la semaine**
+
+Le même principe s'applique en grand : légumes blanchis à l'avance, féculent cuit en réserve, sauces montées le week-end — c'est une mise en place étalée sur plusieurs jours plutôt que sur quelques minutes, avec exactement la même logique.`,
+  vigilance: [
+    "Commencer à couper un ingrédient une fois la poêle déjà chaude : le feu n'attend pas, et la cuisson est ratée en attendant.",
+    "Sortir la viande du frigo au dernier moment : elle part froide et cuit de façon inégale.",
+    "Peser les épices en cours de cuisson plutôt qu'avant : le temps perdu peut brûler ce qui est déjà dans la poêle.",
+    "Ne pas ranger les ingrédients dans l'ordre d'usage : tu perds du temps à chercher pendant que quelque chose cuit sans surveillance."
+  ],
+  questions: [
+    { q: "Pourquoi un oignon qui ne dore pas est-il parfois un problème d'organisation plutôt que de technique ?", r: "Si tu coupes encore d'autres légumes pendant que l'oignon devrait cuire, il perd son temps de coloration — le problème vient du fait que rien n'était prêt avant d'allumer le feu, pas de la technique de cuisson elle-même." },
+    { q: "Dans quel ordre disposes-tu tes ingrédients préparés à l'avance ?", r: "Dans l'ordre où ils entreront dans la cuisson, pour ne jamais avoir à chercher quoi que ce soit une fois le feu allumé." },
+    { q: "Comment le principe de mise en place s'applique-t-il à l'échelle d'une semaine entière ?", r: "De la même façon qu'en cuisine à l'instant T : légumes blanchis, féculents cuits et sauces montées à l'avance forment une mise en place étalée sur plusieurs jours." }
+  ],
+  variations: [
+    "Prépare toute ta mise en place avant d'allumer le feu sur un plat que tu improvises d'habitude en cours de route, et compare le niveau de stress.",
+    "Range tes ingrédients préparés dans l'ordre exact de la cuisson et chronomètre le temps réel entre le premier et le dernier geste.",
+    "Applique la mise en place à l'échelle de la semaine : prépare un élément (féculent, sauce, légumes blanchis) en avance et note ce que ça change en semaine."
+  ],
+  lien: ['organisation-planifier', 'trame-poelee', 'geste-couteau']
+},
+
+/* =====================================================================
+   7. DÉPANNAGE — accès rapide pendant la cuisson
    ===================================================================== */
 
 {
