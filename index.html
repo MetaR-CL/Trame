@@ -364,6 +364,25 @@ details.fold ul{padding-left:1.1em;}
 .dot-traine{color:var(--rouge);}
 .dot-jamais{color:var(--ink-faint);}
 
+/* --- Parcours --- */
+.parcours-progress{margin:14px 0 18px;}
+.parcours-progress-bar{height:8px;border-radius:99px;background:var(--bg-sunken);overflow:hidden;}
+.parcours-progress-bar .fill{height:100%;border-radius:99px;background:var(--rouge);transition:width .2s ease;}
+.parcours-progress-label{font-size:.78rem;color:var(--ink-faint);margin-top:6px;}
+.etape-left{display:flex;align-items:center;gap:10px;}
+.etape-num{
+  flex:none;width:22px;height:22px;border-radius:99px;background:var(--bg-sunken);color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;
+}
+.etape-num.done{background:var(--sauge-soft);color:var(--sauge);}
+.etape-desc{font-size:.84rem;color:var(--ink-soft);padding:8px 8px 10px;margin:0;}
+.parcours-link{display:flex;align-items:center;gap:10px;}
+.read-dot{
+  flex:none;width:18px;height:18px;border-radius:99px;border:1.5px solid var(--line);
+  display:flex;align-items:center;justify-content:center;color:var(--bg-raised);
+}
+.read-dot.read{background:var(--sauge);border-color:var(--sauge);}
+
 .journal-entry{
   background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-m);
   padding:14px 16px;margin-bottom:10px;
@@ -434,6 +453,21 @@ details.fold ul{padding-left:1.1em;}
      variations:[] axes de variation pour le mode Pratique
      lien:      [] ids de notions connexes
    }
+
+   SCHÉMA DU PARCOURS (optionnel — le moteur fonctionne sans)
+   {
+     titre:       string
+     description: string
+     etapes: [{
+       id:          string unique
+       titre:       string
+       description: string
+       notions:     [] ids de notions, dans l'ordre de lecture conseillé
+     }]
+   }
+   Purement additif : un chemin de lecture recommandé par-dessus les
+   notions existantes. Ne change rien à Consulter / Réviser / Pratiquer
+   / Suivi, qui ignorent totalement cette structure.
    ===================================================================== */
 
 const CONTENU = {
@@ -3128,7 +3162,66 @@ Pour les poêles en inox : chauffer la poêle à vide, puis ajouter le gras, pui
   lien: ['geste-deglacer', 'geste-saisir', 'dep-amer']
 }
 
-  ]
+  ],
+
+  /* PARCOURS — un chemin recommandé à travers les notions ci-dessus,
+     pour qui démarre de zéro. Purement additif : ne modifie ni ne
+     remplace Consulter / Réviser / Pratiquer / Suivi, qui continuent
+     de fonctionner sur les notions indépendamment de cet ordre. */
+  parcours: {
+    titre: "Le parcours complet",
+    description: "Huit étapes pour partir de zéro et arriver à cuisiner sans recette. Dans l'ordre la première fois — ensuite chaque fiche continue d'exister pour Consulter, Réviser et Pratiquer.",
+    etapes: [
+      {
+        id: 'etape-1',
+        titre: "Les fondamentaux",
+        description: "Tenir un couteau, et les quatre curseurs qui décident si un plat est bon. De quoi cuisiner un premier vrai plat cette semaine.",
+        notions: ['geste-couteau', 'lev-sel', 'lev-acide', 'lev-gras', 'lev-chaleur', 'trame-poelee']
+      },
+      {
+        id: 'etape-2',
+        titre: "Les gestes de base",
+        description: "Saisir, déglacer, suer, blanchir, rôtir — les techniques qui reviennent dans presque tous les plats, plus le réflexe qui fait gagner du temps : la mise en place.",
+        notions: ['geste-saisir', 'geste-deglacer', 'geste-suer', 'geste-blanchir', 'geste-rotir', 'organisation-mise-en-place']
+      },
+      {
+        id: 'etape-3',
+        titre: "Les ratios essentiels",
+        description: "Les proportions à connaître par cœur pour ne plus jamais chercher une recette de vinaigrette, de riz ou de saumure.",
+        notions: ['ratio-vinaigrette', 'ratio-riz', 'ratio-saumure', 'ratio-roux', 'ratio-mayonnaise']
+      },
+      {
+        id: 'etape-4',
+        titre: "Construire un repas",
+        description: "Des canevas plutôt que des recettes, et comment penser sa semaine plutôt que chaque repas isolément.",
+        notions: ['trame-bol', 'trame-soupe', 'trame-plaque-unique', 'trame-pates', 'organisation-planifier']
+      },
+      {
+        id: 'etape-5',
+        titre: "Techniques avancées",
+        description: "Braiser, réduire, émulsionner, fermenter — les gestes qui demandent un peu plus de pratique mais changent vraiment ce que tu es capable de cuisiner.",
+        notions: ['geste-braiser', 'geste-reduire', 'geste-monter-beurre', 'geste-emulsionner', 'geste-pocher', 'geste-fermentation', 'geste-mariner', 'geste-neige']
+      },
+      {
+        id: 'etape-6',
+        titre: "Pâtisserie et grands ratios",
+        description: "Crêpes, pâte brisée, pain, choux, crème pâtissière — la pâtisserie obéit encore plus strictement aux ratios que le salé.",
+        notions: ['ratio-crepes', 'ratio-pate-brisee', 'ratio-pain', 'ratio-bouillon', 'ratio-choux', 'ratio-creme-patissiere']
+      },
+      {
+        id: 'etape-7',
+        titre: "Affiner le palais",
+        description: "L'umami, les accords d'herbes et d'épices, et le plat qui récompense la patience : le braisé du dimanche.",
+        notions: ['lev-umami', 'accord-herbes', 'accord-epices', 'trame-braise-dimanche']
+      },
+      {
+        id: 'etape-8',
+        titre: "Dépannage : le réflexe qui reste",
+        description: "Treize situations classiques et le levier qui les corrige. À lire une fois pour connaître les réflexes, puis à rouvrir en cuisinant.",
+        notions: ['dep-fade', 'dep-trop-sale', 'dep-lourd', 'dep-sec', 'dep-sauce-liquide', 'dep-sauce-tranchee', 'dep-grumeaux', 'dep-legumes-detrempes', 'dep-viande-grise', 'dep-plat-superficiel', 'dep-amer', 'dep-trop-acide', 'dep-ca-colle']
+      }
+    ]
+  }
 };
 
 /* Export pour usage dans le moteur */
@@ -3157,10 +3250,11 @@ const Store = (function(){
 const STATE_KEY = 'trame_state_v1';
 
 function defaultState(){
-  return { version: 1, createdAt: new Date().toISOString(), review: {}, practice: {}, journal: [] };
+  return { version: 1, createdAt: new Date().toISOString(), review: {}, practice: {}, journal: [], read: {} };
 }
 
 let State = Store.get(STATE_KEY, null) || defaultState();
+State.read = State.read || {};
 function persist(){ Store.set(STATE_KEY, State); }
 
 /* ---------- Index du contenu ---------- */
@@ -3172,6 +3266,7 @@ const CAT_BY_ID = {};
 CATS.forEach(c => CAT_BY_ID[c.id] = c);
 const REVISABLE = NOTIONS.filter(n => n.questions && n.questions.length);
 const PRACTICABLE = NOTIONS.filter(n => n.variations && n.variations.length);
+const PARCOURS = CONTENU.parcours || null;
 
 /* ---------- Aides de temps ---------- */
 function nowISO(){ return new Date().toISOString(); }
@@ -3250,6 +3345,26 @@ function progressionData(){
   });
   const jamaisPratique = PRACTICABLE.filter(n => !State.practice[n.id]);
   return { acquis, traine, jamaisPratique };
+}
+
+/* ---------- Parcours ---------- */
+function markRead(id){
+  if(NOTION_BY_ID[id] && !State.read[id]){
+    State.read[id] = nowISO();
+    persist();
+  }
+}
+function parcoursProgress(){
+  if(!PARCOURS) return null;
+  let totalRead = 0, total = 0;
+  const etapes = PARCOURS.etapes.map(e => {
+    const read = e.notions.filter(id => State.read[id]).length;
+    totalRead += read;
+    total += e.notions.length;
+    return { etape: e, read, total: e.notions.length, done: read === e.notions.length };
+  });
+  const firstUnread = PARCOURS.etapes.flatMap(e => e.notions).find(id => !State.read[id]) || null;
+  return { etapes, totalRead, total, firstUnread };
 }
 
 /* ---------- Export JSON ---------- */
@@ -3341,6 +3456,8 @@ const ICONS = {
   reviser: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="6" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" transform="rotate(-6 11 11)"/><rect x="6" y="8" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
   pratiquer: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="5" y="10" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="3" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="19" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="10" x2="12" y2="7" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="6" r="1.4" fill="currentColor"/></svg>`,
   suivi: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="12" width="4" height="8" fill="currentColor"/><rect x="10" y="7" width="4" height="13" fill="currentColor"/><rect x="16" y="3" width="4" height="17" fill="currentColor"/></svg>`,
+  parcours: `<svg viewBox="0 0 24 24" width="20" height="20"><line x1="5" y1="21" x2="5" y2="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4 H18 L14 8 L18 12 H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" width="14" height="14"><polyline points="4,13 9,18 20,6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   chevron: `<svg width="8" height="14" viewBox="0 0 8 14"><polyline points="1,1 7,7 1,13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
 };
 
@@ -3415,6 +3532,16 @@ function viewHome(){
 
     <div class="section-title">Modes</div>
     <div class="nav-cards">
+      ${PARCOURS ? (() => {
+        const pp = parcoursProgress();
+        const sub = pp.totalRead === 0 ? "Huit étapes pour partir de zéro" : pp.totalRead === pp.total ? "Terminé — à revoir quand tu veux" : `${pp.totalRead}/${pp.total} fiches lues`;
+        return `
+      <a class="nav-card" href="#/parcours">
+        <div class="icon" style="background:var(--rouge-soft);color:var(--rouge)">${ICONS.parcours}</div>
+        <div class="body"><div class="t">Parcours</div><div class="d">${sub}</div></div>
+        <span class="arrow">${ICONS.chevron}</span>
+      </a>`;
+      })() : ''}
       <a class="nav-card" href="#/reviser">
         <div class="icon" style="background:var(--accent-soft);color:var(--accent)">${ICONS.reviser}</div>
         <div class="body"><div class="t">Réviser</div><div class="d">Répétition espacée, auto-évaluation en 3 niveaux</div></div>
@@ -3681,6 +3808,53 @@ function viewSuivi(tab){
   `, { active: 'suivi' });
 }
 
+function viewParcours(){
+  if(!PARCOURS){
+    return shell(`<div class="empty-state">Aucun parcours défini pour ce sujet.</div>`, { active: 'home', back: true });
+  }
+  const pp = parcoursProgress();
+  const pct = pp.total ? Math.round((pp.totalRead / pp.total) * 100) : 0;
+
+  const etapeHtml = pp.etapes.map(({ etape, read, total, done }, i) => `
+    <details class="progress-group parcours-etape"${(!done && etape.notions.includes(pp.firstUnread)) ? ' open' : ''}>
+      <summary>
+        <span class="etape-left"><span class="etape-num${done ? ' done' : ''}">${done ? ICONS.check : (i + 1)}</span>${escapeHtml(etape.titre)}</span>
+        <span class="count">${read}/${total}</span>
+      </summary>
+      <div class="glist">
+        <p class="etape-desc">${escapeHtml(etape.description)}</p>
+        ${etape.notions.map(id => {
+          const n = NOTION_BY_ID[id];
+          if(!n) return '';
+          const isRead = !!State.read[id];
+          return `<a class="grow-link parcours-link" href="#/notion/${id}">
+            <span class="read-dot${isRead ? ' read' : ''}">${isRead ? ICONS.check : ''}</span>
+            <span>${escapeHtml(n.titre)}</span>
+          </a>`;
+        }).join('')}
+      </div>
+    </details>`).join('');
+
+  return shell(`
+    <div class="hero">
+      <h1>${escapeHtml(PARCOURS.titre)}</h1>
+      <div class="sub">${escapeHtml(PARCOURS.description)}</div>
+    </div>
+    <div class="parcours-progress">
+      <div class="parcours-progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="parcours-progress-label">${pp.totalRead} / ${pp.total} fiches lues</div>
+    </div>
+    ${pp.firstUnread ? `
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#/notion/${pp.firstUnread}">${pp.totalRead ? 'Continuer' : 'Commencer'}</a>
+      </div>
+    ` : `
+      <div class="btn-row"><div class="btn" style="background:var(--sauge-soft);color:var(--sauge);border-color:transparent;">Parcours terminé</div></div>
+    `}
+    <div class="block">${etapeHtml}</div>
+  `, { active: 'home', back: true });
+}
+
 /* =====================================================================
    ROUTEUR
    ===================================================================== */
@@ -3694,6 +3868,7 @@ function parseRoute(){
   if(parts[0] === 'reviser') return { name: 'reviser' };
   if(parts[0] === 'pratiquer') return { name: 'pratiquer' };
   if(parts[0] === 'suivi') return { name: 'suivi', tab: parts[1] || 'progression' };
+  if(parts[0] === 'parcours') return { name: 'parcours' };
   return { name: 'home' };
 }
 
@@ -3701,10 +3876,11 @@ function currentViewHtml(){
   const r = parseRoute();
   switch(r.name){
     case 'consulter': return viewConsulter(r.cat);
-    case 'notion': return viewNotion(r.id);
+    case 'notion': markRead(r.id); return viewNotion(r.id);
     case 'reviser': return viewReviser();
     case 'pratiquer': return viewPratiquer();
     case 'suivi': return viewSuivi(r.tab);
+    case 'parcours': return viewParcours();
     default: return viewHome();
   }
 }
