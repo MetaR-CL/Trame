@@ -238,6 +238,15 @@ main.view-anim{animation:view-in .22s ease;}
 .notion-head .tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;}
 .notion-head h1{font-size:1.5rem;margin:.2em 0 .25em;}
 .notion-head .resume{color:var(--ink-soft);font-size:.95rem;}
+.video-link{
+  display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 13px;
+  background:var(--bg-sunken);border-radius:100px;color:var(--ink-soft);text-decoration:none;
+  font-size:.8rem;font-weight:600;
+}
+
+.gen-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 20px;}
+.gen-result{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+.gen-row{margin:0;}
 
 .block{margin-top:20px;}
 .block h2{font-size:.98rem;}
@@ -3367,6 +3376,50 @@ function parcoursProgress(){
   return { etapes, totalRead, total, firstUnread };
 }
 
+/* ---------- Générateur ("Improviser ce soir") ----------
+   Compose une proposition concrète en piochant, au hasard mais dans
+   des familles pertinentes, une trame + un geste + un accord + un
+   rappel de levier — et un ratio s'il y en a un lié à la trame
+   choisie (via le graphe `lien` déjà présent sur chaque notion).
+   Ne fonctionne que si les ids référencés existent dans NOTIONS ;
+   sinon la catégorie est simplement ignorée par pickExisting(). */
+const GENERATEUR = {
+  temps: {
+    '15': { label: '15 minutes', trames: ['trame-poelee', 'trame-pates'] },
+    '30': { label: '30 minutes', trames: ['trame-bol', 'trame-plaque-unique', 'trame-soupe'] },
+    'temps': { label: "J'ai le temps", trames: ['trame-braise-dimanche', 'trame-plaque-unique', 'trame-soupe'] }
+  },
+  element: {
+    proteine: { label: 'Une protéine', gestes: ['geste-saisir', 'geste-mariner', 'geste-rotir', 'geste-pocher'] },
+    legumineuses: { label: 'Légumineuses, tofu', gestes: ['geste-suer', 'geste-emulsionner'] },
+    legumes: { label: 'Juste des légumes', gestes: ['geste-rotir', 'geste-blanchir'] },
+    restes: { label: 'Des restes', gestes: ['geste-deglacer', 'organisation-mise-en-place'] }
+  },
+  envie: {
+    reconfort: { label: 'Réconfort', accords: ['accord-epices', 'accord-herbes'], leviers: ['lev-umami', 'lev-gras'] },
+    frais: { label: 'Frais, léger', accords: ['accord-herbes'], leviers: ['lev-acide', 'lev-sel'] },
+    epice: { label: 'Épicé', accords: ['accord-epices', 'accord-herbes'], leviers: ['lev-gras', 'lev-chaleur'] },
+    surprise: { label: 'Surprends-moi', accords: ['accord-herbes', 'accord-epices'], leviers: ['lev-sel', 'lev-acide', 'lev-gras', 'lev-chaleur', 'lev-umami'] }
+  }
+};
+function pickExisting(ids){
+  const pool = (ids || []).map(id => NOTION_BY_ID[id]).filter(Boolean);
+  return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+}
+function genererPlat(temps, element, envie){
+  const profilTemps = GENERATEUR.temps[temps];
+  const profilElement = GENERATEUR.element[element];
+  const profilEnvie = GENERATEUR.envie[envie];
+  if(!profilTemps || !profilElement || !profilEnvie) return null;
+  const trame = pickExisting(profilTemps.trames);
+  const geste = pickExisting(profilElement.gestes);
+  const accord = pickExisting(profilEnvie.accords);
+  const levier = pickExisting(profilEnvie.leviers);
+  const ratioId = trame ? (trame.lien || []).find(id => id.startsWith('ratio-')) : null;
+  const ratio = ratioId ? NOTION_BY_ID[ratioId] : null;
+  return { trame, geste, accord, levier, ratio };
+}
+
 /* ---------- Export JSON ---------- */
 function exportJSON(){
   const payload = { exportedAt: nowISO(), sujet: CONTENU.sujet, state: State };
@@ -3444,7 +3497,8 @@ const ui = {
   consulterCat: 'all',
   consulterQuery: '',
   reviser: { queue: null, index: 0, revealed: false, qa: null, results: { 1:0, 2:0, 3:0 } },
-  pratique: { notionId: null, variationIndex: 0, step: 'proposal' }
+  pratique: { notionId: null, variationIndex: 0, step: 'proposal' },
+  generateur: { temps: null, element: null, envie: null, result: null }
 };
 
 function catLabel(id){ return CAT_BY_ID[id] ? CAT_BY_ID[id].nom : id; }
@@ -3457,6 +3511,7 @@ const ICONS = {
   pratiquer: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="5" y="10" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="3" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="19" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="10" x2="12" y2="7" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="6" r="1.4" fill="currentColor"/></svg>`,
   suivi: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="12" width="4" height="8" fill="currentColor"/><rect x="10" y="7" width="4" height="13" fill="currentColor"/><rect x="16" y="3" width="4" height="17" fill="currentColor"/></svg>`,
   parcours: `<svg viewBox="0 0 24 24" width="20" height="20"><line x1="5" y1="21" x2="5" y2="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4 H18 L14 8 L18 12 H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  generateur: `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>`,
   check: `<svg viewBox="0 0 24 24" width="14" height="14"><polyline points="4,13 9,18 20,6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   chevron: `<svg width="8" height="14" viewBox="0 0 8 14"><polyline points="1,1 7,7 1,13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
 };
@@ -3542,6 +3597,11 @@ function viewHome(){
         <span class="arrow">${ICONS.chevron}</span>
       </a>`;
       })() : ''}
+      <a class="nav-card" href="#/generateur">
+        <div class="icon" style="background:var(--accent-soft);color:var(--accent)">${ICONS.generateur}</div>
+        <div class="body"><div class="t">Improviser ce soir</div><div class="d">Une proposition composée à partir de tes fiches</div></div>
+        <span class="arrow">${ICONS.chevron}</span>
+      </a>
       <a class="nav-card" href="#/reviser">
         <div class="icon" style="background:var(--accent-soft);color:var(--accent)">${ICONS.reviser}</div>
         <div class="body"><div class="t">Réviser</div><div class="d">Répétition espacée, auto-évaluation en 3 niveaux</div></div>
@@ -3593,6 +3653,10 @@ function viewConsulter(cat){
   `, { active: 'consulter' });
 }
 
+function youtubeSearchUrl(titre){
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(titre + ' cuisine');
+}
+
 function viewNotion(id){
   const n = NOTION_BY_ID[id];
   if(!n) return shell(`<div class="empty-state">Cette notion n'existe pas (ou plus).</div>`, { active: 'consulter', back: true });
@@ -3601,6 +3665,7 @@ function viewNotion(id){
       <span class="tag">${escapeHtml(catLabel(n.cat))}</span>
       <h1>${escapeHtml(n.titre)}</h1>
       <div class="resume">${escapeHtml(n.resume)}</div>
+      ${n.cat === 'geste' ? `<a class="video-link" href="${youtubeSearchUrl(n.titre)}" target="_blank" rel="noopener">▶ Voir le geste en vidéo</a>` : ''}
     </div>
     <div class="block prose">${formatContenu(n.contenu)}</div>
     ${n.vigilance && n.vigilance.length ? `
@@ -3855,6 +3920,58 @@ function viewParcours(){
   `, { active: 'home', back: true });
 }
 
+function genRow(label, color, n){
+  if(!n) return '';
+  return `<a class="notion-item gen-row" href="#/notion/${n.id}" style="border-left:3px solid var(--${color})">
+    <span class="tag" style="color:var(--${color})">${escapeHtml(label)}</span>
+    <h3>${escapeHtml(n.titre)}</h3>
+    <p>${escapeHtml(n.resume)}</p>
+  </a>`;
+}
+
+function viewGenerateur(){
+  const st = ui.generateur;
+  const ready = st.temps && st.element && st.envie;
+
+  const chipGroup = (field, options, current) => `
+    <div class="gen-chip-row">
+      ${Object.entries(options).map(([key, o]) => `
+        <div class="filter-chip${current === key ? ' active' : ''}" data-action="gen-pick" data-field="${field}" data-value="${key}">${escapeHtml(o.label)}</div>
+      `).join('')}
+    </div>`;
+
+  if(!st.result){
+    return shell(`
+      <div class="hero"><h1>Improviser ce soir</h1><div class="sub">Trois questions, une proposition composée à partir de ce que tu as déjà appris — jamais deux fois pareil.</div></div>
+      <div class="section-title">Combien de temps ?</div>
+      ${chipGroup('temps', GENERATEUR.temps, st.temps)}
+      <div class="section-title">Tu pars de quoi ?</div>
+      ${chipGroup('element', GENERATEUR.element, st.element)}
+      <div class="section-title">Une envie ?</div>
+      ${chipGroup('envie', GENERATEUR.envie, st.envie)}
+      <div class="btn-row" style="margin-top:8px">
+        ${ready ? `<button class="btn btn-primary" data-action="gen-generate">Improviser</button>` : `<div class="empty-state" style="padding:8px 0">Choisis une option dans chaque groupe.</div>`}
+      </div>
+    `, { active: 'home', back: true });
+  }
+
+  const r = st.result;
+  return shell(`
+    <div class="hero"><h1>Ce soir</h1><div class="sub">Une proposition, pas une obligation — change ce qui ne te convient pas.</div></div>
+    <div class="gen-result">
+      ${genRow('Base', 'accent', r.trame)}
+      ${genRow('Geste', 'ocre', r.geste)}
+      ${r.ratio ? genRow('Ratio à connaître', 'accent', r.ratio) : ''}
+      ${genRow('Touche', 'sauge', r.accord)}
+      ${genRow('Rappel', 'rouge', r.levier)}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" data-action="gen-restart">Recommencer</button>
+      <button class="btn btn-primary" data-action="gen-reroll">Autre proposition</button>
+    </div>
+  `, { active: 'home', back: true });
+}
+
 /* =====================================================================
    ROUTEUR
    ===================================================================== */
@@ -3869,6 +3986,7 @@ function parseRoute(){
   if(parts[0] === 'pratiquer') return { name: 'pratiquer' };
   if(parts[0] === 'suivi') return { name: 'suivi', tab: parts[1] || 'progression' };
   if(parts[0] === 'parcours') return { name: 'parcours' };
+  if(parts[0] === 'generateur') return { name: 'generateur' };
   return { name: 'home' };
 }
 
@@ -3881,6 +3999,7 @@ function currentViewHtml(){
     case 'pratiquer': return viewPratiquer();
     case 'suivi': return viewSuivi(r.tab);
     case 'parcours': return viewParcours();
+    case 'generateur': return viewGenerateur();
     default: return viewHome();
   }
 }
@@ -3981,6 +4100,24 @@ appEl.addEventListener('click', function(e){
   }
 
   if(e.target.closest('[data-action="export"]')){ exportJSON(); return; }
+
+  const genPick = e.target.closest('[data-action="gen-pick"]');
+  if(genPick){
+    ui.generateur[genPick.getAttribute('data-field')] = genPick.getAttribute('data-value');
+    rerender();
+    return;
+  }
+  if(e.target.closest('[data-action="gen-generate"]') || e.target.closest('[data-action="gen-reroll"]')){
+    const st = ui.generateur;
+    st.result = genererPlat(st.temps, st.element, st.envie);
+    rerender(true);
+    return;
+  }
+  if(e.target.closest('[data-action="gen-restart"]')){
+    ui.generateur = { temps: null, element: null, envie: null, result: null };
+    rerender(true);
+    return;
+  }
 });
 
 appEl.addEventListener('input', function(e){
